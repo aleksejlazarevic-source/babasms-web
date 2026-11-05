@@ -1,0 +1,69 @@
+BABASMS1
+{IME}, these are Lidl's cooking deals from 7.11. to 8.11.:
+
+MEAT
+Poetovio piščančje prsi 2,99 (4,99) od 6.11.+
+Kmečka klobasa 2,99 (3,99)
+Kranjska klobasa 2,49 (3,49)
+Sveža štefani pečenka 3,99 (4,99)
+Piščančja nabodala 3,49 (4,39)+
+Sušena mesnata slanina 1,79 (2,69)+
+Pica s šunko in gobami XXL 4,19 (4,99)+
+Sveži piščanec 2,99 (3,79) od 6.11.+
+Piščančja stegna 1,99 (2,69)+
+Svinjski zrezki 2,59 (3,25)
+Domači suhi ocvirki 2,23 (2,79)
+Pusto mleto mešano meso 2,99 (3,45)
+Piščančje hrenovke 0,75 (1,19) od 6.11.
+Toast šunka 1,40 (1,69)
+
+FISH
+Sveži file jadranske orade 8,99 (11,49) do 7.11.
+Premium suši 3,49 (4,49) do 7.11.+
+
+DAIRY
+Sir Ementalec XXL 2,79 (3,49)+
+Margarina za peko 0,85 (1,35) od 6.11.
+Skuta Sweetello 0,79 (1,19) od 6.11.
+
+FRUIT AND VEGETABLES
+Kostanj 5,99 (7,49) do 7.11.
+Delikatesne kumarice 1,89 (2,87)+
+Ananas 1,09 (1,59) od 6.11.
+Domača rdeča pesa 0,99 (1,49) od 6.11.
+Francoska solata 1,35 (1,78)
+Korenje 0,89 (1,29) do 7.11.+
+Rdeče zelje 0,89 (1,29)
+
+BREAD AND PASTRY
+Craft kruh 0,99 (1,69) od 6.11.+
+Koruzni kruh brez kvasa 0,99 (1,59)+
+Ajdov kruh z orehi 1,39 (1,95)
+Martinov kruh 1,19 (1,69)
+Polnozrnati pšenični toast 0,99 (1,49) od 6.11.
+Kruh z drožmi 0,99 (1,39)
+Štručka s hrenovko 0,59 (0,79)
+Žepek s šunko in sirom 0,49 (0,69) do 7.11.
+Rogljiček 0,49 (0,68)+
+Štručka s semeni 0,29 (0,39)
+
+SWEETS
+Čokolino 6,99 (10,79) od 6.11.+
+Raffaello praline 4,19 (5,99) od 6.11.+
+
+PANTRY
+Pesto Genovese 1,99 (3,97) od 6.11.+
+Vegeta 1,65 (2,59) od 6.11.+
+Bio veganski namaz 1,19 (1,99) od 6.11.
+
+FROZEN
+Pica s polnjenim robom več vrst 2,49 (3,39) od 6.11.
+
+DRINKS
+Zeliščni čaj 0,99 (1,79)+
+Nektar črni ribez 0,89 (1,29)+
+
+OTHER FOR COOKING
+Ora exotic 1,25 (1,72) od 6.11.+
+
++ means Lidl Plus.
