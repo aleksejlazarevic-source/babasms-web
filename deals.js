@@ -1,4 +1,6 @@
-/* The icon: one live store, the approved Lidl lines, no name (Aleksej, 9 Nov 2026).
+/* The icon: Lidl's approved lines, one store on the screen, no name (Aleksej, 9 Nov 2026).
+   The look is the shelf price tag (Aleksej approved Fable's page, 10 Nov 2026).
+   Tuš and Hofer are listed as not open yet, and do not open.
    The date cut is babasms/message.py filter_published. The send day is
    web/tools/latest.py valid_send_day. */
 (function (root) {
@@ -11,9 +13,28 @@
   var HEADER_EN = /from (\d{1,2})\.(\d{1,2})\. to (\d{1,2})\.(\d{1,2})\./;
   /* Approved public files (T2.3). Her gist is not on this machine. */
   var PUBLIC = 'https://aleksejlazarevic-source.github.io/babasms-web/t/';
-  /* Guess, 9 Nov 2026, until Aleksej writes these two lines. */
-  var MISSING = 'Ta sveženj še ni na strani.';
-  var OFFLINE = 'Stran ne more prenesti popustov.';
+  /* The words on the screen that are not deal lines. Aleksej approved these with the look, 10 Nov 2026. */
+  var MISSING = 'Novih popustov še\u00a0ni.'; /* the last two words stay on one line */
+  var OFFLINE = 'Popustov ni mogoče naložiti.';
+  var OFFLINE_HOW = 'Preverite, ali ima telefon internet.';
+  var LATER = 'Poglejte malo pozneje.';
+  var RETRY = 'Poskusi znova';
+  var RETRYING = 'Preverjam …';
+  var CHECKED = 'Preverjeno ob ';
+  var STORES = 'Trgovine';
+  var SHUT = 'še ni na voljo';
+  /* "od ponedeljka", "od četrtka": Sunday is 0, as in getUTCDay. */
+  var WEEKDAY_FROM = ['nedelje', 'ponedeljka', 'torka', 'srede', 'četrtka', 'petka', 'sobote'];
+  /* Only Lidl's approved file is read in this version, so only Lidl can open (Aleksej, 9 Nov 2026). */
+  var READABLE = {lidl: true};
+  /* Shown when stores.json cannot be read. Tuš and Hofer are not live (t2/stores.json, 9 Nov 2026). */
+  var KNOWN = [
+    {id: 'lidl', name: 'Lidl', live: true, order: 1},
+    {id: 'tus', name: 'Tuš', live: false, order: 2},
+    {id: 'hofer', name: 'Hofer', live: false, order: 3}
+  ];
+  /* Coming back to the icon asks the network again after this long. One minute is a guess, 9 Nov 2026. */
+  var STALE_MS = 60000;
   var DAY = /^\d{4}-\d{2}-\d{2}$/;
   /* How many earlier send days the page looks back when a day's file is missing (T3.4b).
      Guess, 10 Nov 2026: two weeks of Monday and Thursday files. */
@@ -200,66 +221,194 @@
     return isoOf(validSendDay(ljubljanaToday(new Date())));
   }
 
-  function show(lines) {
-    document.getElementById('text').textContent = lines.join('\n');
+  function byOrder(list) {
+    return (list || []).filter(function (s) { return s && s.id && s.name; })
+      .slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
   }
 
-  function showDeals(name) {
-    document.getElementById('list').hidden = true;
-    document.getElementById('store').hidden = false;
-    document.getElementById('store').textContent = name;
-    document.getElementById('text').hidden = false;
-    document.getElementById('back').hidden = false;
+  /* She can open a store only when he has set it live and this page can read its file. */
+  function canOpen(store) {
+    return liveStores([store]).length === 1 && READABLE[store.id] === true;
   }
 
-  function showList(stores) {
-    var list = document.getElementById('list');
-    list.hidden = false;
-    list.textContent = '';
-    stores.forEach(function (store) {
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.textContent = store.name;
-      b.addEventListener('click', function () { openStore(store); });
-      list.appendChild(b);
+  /* What to draw for one answer from the network. The deal lines are showText's, unchanged. */
+  function viewOf(got, dayIso) {
+    if (got.kind === 'deals') return {type: 'deals', lines: got.lines};
+    if (got.kind === 'missing') {
+      var d = parseIso(dayIso);
+      return {type: 'message', title: MISSING, body:
+        'Popusti od ' + WEEKDAY_FROM[d.getUTCDay()] + ', ' + shortDate(d) + ', še niso na strani. ' + LATER};
+    }
+    if (got.kind === 'offline') return {type: 'message', title: OFFLINE, body: OFFLINE_HOW};
+    if (got.kind === 'outside') return {type: 'message', title: MISSING, body: got.lines.join(' ')};
+    if (got.kind === 'none') return {type: 'message', title: MISSING, body: LATER};
+    /* 'empty': "Danes ni več veljavnih … Naslednji pridejo v …" The first sentence is the heading. */
+    var text = got.lines.join(' ');
+    var cut = text.indexOf('. ');
+    if (cut < 0) return {type: 'message', title: text, body: ''};
+    return {type: 'message', title: text.slice(0, cut + 1), body: text.slice(cut + 2)};
+  }
+
+  /* One of: first line, section name, deal line, store note. Blank lines are spacing, drawn by the CSS. */
+  function kindOf(line, index) {
+    if (index === 0) return 'greeting';
+    if (PRICE.test(line)) return 'deal';
+    return line.toUpperCase() === line ? 'section' : 'note';
+  }
+
+  function clock(now) {
+    return now.getHours() + ':' + pad(now.getMinutes());
+  }
+
+  function $(id) { return document.getElementById(id); }
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  var stores = [];
+  var current = null; /* the store on the screen, or null on the list */
+  var shown = '';     /* what is drawn now, so the same lines are not drawn twice */
+  var lastLoad = 0;
+
+  function drawDeals(lines) {
+    var host = $('text');
+    var group = null;
+    host.textContent = '';
+    lines.forEach(function (line, i) {
+      if (line === '') return;
+      var kind = kindOf(line, i);
+      var row = el(kind === 'section' ? 'h2' : 'p', kind, line);
+      if (kind === 'section') {
+        group = el('section', 'group');
+        host.appendChild(group);
+      }
+      if (group && (kind === 'section' || kind === 'deal')) group.appendChild(row);
+      else host.appendChild(row);
     });
-    document.getElementById('store').hidden = true;
-    document.getElementById('text').hidden = true;
-    document.getElementById('back').hidden = true;
+  }
+
+  function drawMessage(view) {
+    var host = $('text');
+    var box = el('div', 'msg');
+    var again = el('button', 'retry', RETRY);
+    host.textContent = '';
+    box.appendChild(el('p', 'msg-title', view.title));
+    if (view.body) box.appendChild(el('p', 'msg-body', view.body));
+    host.appendChild(box);
+    again.type = 'button';
+    again.addEventListener('click', function () {
+      again.disabled = true;
+      again.textContent = RETRYING;
+      load(true);
+    });
+    host.appendChild(again);
+    host.appendChild(el('p', 'checked', CHECKED + clock(new Date())));
+  }
+
+  function draw(view) {
+    var key = JSON.stringify(view);
+    if (view.type === 'deals' && key === shown) return; /* same lines: leave her place on the page */
+    shown = key;
+    if (view.type === 'deals') drawDeals(view.lines);
+    else drawMessage(view);
+  }
+
+  function load(asked) {
+    var store = current;
+    if (!store) return;
+    var day = askedDay();
+    if (!asked && !shown) {
+      $('text').textContent = '';
+      $('text').appendChild(el('p', 'loading', 'Nalagam popuste …'));
+    }
+    lastLoad = Date.now();
+    loadBatch(day, fetch.bind(root)).then(function (got) {
+      if (current !== store) return; /* she went back while it loaded */
+      draw(viewOf(got, day));
+    }).catch(function () {
+      if (current !== store) return;
+      draw(viewOf({kind: 'offline'}, day));
+    });
   }
 
   function openStore(store) {
-    showDeals(store.name);
-    if (store.id !== 'lidl') {
-      show([MISSING]); /* only Lidl's approved file is read in this version */
-      return;
-    }
-    loadBatch(askedDay(), fetch.bind(root)).then(function (shown) {
-      show(shown.lines);
-    }).catch(function () { show([OFFLINE]); });
+    current = store;
+    shown = '';
+    $('list').hidden = true;
+    $('store').textContent = store.name;
+    $('store').hidden = false;
+    $('back').hidden = false;
+    $('text').textContent = '';
+    $('text').hidden = false;
+    window.scrollTo(0, 0);
+    load(false);
+  }
+
+  function showList() {
+    var list = $('list');
+    current = null;
+    shown = '';
+    list.textContent = '';
+    stores.forEach(function (store) {
+      var item = el('li');
+      var row;
+      if (canOpen(store)) {
+        row = el('button', 'shop', store.name);
+        row.type = 'button';
+        row.addEventListener('click', function () { openStore(store); });
+      } else { /* not a button: it must not open */
+        row = el('div', 'shop shut', store.name);
+        row.appendChild(document.createTextNode(' '));
+        row.appendChild(el('small', '', SHUT));
+      }
+      item.appendChild(row);
+      list.appendChild(item);
+    });
+    list.hidden = false;
+    $('store').textContent = STORES;
+    $('store').hidden = false;
+    $('back').hidden = true;
+    $('text').hidden = true;
+    $('text').textContent = '';
+    window.scrollTo(0, 0);
+  }
+
+  /* The icon stays open in the background. When she comes back to it, ask again. */
+  function wake() {
+    if (document.visibilityState === 'visible' && current && Date.now() - lastLoad > STALE_MS) load(false);
   }
 
   function start() {
-    var back = document.getElementById('back');
+    $('back').addEventListener('click', showList);
+    document.addEventListener('visibilitychange', wake);
+    window.addEventListener('pageshow', wake);
     /* page/deals.html in this repo sits one folder below t2/. On babasms-web the
        same file is the site root, beside t2/. (Aleksej, 10 Nov 2026.) */
     var storesUrl = /\/page\/[^/]*$/.test(location.pathname) ? '../t2/stores.json' : 't2/stores.json';
     fetch(fresh(storesUrl), {cache: 'no-store'}).then(function (res) {
       if (!res.ok) throw new Error('stores');
       return res.json();
-    }).then(liveStores).catch(function () {
-      return [{id: 'lidl', name: 'Lidl', live: true, order: 1}];
-    }).then(function (stores) {
-      if (!stores.length) stores = [{id: 'lidl', name: 'Lidl', live: true, order: 1}];
-      back.addEventListener('click', function () { showList(stores); });
-      if (stores.length === 1) openStore(stores[0]);
-      else showList(stores);
+    }).then(function (list) {
+      if (!byOrder(list).length) throw new Error('stores');
+      return list;
+    }).catch(function () {
+      return KNOWN;
+    }).then(function (list) {
+      stores = byOrder(list);
+      var open = stores.filter(canOpen);
+      if (open.length === 1) openStore(open[0]); /* one store: the icon opens its deals */
+      else showList();
     });
   }
 
   var api = {
     showText: showText, loadBatch: loadBatch, validSendDay: validSendDay, ljubljanaToday: ljubljanaToday,
-    isoOf: isoOf, liveStores: liveStores, MISSING: MISSING, OFFLINE: OFFLINE, PUBLIC: PUBLIC
+    isoOf: isoOf, liveStores: liveStores, canOpen: canOpen, viewOf: viewOf, kindOf: kindOf,
+    MISSING: MISSING, OFFLINE: OFFLINE, PUBLIC: PUBLIC
   };
   root.KinDealsPage = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

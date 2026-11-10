@@ -1,0 +1,199 @@
+/* The look of the two screens. A shelf price tag: ink on yellow.
+   Yellow means deals are here. A dashed outline means not here yet.
+   Aleksej approved this look on 10 Nov 2026. Sizes, spaces and colours are Claude's, 9 Nov 2026.
+   Sizes are CSS pixels and were tried on the 8 Nov Lidl lines in Chromium at 320, 375 and 430 wide.
+   Not tried on a phone, and not in Safari. */
+
+/* Lexend, SIL Open Font License 1.1 (fonts/OFL.txt). The ranges are the ones the
+   @fontsource-variable/lexend 5.3.0 package ships with these two files. č, š and ž are in latin-ext. */
+@font-face {
+  font-family: "Lexend";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(fonts/lexend-latin-ext-wght-normal.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Lexend";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(fonts/lexend-latin-wght-normal.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152, U+0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --ink: #111111;    /* all text she reads; 18.9 to 1 on paper, 13.3 to 1 on tag (WCAG formula, 9 Nov 2026) */
+  --paper: #FFFFFF;
+  --tag: #FFD500;    /* behind the pitch, a section name, and a store she can open */
+  --rule: #8A8A8A;   /* thin lines and dashed outlines; never text */
+  --quiet: #595959;  /* a store that is not open yet, and the "checked at" line; 7.0 to 1 on paper */
+  --line: 22px;      /* a deal line. 22 of the 40 lines of 8 Nov fit on one line at 375 wide; at 24px, 16 do */
+  --side: 20px;
+  color-scheme: light; /* one look, so her phone shows the page he checked */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { font-size: 100%; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Lexend", system-ui, sans-serif;
+  font-size: var(--line);
+  line-height: 1.3;
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, p, ol, ul { margin: 0; padding: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+/* ---------- The pitch (index.html) ---------- */
+
+.pitch main { min-height: 100vh; min-height: 100dvh; }
+.tag {
+  background: var(--tag);
+  border-bottom: 2px solid var(--ink);
+  padding: 24px 24px 40px;
+}
+.name { font-size: 20px; line-height: 1.2; font-weight: 700; margin-bottom: 44px; }
+.tag h1 {
+  max-width: 7.5em; /* breaks as "All your / discounts, in / one place." at every width */
+  font-size: 44px;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.setup { padding: 28px 24px 48px; }
+.setup h2 { font-size: 16px; line-height: 1.2; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.setup ol { list-style: none; counter-reset: step; margin-top: 6px; }
+.setup li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 1.6em 1fr; /* the words line up under each other */
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.setup li:last-child { border-bottom: 0; }
+.setup li::before { content: counter(step) "."; }
+
+@media (max-width: 359px) {
+  .tag h1 { font-size: 38px; }
+}
+@media (min-width: 700px) {
+  .tag, .setup { padding-left: calc(50vw - 280px); padding-right: calc(50vw - 280px); }
+  .tag { padding-top: 40px; padding-bottom: 64px; }
+  .name { margin-bottom: 80px; }
+  .tag h1 { font-size: 64px; }
+}
+
+/* ---------- The icon (deals.html) ---------- */
+
+.app {
+  padding: 0 var(--side) calc(56px + env(safe-area-inset-bottom));
+}
+
+#back {
+  min-height: 56px;
+  margin-top: 20px;
+  padding: 0 20px 0 16px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  font-weight: 700;
+}
+#back::before { /* a drawn arrowhead, so the control reads as "back" before the word is read */
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin: 0 0.45em 0 0.15em;
+  border-left: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  transform: rotate(45deg);
+  vertical-align: 0.1em;
+}
+#back:active { background: var(--ink); color: var(--paper); }
+#back:active::before { border-color: var(--paper); }
+
+#store { font-size: 40px; line-height: 1.1; font-weight: 800; margin: 24px 0 8px; }
+
+/* The stores */
+#list { list-style: none; display: grid; gap: 16px; margin-top: 16px; }
+.shop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 16px;
+  width: 100%;
+  min-height: 76px;
+  padding: 14px 20px;
+  border-radius: 4px;
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 700;
+  text-align: left;
+}
+button.shop { background: var(--tag); border: 2px solid var(--ink); }
+button.shop::after {
+  content: "";
+  width: 0.45em;
+  height: 0.45em;
+  margin-right: 0.1em;
+  border-right: 3px solid var(--ink);
+  border-top: 3px solid var(--ink);
+  transform: rotate(45deg);
+}
+button.shop:active { background: var(--ink); color: var(--paper); }
+button.shop:active::after { border-color: var(--paper); }
+.shop.shut { border: 2px dashed var(--rule); color: var(--quiet); }
+.shop.shut small { font-size: 20px; font-weight: 400; }
+
+/* One store's lines */
+.greeting { margin-bottom: 24px; line-height: 1.35; }
+.greeting::first-letter { text-transform: uppercase; } /* the line starts small once the name is taken out */
+.group { margin-top: 28px; }
+.greeting + .group { margin-top: 0; }
+.section {
+  position: sticky; /* she can see which section she is in */
+  top: 0;
+  margin: 0 calc(-1 * var(--side));
+  padding: 12px var(--side);
+  background: var(--tag);
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.deal { padding: 14px 0; border-bottom: 1px solid var(--rule); overflow-wrap: break-word; }
+.deal:last-child { border-bottom: 0; }
+.note { margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--ink); line-height: 1.35; }
+
+/* When there are no lines to show: the batch is not on the page yet, or the phone is offline */
+.msg { margin-top: 20px; padding: 28px 20px 32px; border: 2px dashed var(--rule); border-radius: 4px; }
+.msg-title { font-size: 28px; line-height: 1.2; font-weight: 700; }
+.msg-body { margin-top: 12px; line-height: 1.35; }
+.retry {
+  display: block;
+  width: 100%;
+  min-height: 64px;
+  margin-top: 20px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  font-weight: 700;
+}
+.retry:active { background: var(--paper); color: var(--ink); }
+.retry:disabled { background: var(--paper); color: var(--ink); border-style: dashed; cursor: default; }
+.checked { margin-top: 16px; font-size: 20px; color: var(--quiet); }
+
+/* Shown only if the network is slow, so a fast load does not flash it. Half a second is a guess, 9 Nov 2026. */
+.loading { margin-top: 24px; opacity: 0; animation: appear 0s linear 0.5s forwards; }
+@keyframes appear { to { opacity: 1; } }

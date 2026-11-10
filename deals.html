@@ -3,17 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#FFFFFF">
 <title>KinDeals</title>
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="KinDeals">
-<link rel="stylesheet" href="plain.css">
+<link rel="preload" href="fonts/lexend-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/lexend-latin-ext-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="look.css">
 </head>
-<body>
+<body class="app">
 <button type="button" id="back" hidden>Nazaj</button>
-<div id="list" hidden></div>
 <h1 id="store" hidden></h1>
-<pre id="text"></pre>
+<ul id="list" hidden></ul>
+<div id="text" aria-live="polite"><p class="loading">Nalagam popuste …</p></div>
 <script src="deals.js"></script>
 <script src="sw-register.js"></script>
 </body>

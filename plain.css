@@ -1,7 +1,0 @@
-/* Large type, so one store is not a wall of text (Aleksej, 9 Nov 2026).
-   150% is a guess. Colours, a chosen face, and layout wait. */
-html { font-size: 150%; }
-body { margin: 1rem; }
-button, pre { font: inherit; }
-pre { white-space: pre-wrap; margin: 0; }
-[hidden] { display: none; }

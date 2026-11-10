@@ -3,15 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#FFD500">
 <title>KinDeals</title>
+<script>
+/* The icon opens the deals. On an older iPhone, Add to Home Screen can save this
+   page's address (not tapped here, 9 Nov 2026). Standalone still goes to the deals. */
+if (window.navigator.standalone || matchMedia('(display-mode: standalone)').matches) {
+  location.replace('deals.html');
+}
+</script>
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="KinDeals">
-<link rel="stylesheet" href="plain.css">
+<link rel="preload" href="fonts/lexend-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="look.css">
 </head>
-<body>
+<body class="pitch">
 <main>
+<header class="tag">
+<p class="name">KinDeals</p>
 <h1>All your discounts, in one place.</h1>
+</header>
+<section class="setup">
+<h2>Setup</h2>
 <ol>
 <li>More</li>
 <li>Share</li>
@@ -20,14 +36,8 @@
 <li>Add</li>
 <li>Then tap the icon</li>
 </ol>
+</section>
 </main>
 <script src="sw-register.js"></script>
-<script>
-/* The icon opens the deals. On an older iPhone, Add to Home Screen can save this
-   page's address (not tapped here, 9 Nov 2026). Standalone still goes to the deals. */
-if (window.navigator.standalone || matchMedia('(display-mode: standalone)').matches) {
-  location.replace('deals.html');
-}
-</script>
 </body>
 </html>
