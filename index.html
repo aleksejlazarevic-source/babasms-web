@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KinDeals</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="KinDeals">
+<link rel="stylesheet" href="plain.css">
+</head>
+<body>
+<main>
+<h1>All your discounts, in one place.</h1>
+<ol>
+<li>More</li>
+<li>Share</li>
+<li>Add to Home Screen</li>
+<li>Open as Web App left on</li>
+<li>Add</li>
+<li>Then tap the icon</li>
+</ol>
+</main>
+<script src="sw-register.js"></script>
+<script>
+/* The icon opens the deals. On an older iPhone, Add to Home Screen can save this
+   page's address (not tapped here, 9 Nov 2026). Standalone still goes to the deals. */
+if (window.navigator.standalone || matchMedia('(display-mode: standalone)').matches) {
+  location.replace('deals.html');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "name": "KinDeals",
+  "short_name": "KinDeals",
+  "start_url": "deals.html",
+  "scope": "./",
+  "display": "standalone"
+}

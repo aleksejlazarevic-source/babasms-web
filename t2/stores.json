@@ -1,0 +1,5 @@
+[
+  {"id": "lidl", "name": "Lidl", "gen_sl": "Lidla", "days": ["mon", "thu"], "order": 1, "test": true, "live": true},
+  {"id": "tus", "name": "Tuš", "gen_sl": "Tuša", "days": ["wed", "fri"], "order": 2, "test": true, "live": false},
+  {"id": "hofer", "name": "Hofer", "gen_sl": "Hoferja", "days": ["mon", "thu"], "order": 3, "test": true, "live": false}
+]
