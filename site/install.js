@@ -49,13 +49,11 @@
     var ua = String(env.ua || '');
     var mtp = Number(env.maxTouchPoints) || 0;
     var dismissed = env.dismissed === true;
-    var out = { kind: 'desktop', showButton: false, showGuide: true, dismissible: false, guide: null,
-      showOpen: true, showManual: false, manual: null };
+    var out = { kind: 'desktop', showButton: false, showGuide: true, dismissible: false, guide: null };
 
     if (env.standalone === true || env.displayModeStandalone === true) {
       out.kind = 'installed';
       out.showGuide = false;
-      out.showOpen = false;
       return out;
     }
 
@@ -78,7 +76,6 @@
         canAdd = !!v && (v[0] > 16 || (v[0] === 16 && v[1] >= 4));
       }
       out.kind = 'ios';
-      out.showOpen = false;
       out.showGuide = !dismissed;
       out.dismissible = out.showGuide;
       out.guide = { device: device, browser: browser, share: share, canAdd: canAdd };
@@ -89,14 +86,13 @@
     if (/Android/.test(ua) || /Mobile/.test(ua)) {
       out.kind = /Android/.test(ua) ? 'android' : 'mobile';
       out.showGuide = false;
-      out.showButton = !dismissed && env.beforeInstallPrompt === true;
-      out.dismissible = out.showButton;
-      out.showManual = !dismissed && !out.showButton;
-      out.manual = /SamsungBrowser/.test(ua) ? 'samsung' : 'chrome';
+      /* One button, always shown, so the page is never blank. No Ne zdaj:
+         hiding the button would leave nothing to install with. */
+      out.showButton = true;
       return out;
     }
 
-    return out; // desktop: iOS guide stays, plus Odpri akcije
+    return out; // desktop: the iOS guide stays, nothing else
   }
 
   /* ---------- page ---------- */
@@ -121,8 +117,8 @@
     var root = byId || document;
     var firstSay = root.querySelector('.say');
     var list = firstSay && firstSay.closest ? firstSay.closest('ol, ul') : null;
-    var setup = byId || document.querySelector('.setup') ||
-      (list && list.closest('section')) || (list && list.parentNode) || null;
+    var setup = byId || (list && list.closest('section')) ||
+      document.querySelector('.setup:not(#kd-go)') || (list && list.parentNode) || null;
     var where = (setup && setup.querySelector('.where')) || (byId ? null : document.querySelector('.where'));
     var items = [];
     if (list) {
@@ -133,7 +129,7 @@
     return { setup: setup, list: list, items: items, where: where };
   }
 
-  /* The second section: Odpri akcije, the install offer, the manual guide. */
+  /* The second section: the one install button and its note. */
   function findGo() {
     var section = document.getElementById('kd-go');
     var offer = document.getElementById('kd-offer');
@@ -141,20 +137,9 @@
       section: section,
       offer: offer,
       button: offer ? offer.querySelector('.kd-install-btn') : null,
-      later: offer ? offer.querySelector('.kd-later') : null,
-      manual: document.getElementById('kd-manual')
+      note: offer ? offer.querySelector('.kd-install-note:not(#kd-hint)') : null,
+      hint: document.getElementById('kd-hint')
     };
-  }
-
-  /* Keep only the steps for this browser. */
-  function pickManual(ol, browser) {
-    if (!ol) return;
-    var c = ol.firstElementChild;
-    while (c) {
-      var n = c.nextElementSibling;
-      if (c.getAttribute('data-browser') !== browser) ol.removeChild(c);
-      c = n;
-    }
   }
 
   function hidePictures(el) {
@@ -242,7 +227,6 @@
     };
     var choice = installChoice(env);
     if (choice.kind === 'desktop') {
-      whenReady(function () { show(findGo().section); });
       return;
     }
 
@@ -266,50 +250,50 @@
       return;
     }
 
-    // android and other non-iOS phones
-    var deferred = null, ready = false, go = null;
+    // android and other non-iOS phones: one install button, always shown
+    var deferred = null, go = null, timer = null;
 
-    function render() {
-      if (!go) return;
-      var c = installChoice(env);
-      if (c.showButton && deferred) show(go.offer); else hide(go.offer);
-      if (c.showManual) show(go.manual); else hide(go.manual);
+    /* No captured event: the ⋮ line takes the note's place for a while. */
+    function menuHint() {
+      if (!go || !go.hint) return;
+      hide(go.note);
+      show(go.hint);
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(function () {
+        timer = null;
+        hide(go.hint);
+        show(go.note);
+      }, 8000);
     }
 
     window.addEventListener('beforeinstallprompt', function (e) {
       e.preventDefault();
       deferred = e;
-      env.beforeInstallPrompt = true;
-      if (ready) render();
     });
     window.addEventListener('appinstalled', function () {
       deferred = null;
-      if (go) hide(go.offer);
+      if (!go) return;
+      if (timer) { clearTimeout(timer); timer = null; }
+      hide(go.hint);
+      hide(go.button);
+      show(go.note);
     });
 
     whenReady(function () {
-      ready = true;
       hide(findDom().setup);
       go = findGo();
-      pickManual(go.manual, choice.manual);
       if (go.button) {
         go.button.addEventListener('click', function () {
           var ev = deferred;
           deferred = null;
-          if (ev) { try { ev.prompt(); } catch (e) { /* ignore */ } }
-          hide(go.offer);
-        });
-      }
-      if (go.later) {
-        go.later.addEventListener('click', function () {
-          writeDismissed();
-          env.dismissed = true;
-          hide(go.offer);
-          hide(go.manual);
+          if (!ev) { menuHint(); return; }
+          try {
+            var p = ev.prompt();
+            if (p && typeof p.then === 'function') p.then(null, menuHint);
+          } catch (e) { menuHint(); }
         });
       }
       show(go.section);
-      render();
     });
   }
 
