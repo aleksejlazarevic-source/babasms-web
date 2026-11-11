@@ -57,7 +57,14 @@ const KD_TEXT = {
     weather: "Vreme",
     notes: "Zapiski",
     mail: "Pošta",
-    calendar: "Koledar"
+    calendar: "Koledar",
+    openDeals: "Odpri akcije",
+    chromeSay: "Tapni ⋮ zgoraj desno.",
+    chromeAside: "Tapni Dodaj na začetni zaslon ali Namesti aplikacijo. Nato tapni Namesti ali Dodaj.",
+    samsungSay: "Tapni ☰ spodaj desno.",
+    samsungAside: "Tapni Dodaj stran na. Nato tapni Začetni zaslon.",
+    installNote: "Doda ikono KinDeals na zaslon. Nato tapni ikono.",
+    notNow: "Ne zdaj"
   },
   en: {
     pitch: "All your discounts, in one place.",
@@ -98,7 +105,14 @@ const KD_TEXT = {
     weather: "Weather",
     notes: "Notes",
     mail: "Mail",
-    calendar: "Calendar"
+    calendar: "Calendar",
+    openDeals: "Open the deals",
+    chromeSay: "Tap ⋮ at the top right.",
+    chromeAside: "Tap Add to Home screen or Install app. Then tap Install or Add.",
+    samsungSay: "Tap ☰ at the bottom right.",
+    samsungAside: "Tap Add page to. Then tap Home screen.",
+    installNote: "Adds the KinDeals icon to your screen. Then tap the icon.",
+    notNow: "Not now"
   },
   de: {
     pitch: "Alle deine Rabatte an einem Ort.",

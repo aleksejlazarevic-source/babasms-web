@@ -402,6 +402,7 @@ button.shop:active::after { border-color: var(--paper); }
   display: block; width: 100%; min-height: 76px; padding: 12px 16px;
   font: inherit; font-size: 28px; font-weight: 700; line-height: 1.2;
   background: var(--tag); color: var(--ink); border: 2px solid var(--ink); border-radius: 4px; cursor: pointer;
+  text-align: center; text-decoration: none;
 }
 .kd-install-note { margin: 12px 0 0; font-size: 22px; line-height: 1.35; color: var(--ink); }
 .kd-later {

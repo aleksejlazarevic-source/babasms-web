@@ -69,7 +69,25 @@ if (window.navigator.standalone || matchMedia('(display-mode: standalone)').matc
 <p class="name">KinDeals</p>
 <h1>All your discounts, in one place.</h1>
 </header>
-<section class="setup">
+<section class="setup" id="kd-go" hidden>
+<div class="kd-install"><a class="kd-install-btn" href="deals.html">Odpri akcije</a></div>
+<div class="kd-install" id="kd-offer" hidden>
+<button type="button" class="kd-install-btn">Dodaj na domači zaslon</button>
+<p class="kd-install-note">Doda ikono KinDeals na zaslon. Nato tapni ikono.</p>
+<button type="button" class="kd-later">Ne zdaj</button>
+</div>
+<ol id="kd-manual" hidden>
+<li data-browser="chrome">
+<p class="say">Tapni ⋮ zgoraj desno.</p>
+<p class="aside">Tapni Dodaj na začetni zaslon ali Namesti aplikacijo. Nato tapni Namesti ali Dodaj.</p>
+</li>
+<li data-browser="samsung">
+<p class="say">Tapni ☰ spodaj desno.</p>
+<p class="aside">Tapni Dodaj stran na. Nato tapni Začetni zaslon.</p>
+</li>
+</ol>
+</section>
+<section class="setup" id="setup">
 <h2>Na domači zaslon</h2>
 <p class="where">Odpri to stran v Safariju. Če je stran odprta v sporočilu, tapni ikono Safari.</p>
 <ol>

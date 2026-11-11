@@ -28,8 +28,6 @@
 
   var IPAD_FIRST_ASIDE = 'Je zgoraj desno, ne spodaj.';
   var CANNOT_ADD = 'Ta brskalnik na tej napravi ne zna dodati ikone. Odpri to stran v Safariju. Če je stran odprta v sporočilu, tapni ikono Safari.';
-  var BUTTON_LABEL = 'Dodaj na domači zaslon';
-  var BUTTON_NOTE = 'Doda ikono KinDeals na zaslon. Nato tapni ikono.';
   var LATER = 'Ne zdaj';
 
   function iosBrowser(ua) {
@@ -51,11 +49,13 @@
     var ua = String(env.ua || '');
     var mtp = Number(env.maxTouchPoints) || 0;
     var dismissed = env.dismissed === true;
-    var out = { kind: 'desktop', showButton: false, showGuide: true, dismissible: false, guide: null };
+    var out = { kind: 'desktop', showButton: false, showGuide: true, dismissible: false, guide: null,
+      showOpen: true, showManual: false, manual: null };
 
     if (env.standalone === true || env.displayModeStandalone === true) {
       out.kind = 'installed';
       out.showGuide = false;
+      out.showOpen = false;
       return out;
     }
 
@@ -78,21 +78,25 @@
         canAdd = !!v && (v[0] > 16 || (v[0] === 16 && v[1] >= 4));
       }
       out.kind = 'ios';
+      out.showOpen = false;
       out.showGuide = !dismissed;
       out.dismissible = out.showGuide;
       out.guide = { device: device, browser: browser, share: share, canAdd: canAdd };
       return out;
     }
 
-    if (/Android/.test(ua)) {
-      out.kind = 'android';
+    /* Android, and any other phone that is not iOS. */
+    if (/Android/.test(ua) || /Mobile/.test(ua)) {
+      out.kind = /Android/.test(ua) ? 'android' : 'mobile';
       out.showGuide = false;
       out.showButton = !dismissed && env.beforeInstallPrompt === true;
       out.dismissible = out.showButton;
+      out.showManual = !dismissed && !out.showButton;
+      out.manual = /SamsungBrowser/.test(ua) ? 'samsung' : 'chrome';
       return out;
     }
 
-    return out; // desktop: page stays as it is
+    return out; // desktop: iOS guide stays, plus Odpri akcije
   }
 
   /* ---------- page ---------- */
@@ -113,11 +117,13 @@
   }
 
   function findDom() {
-    var firstSay = document.querySelector('.say');
+    var byId = document.getElementById('setup');
+    var root = byId || document;
+    var firstSay = root.querySelector('.say');
     var list = firstSay && firstSay.closest ? firstSay.closest('ol, ul') : null;
-    var setup = document.getElementById('setup') || document.querySelector('.setup') ||
+    var setup = byId || document.querySelector('.setup') ||
       (list && list.closest('section')) || (list && list.parentNode) || null;
-    var where = (setup && setup.querySelector('.where')) || document.querySelector('.where');
+    var where = (setup && setup.querySelector('.where')) || (byId ? null : document.querySelector('.where'));
     var items = [];
     if (list) {
       for (var c = list.firstElementChild; c; c = c.nextElementSibling) {
@@ -125,6 +131,30 @@
       }
     }
     return { setup: setup, list: list, items: items, where: where };
+  }
+
+  /* The second section: Odpri akcije, the install offer, the manual guide. */
+  function findGo() {
+    var section = document.getElementById('kd-go');
+    var offer = document.getElementById('kd-offer');
+    return {
+      section: section,
+      offer: offer,
+      button: offer ? offer.querySelector('.kd-install-btn') : null,
+      later: offer ? offer.querySelector('.kd-later') : null,
+      manual: document.getElementById('kd-manual')
+    };
+  }
+
+  /* Keep only the steps for this browser. */
+  function pickManual(ol, browser) {
+    if (!ol) return;
+    var c = ol.firstElementChild;
+    while (c) {
+      var n = c.nextElementSibling;
+      if (c.getAttribute('data-browser') !== browser) ol.removeChild(c);
+      c = n;
+    }
   }
 
   function hidePictures(el) {
@@ -211,10 +241,13 @@
       beforeInstallPrompt: false
     };
     var choice = installChoice(env);
-    if (choice.kind === 'desktop') return;
+    if (choice.kind === 'desktop') {
+      whenReady(function () { show(findGo().section); });
+      return;
+    }
 
     if (choice.kind === 'installed') {
-      whenReady(function () { hide(findDom().setup); });
+      whenReady(function () { hide(findDom().setup); hide(findGo().section); });
       return;
     }
 
@@ -233,62 +266,50 @@
       return;
     }
 
-    // android
-    var deferred = null, ready = false, dom = null, block = null;
+    // android and other non-iOS phones
+    var deferred = null, ready = false, go = null;
 
-    function renderButton() {
-      if (block || !dom || !deferred) return;
-      if (!installChoice(env).showButton) return;
-      show(dom.setup);
-      hide(dom.where);
-      hide(dom.list);
-      block = document.createElement('div');
-      block.className = 'kd-install';
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'kd-install-btn';
-      btn.textContent = BUTTON_LABEL;
-      btn.addEventListener('click', function () {
-        var ev = deferred;
-        deferred = null;
-        if (ev) { try { ev.prompt(); } catch (e) { /* ignore */ } }
-        hide(block);
-      });
-      var note = document.createElement('p');
-      note.className = 'kd-install-note';
-      note.textContent = BUTTON_NOTE;
-      block.appendChild(btn);
-      block.appendChild(note);
-      block.appendChild(laterButton(function () {
-        writeDismissed();
-        env.dismissed = true;
-        hide(block);
-        hide(dom.setup);
-      }));
-      if (dom.list && dom.list.parentNode) dom.list.parentNode.insertBefore(block, dom.list);
-      else if (dom.setup) dom.setup.appendChild(block);
+    function render() {
+      if (!go) return;
+      var c = installChoice(env);
+      if (c.showButton && deferred) show(go.offer); else hide(go.offer);
+      if (c.showManual) show(go.manual); else hide(go.manual);
     }
 
     window.addEventListener('beforeinstallprompt', function (e) {
       e.preventDefault();
       deferred = e;
       env.beforeInstallPrompt = true;
-      if (ready) renderButton();
+      if (ready) render();
     });
     window.addEventListener('appinstalled', function () {
       deferred = null;
-      hide(block);
+      if (go) hide(go.offer);
     });
 
     whenReady(function () {
       ready = true;
-      dom = findDom();
-      /* No iPhone steps, and no "open in Safari" line, until Chrome offers the button. */
-      hide(dom.setup);
-      hide(dom.where);
-      hide(dom.list);
-      if (env.dismissed) return;
-      renderButton();
+      hide(findDom().setup);
+      go = findGo();
+      pickManual(go.manual, choice.manual);
+      if (go.button) {
+        go.button.addEventListener('click', function () {
+          var ev = deferred;
+          deferred = null;
+          if (ev) { try { ev.prompt(); } catch (e) { /* ignore */ } }
+          hide(go.offer);
+        });
+      }
+      if (go.later) {
+        go.later.addEventListener('click', function () {
+          writeDismissed();
+          env.dismissed = true;
+          hide(go.offer);
+          hide(go.manual);
+        });
+      }
+      show(go.section);
+      render();
     });
   }
 
