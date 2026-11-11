@@ -30,7 +30,10 @@
   var KNOWN = [
     {id: 'lidl', name: 'Lidl', days: ['mon', 'thu'], live: true, order: 1},
     {id: 'tus', name: 'Tuš', days: ['wed', 'fri'], live: true, order: 2},
-    {id: 'hofer', name: 'Hofer', days: ['mon', 'thu'], live: true, order: 3}
+    {id: 'hofer', name: 'Hofer', days: ['mon', 'thu'], live: true, order: 3},
+    {id: 'spar', name: 'Spar', days: ['wed'], live: true, order: 4},
+    {id: 'leclerc', name: 'E.Leclerc', days: ['wed'], live: true, order: 5},
+    {id: 'mercator', name: 'Mercator', days: ['wed'], live: false, soon: true, order: 6}
   ];
   /* Coming back to the icon asks the network again after this long. One minute is a guess, 9 Nov 2026. */
   var STALE_MS = 60000;
@@ -373,6 +376,17 @@
     load(false);
   }
 
+  /* Same two tiles as before. Open is button.shop. Closed is div.shop.shut plus a small.
+     A live store with no file says there are no deals this week. Mercator says kmalu. */
+  function tileOf(store) {
+    if (canOpen(store) && !store.soon) return {tag: 'button', className: 'shop', note: ''};
+    return {
+      tag: 'div',
+      className: 'shop shut',
+      note: store.soon ? 'kmalu' : (store.live ? 'Ta teden ni akcij' : SHUT)
+    };
+  }
+
   function showList() {
     var list = $('list');
     current = null;
@@ -380,15 +394,14 @@
     list.textContent = '';
     stores.forEach(function (store) {
       var item = el('li');
-      var row;
-      if (canOpen(store)) {
-        row = el('button', 'shop', store.name);
+      var spec = tileOf(store);
+      var row = el(spec.tag, spec.className, store.name);
+      if (spec.tag === 'button') {
         row.type = 'button';
         row.addEventListener('click', function () { openStore(store); });
       } else { /* not a button: it must not open */
-        row = el('div', 'shop shut', store.name);
         row.appendChild(document.createTextNode(' '));
-        row.appendChild(el('small', '', SHUT));
+        row.appendChild(el('small', '', spec.note));
       }
       item.appendChild(row);
       list.appendChild(item);
@@ -456,6 +469,7 @@
     showText: showText, loadBatch: loadBatch, validSendDay: validSendDay, ljubljanaToday: ljubljanaToday,
     isoOf: isoOf, liveStores: liveStores, canOpen: canOpen, viewOf: viewOf, kindOf: kindOf,
     KNOWN: KNOWN, LOOK_BACK: LOOK_BACK, previousSendDay: previousSendDay, fileUrl: fileUrl,
+    tileOf: tileOf,
     MISSING: MISSING, OFFLINE: OFFLINE, PUBLIC: PUBLIC
   };
   root.KinDealsPage = api;
