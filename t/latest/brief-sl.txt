@@ -1,0 +1,72 @@
+BABASMS1
+{IME}, to so Lidlovi popusti za kuhanje od 9.11. do 11.11.:
+
+MESO
+Lokavski pršut 10,99 (13,59)
+Domači ocvirki v masti 4,79 (5,99)
+Kmečka klobasa 2,99 (3,99)
+Kranjska klobasa 2,49 (3,49)
+Prekajena svinjska zadnja krača 3,99 (4,99)
+Sveža štefani pečenka 3,99 (4,99)
+Sveži piščanec premium 3,99 (4,99)+
+Piščančji zrezki premium 3,67 (4,59)+
+Piščančja nabodala 3,49 (4,39)+
+Sušena mesnata slanina 1,79 (2,69)+
+Blejska salama 1,99 (2,79)+
+Pica s šunko in gobami XXL 4,19 (4,99)+
+Piščančja stegna premium 400 g 3,03 (3,79)+
+Piščančja stegna 1,99 (2,69)+
+Svinjski zrezki 2,59 (3,25)
+Lokavski pršut 2,39 (2,99)
+Panceta 1,99 (2,59)
+Domači suhi ocvirki 2,23 (2,79)
+Divjačinska/jelenova salama 1,99 (2,49)
+Nanoška salama 1,99 (2,49)+
+Pusto mleto mešano meso 2,99 (3,45)
+Narezek 1,39 (1,79)
+Ljubljanska salama 1,55 (1,94)
+Piščančja posebna klobasa 1,35 (1,69)
+Toast šunka 1,40 (1,69) do 9.11.
+
+MLEČNI IZDELKI
+Mleko za telo 4,79 (6,99)+
+Skutni štruklji 2,39 (3,29)+
+Sveža jajca iz hlevske reje 3,27 (4,09)
+Sveža sladka smetana 1,35 (2,09)
+Sir Ementalec XXL 2,79 (3,49)+
+Domača skuta 1,99 (2,49)
+Kisla smetana 0,49 (0,75)
+Navadni čvrsti jogurt 0,25 (0,33)
+
+SADJE IN ZELENJAVA
+Delikatesne kumarice 1,89 (2,87)+
+Francoska solata 1,35 (1,78)
+Avokado predzorjen 0,89 (1,29)+
+Motovilec 0,99 (1,39)
+Rdeče zelje 0,89 (1,29)
+Kivi zlati 0,49 (0,69)
+
+KRUH IN PECIVO
+Sirov burek 3,59 (4,49)
+Koruzni kruh brez kvasa 0,99 (1,59)+
+Ajdiv kruh z orehi 1,39 (1,95)
+Martinov kruh 1,19 (1,69)
+Kruh z drožmi 0,99 (1,39)
+Štručka s hrenovko 0,59 (0,79)
+Rogljiček 0,49 (0,68)+
+Štručka s semeni 0,29 (0,39)
+
+ZA SHRAMBO
+Pšenična polnozrnata moka 0,69 (0,99)
+Testenine polžki 0,79 (1,05)
+
+PIJAČE
+Zeliščni čaj 0,99 (1,79)+
+Nektar črni ribez 0,89 (1,29)+
+
+DRUGO ZA KUHANJE
+Domači zašinek 12,79 (15,99)
+Sušeni kare 1,59 (2,79)+
+Domače sušeno stegno 1,59 (2,09)
+
++ pomeni Lidl Plus.
