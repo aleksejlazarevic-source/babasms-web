@@ -242,6 +242,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 
 #back {
+  position: sticky; /* stays on screen while the list scrolls (Aleksej asked, 11 Nov 2026) */
+  top: 0;
+  z-index: 1; /* above the sticky section headers */
   min-height: 56px;
   margin-top: 20px;
   padding: 0 20px 0 16px;
@@ -305,7 +308,7 @@ button.shop:active::after { border-color: var(--paper); }
 .greeting + .group { margin-top: 0; }
 .section {
   position: sticky; /* she can see which section she is in */
-  top: 0;
+  top: 56px; /* just below the stuck #back: its min-height, not measured */
   margin: 0 calc(-1 * var(--side));
   padding: 12px var(--side);
   background: var(--tag);
