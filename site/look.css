@@ -94,12 +94,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .setup .say { font-size: 26px; line-height: 1.25; font-weight: 700; }
 .setup .aside { margin-top: 8px; font-size: 20px; line-height: 1.35; font-weight: 400; }
 
-/* The five setup pictures, drawn to look like the real iPhone screens. Version B of three (Aleksej
+/* The setup pictures, drawn to look like the real iPhone screens. Version B of three (Aleksej
    picked it 10 Nov 2026), then polished three ways; he picked "Y" the same day: half a phone as a thin
    line, and a black hand as the mark. The other two were not picked and are not in the repo. */
-/* ----- The iPhone parts, shared by the five pictures -----
+/* ----- The iPhone parts, shared by the pictures -----
    Drawn to look like the real screens (version B, Aleksej picked it 10 Nov 2026). Nothing here was
-   checked on her phone: iOS 27 is drawn from iOS 26 Safari (guess). The words
+   checked on her phone. Steps 2 and 3 copy her iOS 27 photos of 11 Nov 2026; step 1's bar is drawn
+   from what she said about it (no photo). The words
    follow the phone's language (setup-lang.js). No Apple logo, no product photo.
    Every size is in em, and the em is set from the picture's width, so 320 and 430 wide are the same
    drawing, smaller or bigger. All em sizes below are guesses by eye in Chromium, 10 Nov 2026. */
@@ -117,7 +118,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* Safari's bottom bar: three glass pieces */
 .d .gl { background: #f5f5f7; border: 0.06em solid rgba(0, 0, 0, 0.06); box-shadow: 0 0.1em 0.5em rgba(0, 0, 0, 0.14), 0 0 0.06em rgba(0, 0, 0, 0.22); }
 .d .bar { display: flex; align-items: center; gap: 0.6em; }
-.d .circ { width: 3em; height: 3em; border-radius: 50%; display: grid; place-items: center; flex: none; --r: 1.5em; }
 .d .pill { flex: 1; min-width: 0; height: 3em; border-radius: 1.5em; display: flex; align-items: center; gap: 0.35em; padding: 0 0.75em; }
 .d .pill .aa { font-size: 0.72em; color: #555; letter-spacing: -0.02em; }
 .d .pill .aa big { font-size: 1.25em; }
@@ -126,45 +126,23 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .d .hind { width: 8.4em; height: 0.32em; border-radius: 0.2em; background: #000; margin: 0 auto; } /* the line at the very bottom of her screen */
 .d .ln { height: 0.7em; border-radius: 0.35em; background: #e5e5ea; }   /* a line of the page behind, as a grey bar. No copy of the headline. */
 
-/* a menu or list row: the word on the left, its sign on the right. A long word wraps; it never leaves the row. */
+/* a menu or list row: a sign and a word, in the order her phone shows them. A long word wraps; it never leaves the row. */
 .d .r { display: flex; align-items: center; gap: 0.7em; min-height: 2.95em; padding: 0.45em 1.05em; font-size: 1.05em; border-top: 0.05em solid rgba(60, 60, 67, 0.18); --r: 0.9em; }
 .d .r:first-child { border-top: 0; }
 .d .r > span { flex: 1; min-width: 0; overflow-wrap: break-word; }
 .d .r .i { color: #1c1c1e; }
-.d .menu { background: #fbfbfc; border-radius: 1.4em; box-shadow: 0 0.25em 1.4em rgba(0, 0, 0, 0.2), 0 0 0.06em rgba(0, 0, 0, 0.3); }
-.d .menu .r:first-child { --r: 1.4em; }
 .d .grp { background: #fff; border-radius: 1.1em; }
-.d .edit { display: block; text-align: center; font-size: 1.05em; color: #007aff; } /* #007aff: iOS system blue, light mode (from memory) */
+/* an app tile with its name under it, and the Prikaži več circle (the share sheet) */
+.d .ap { display: flex; flex-direction: column; align-items: center; gap: 0.35em; min-width: 0; font-size: 0.78em; }
+.d .ap .ic { display: block; width: 4.4em; height: 4.4em; border-radius: 1em; overflow: hidden; flex: none; }
+.d .ap .ic svg, .d .ic4 svg { display: block; width: 100%; height: 100%; }
+.d .ap > span { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d .ic4 { display: block; width: 3.4em; height: 3.4em; border-radius: 0.8em; overflow: hidden; flex: none; border: 0.05em solid rgba(0, 0, 0, 0.12); background: var(--tag); }
+.d .chev { width: 2.5em; height: 2.5em; border-radius: 50%; background: #e9e9ee; display: grid; place-items: center; flex: none; }
 
-/* the Add to Home Screen sheet */
-.d .nav4 { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; font-size: 0.86em; } /* 0.86 so the Slovenian title stays on one line, as on the phone (tried at 320, 375, 430) */
-.d .nav4 .t { font-weight: 600; text-align: center; padding: 0 0.5em; min-width: 0; overflow-wrap: break-word; }
-.d .nav4 .c { justify-self: start; padding: 0.5em 0.2em; color: #007aff; }
-.d .nav4 .dd { justify-self: end; padding: 0.5em 0.7em; font-weight: 600; color: #007aff; --r: 1.2em; }
-.d .app4 { display: flex; align-items: center; gap: 0.9em; padding: 0.8em 1em; }
-.d .app4 .ic4 { display: block; width: 3.4em; height: 3.4em; border-radius: 0.8em; overflow: hidden; flex: none; border: 0.05em solid rgba(0, 0, 0, 0.12); background: var(--tag); }
-.d .app4 .ic4 svg { display: block; width: 100%; height: 100%; }
-.d .app4 .n { flex: 1; min-width: 0; font-size: 1.1em; }
-.d .app4 .n span { display: block; border-bottom: 0.05em solid #e5e5ea; padding-bottom: 0.4em; margin-bottom: 0.3em; }
-.d .app4 .n small { display: block; font-size: 0.8em; color: #8e8e93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.d .note4 { margin: 0.6em 0.5em 0.8em; font-size: 0.78em; line-height: 1.3; color: #6c6c70; }
-.d .web4 { display: flex; align-items: center; gap: 0.6em; padding: 0.7em 0.9em; font-size: 0.95em; }
-.d .web4 > span:first-child { flex: 1; min-width: 0; overflow-wrap: break-word; }
-.d .sw { width: 3.2em; height: 1.95em; border-radius: 1em; background: #34c759; position: relative; flex: none; } /* iOS green: the switch is on */
-.d .sw::after { content: ""; position: absolute; top: 0.15em; right: 0.15em; width: 1.65em; height: 1.65em; border-radius: 50%; background: #fff; box-shadow: 0 0.1em 0.3em rgba(0, 0, 0, 0.3); }
-
-/* a home-screen app: a drawn tile and its name */
-.d .ap { display: flex; flex-direction: column; align-items: center; gap: 0.4em; min-width: 0; font-size: 0.72em; color: #fff; text-shadow: 0 0.05em 0.25em rgba(0, 0, 0, 0.45); --r: 1.5em; }
-.d .ap .ic { display: block; width: 5em; height: 5em; border-radius: 1.15em; overflow: hidden; flex: none; box-shadow: 0 0.08em 0.4em rgba(0, 0, 0, 0.25); background: #fff; }
-.d .ap .ic svg { display: block; width: 100%; height: 100%; }
-.d .ap > span { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } /* a long app name is cut with dots; setup-lang.js shrinks it first */
-.d .dock { display: flex; justify-content: space-around; align-items: center; border-radius: 1.8em; background: rgba(255, 255, 255, 0.3); }
-.d .dock .ic { display: block; width: 3.7em; height: 3.7em; border-radius: 0.85em; overflow: hidden; box-shadow: 0 0.06em 0.3em rgba(0, 0, 0, 0.25); }
-.d .dock .ic svg { display: block; width: 100%; height: 100%; }
-
-/* ----- How the five pictures are put together: half a phone, and a hand -----
+/* ----- How the pictures are put together: half a phone, and a hand -----
    The phone is still drawn, as one thin black line, but only the end of it where the step happens:
-   the bottom for steps 1, 2, 3 and 5, the top for step 4. The other end fades into the page.
+   the bottom, for steps 1, 2 and 3. The other end fades into the page. Step 4 has no picture.
    The mark is a black hand that comes in from the right margin and touches the thing to tap.
    It lies beside the target, never on it, so it covers none of the target's words. */
 .setup li > .pic.y { container-type: inline-size; }
@@ -205,80 +183,47 @@ button { font: inherit; color: inherit; cursor: pointer; }
   pointer-events: none;
 }
 
-/* 1. her bottom row, seen 10 Nov 2026 at 19:56. The arrow is share. The three lines are not. */
-.y .y1 { padding: 2.4em 0.2em 0.45em; }
-.y1 .addr {
-  display: flex;
-  align-items: center;
-  gap: 0.45em;
-  height: 2.5em;
-  margin: 0 0.7em;
-  padding: 0 0.7em;
-  border-radius: 0.7em;
-  background: #f2f2f7;
-}
-.y1 .addr .dom { flex: 1; min-width: 0; text-align: center; font-size: 0.86em; font-weight: 600; white-space: nowrap; overflow: hidden; }
-.y1 .addr .i { width: 1.15em; height: 1.15em; color: #1c1c1e; }
-.y1 .tools { display: flex; align-items: center; justify-content: space-between; margin: 0.85em 0.85em 0; }
-.y1 .tools > .i { width: 1.55em; height: 1.55em; color: #1c1c1e; }
-.y1 .tool {
-  width: 2.7em;
-  height: 2.7em;
-  border-radius: 50%;
-  background: var(--tag);
-  display: grid;
-  place-items: center;
-}
-.y1 .tool .i { width: 1.45em; height: 1.45em; color: #1c1c1e; }
-
-/* 2. her share sheet, copied from the 11 Nov 2026 08:40 photo. No people's names. */
-.y .yshare { padding: 1.5em 0.7em 0.45em; background: #f2f2f7; }
-.yshare .preview { display: flex; gap: 0.7em; align-items: center; background: #fff; border-radius: 1em; padding: 0.7em; }
-.yshare .preview .n { min-width: 0; }
-.yshare .preview .n span { display: block; font-weight: 700; font-size: 1em; }
-.yshare .preview .n small { display: block; color: #8e8e93; font-size: 0.78em; }
-.yshare .opt { display: inline-block; margin-top: 0.35em; padding: 0.15em 0.55em; border-radius: 1em; background: #f2f2f7; color: #3a3a3c; font-size: 0.72em; font-weight: 600; }
-.yshare .dest { display: flex; gap: 1.2em; margin: 0.9em 0.3em; font-size: 0.72em; font-weight: 600; }
-.yshare .dest span { display: flex; flex-direction: column; align-items: center; gap: 0.25em; }
-.yshare .blob { width: 2.8em; height: 2.8em; border-radius: 0.7em; }
-.yshare .air { background: #0a84ff; }
-.yshare .msg { background: #30d158; }
-.yshare .more { display: flex; align-items: center; gap: 0.55em; background: #fff; border-radius: 0.8em; min-height: 2.6em; padding: 0.4em 0.8em; font-weight: 600; font-size: 0.95em; }
-.yshare .down { width: 0.55em; height: 0.55em; border-right: 0.14em solid #1c1c1e; border-bottom: 0.14em solid #1c1c1e; transform: rotate(45deg) translateY(-0.15em); }
+/* 1. the bottom of Safari with the bottom toolbar: the address, then a row of five signs.
+   Share is the middle one. Her iPhone 11, iOS 27 (her photos, 11 Nov 2026); sizes by eye (guess). */
+.y .y1 { padding: 1.6em 0 0.55em; }
+.y1 .ln { margin: 0 1.4em 0.8em; }
+.y1 .ln.s { width: 48%; }
 .y .ph .bar { padding: 0 0.8em; margin-top: 1.1em; gap: 0.45em; }
 .y .ph .dom { font-size: 0.74em; }   /* so the whole address shows (tried at 320, 375, 430) */
+.y1 .pill .i { width: 1.25em; height: 1.25em; color: #1c1c1e; }
+.y1 .tools { display: flex; align-items: center; justify-content: space-between; margin: 0.7em 1.3em 0; height: 3em; }
+.y1 .tools .i { width: 1.6em; height: 1.6em; color: #1c1c1e; }
+.y1 .tools .tap { display: grid; place-items: center; --r: 1.5em; }
+/* Share is in the middle of the row, so a hand from the right margin would cover the next sign.
+   Here the same hand comes up from below the phone, fingertip under the arrow (guess by eye). */
+.y1 .tools .tap::after { left: 50%; top: 100%; transform-origin: 0 37.5%; transform: translateY(-37.5%) rotate(90deg); }
+.setup li > .pic.y:has(.y1) { margin-bottom: 14px; }   /* room for the hand under the phone (guess by eye) */
 .y .ph .hind { margin-top: 0.75em; }
 
-/* 2. the menu above the bar. The page behind is a little darker, as it is when a menu is open. */
-.y .y2 { padding: 3em 0 0.55em; background: #d2d2d6; } /* white under a light shade; no yellow behind it, so no olive (guess) */
-.y2 .menu { width: 15em; margin: 0 0.8em 0 auto; }
-.y2 .bar { margin-top: 0.6em; }
+/* 2. the bottom of the share sheet: the page's card, AirDrop and Sporočila, then Prikaži več.
+   White, as on her photo of 11 Nov 2026, 08:40. */
+.y .y2 { padding: 2.2em 0.9em 0.55em; }
+.y2 .pv { display: flex; align-items: center; gap: 0.9em; padding: 0 0.15em 0.8em; }
+.y2 .pv .n { flex: 1; min-width: 0; }
+.y2 .pv .n > span { display: block; font-size: 1.15em; font-weight: 700; }
+.y2 .pv .n small { display: block; font-size: 0.9em; color: #8e8e93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.y2 .opt { display: inline-flex; align-items: center; gap: 0.15em; margin-top: 0.35em; padding: 0.25em 0.45em 0.25em 0.75em; border-radius: 1em; background: #f2f2f7; font-size: 0.85em; font-weight: 400; }
+.y2 .opt .i { width: 1em; height: 1em; color: #8e8e93; }
+.y2 .r { padding-left: 0.15em; padding-right: 0.15em; }
+.y2 .apps { gap: 1.6em; padding-top: 0.8em; padding-bottom: 0.8em; }
+.y2 .apps > .ap { flex: none; }
+.y2 .tap { margin-bottom: 0.9em; }
 
-/* 3. her list after Prikaži več, 11 Nov 2026 08:55. Icons sit on the left, as on her sheet. */
-.y .y3 { padding: 0 0.7em 0.55em; background: #f2f2f7; }
-.y3 .grp { background: #e9e9ee; }
-.y3 .cut { border-radius: 0 0 1.1em 1.1em; margin-bottom: 0.7em; padding-top: 1.4em; }
-.y3 .r { font-size: 0.92em; font-weight: 600; }
-.y3 .edit { margin: 1em 0 1.1em; }
-
-/* 4. the top of the phone with the Add to Home Screen sheet */
-.y .y4 { background: #c4c4c9; } /* the page behind the sheet, shaded (guess) */
-.y4 .stat { display: flex; justify-content: space-between; align-items: center; height: 2.3em; padding: 0 1.9em; font-size: 0.85em; font-weight: 600; }
-.y4 .notch { position: absolute; top: -0.02em; left: 50%; width: 10em; height: 1.5em; margin-left: -5em; border-radius: 0 0 1em 1em; background: var(--ink); } /* an iPhone 11 has a notch */
-.y4 .bat { width: 1.9em; height: 0.9em; border: 0.1em solid #000; border-radius: 0.28em; padding: 0.1em; }
-.y4 .bat::after { content: ""; display: block; width: 75%; height: 100%; border-radius: 0.1em; background: #000; }
-.y4 .sheet4 { background: #f2f2f7; border-radius: 1.6em 1.6em 0 0; margin-top: 0.5em; padding: 0.7em 0.9em 3.2em; }
-.y4 .nav4 { margin-bottom: 0.8em; }
-
-/* 5. the bottom of the home screen */
-.y .y5 { padding: 3.2em 0 0.5em; background: linear-gradient(170deg, #7ea3e6, #4f69c8 55%, #3b3f98); } /* a plain blue wallpaper (guess) */
-.y5 .grid5 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 0 0.6em; }
-.y5 .ap { font-size: 0.78em; }   /* the app names are 9.5px on a 320 phone, not 8.7 (tried 10 Nov 2026) */
-.y5 .dots5 { display: flex; justify-content: center; gap: 0.5em; margin: 1.3em 0 0.9em; }
-.y5 .dots5 b { width: 0.5em; height: 0.5em; border-radius: 50%; background: rgba(255, 255, 255, 0.45); }
-.y5 .dots5 b:first-child { background: #fff; }
-.y5 .dock { margin: 0 0.8em; height: 5.1em; padding: 0 0.4em; }
-.y5 .hind { background: #fff; }
+/* 3. the list after Prikaži več, scrolled down. A white sheet with grey boxes, the sign on the left,
+   as on her photos of 11 Nov 2026, 08:55. The rows are bigger than step 2's, as on her screen, so
+   Dodaj na domači zaslon wraps onto two lines (tried at 320, 375, 430; guess by eye). */
+.y .y3 { padding: 0 0.9em 0.55em; }
+.y3 .grp { background: #ececf0; }
+.y3 .r { font-size: 1.2em; gap: 0.6em; }
+.y3 .tap > span { max-width: 8.6em; }   /* on her screen this one row wraps after "Dodaj na" */
+.y3 .r .i { width: 1.25em; height: 1.25em; }
+.y3 .cut { border-radius: 0 0 1.1em 1.1em; margin-bottom: 0.9em; padding-top: 0.9em; }
+.y3 .grp:last-of-type { margin-bottom: 1em; }
 
 @media (max-width: 359px) {
   .tag h1 { font-size: 38px; }

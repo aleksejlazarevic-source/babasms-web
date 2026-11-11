@@ -25,43 +25,28 @@ if (window.navigator.standalone || matchMedia('(display-mode: standalone)').matc
 <!-- shared drawing parts. aria-hidden, so a screen reader skips them. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
-    <linearGradient id="g-grey" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6e6ea"/><stop offset="1" stop-color="#b6b6bd"/></linearGradient>
     <linearGradient id="g-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5ab2f9"/><stop offset="1" stop-color="#1f6ee0"/></linearGradient>
     <linearGradient id="g-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#63e07f"/><stop offset="1" stop-color="#1fb34c"/></linearGradient>
-    <linearGradient id="g-red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6b80"/><stop offset="1" stop-color="#f5243f"/></linearGradient>
   </defs>
   <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
   <symbol id="i-fwd" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
-  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
-  <symbol id="i-tabs" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M5 15V6.5A1.5 1.5 0 0 1 6.5 5H15"/></symbol>
-  <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.7" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7"/></symbol>
+  <symbol id="i-lines" viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></symbol>
+  <symbol id="i-tabs" viewBox="0 0 24 24"><rect x="8" y="8" width="11.5" height="11.5" rx="2.2"/><path d="M5 15.5V6.7A1.7 1.7 0 0 1 6.7 5H15.5"/></symbol>
   <symbol id="i-reload" viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.2-5.1M19 4v4.5h-4.5"/></symbol>
   <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3.5M8 7l4-4 4 4M7 10.5H6a1.5 1.5 0 0 0-1.5 1.5v7A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 18 10.5h-1"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3.5"/><path d="M12 8.5v7M8.5 12h7"/></symbol>
-  <symbol id="i-find" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></symbol>
+  <symbol id="i-find" viewBox="0 0 24 24"><path d="M14 20.5H7a1.5 1.5 0 0 1-1.5-1.5V5A1.5 1.5 0 0 1 7 3.5h10A1.5 1.5 0 0 1 18.5 5v6M9 8h6M9 11.5h3"/><circle cx="15" cy="16" r="2.8"/><path d="M17 18l2.5 2.5"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5zM12 6.5v13"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.8l2.5 5.3 5.8.7-4.3 4 1.1 5.7L12 16.7l-5.1 2.8L8 13.8l-4.3-4 5.8-.7z"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M3.5 8.5h17M7 15c1-2.2 1.8-2.2 2.3 0s1.3 2.2 2.3 0 1.3-2.2 2.3 0"/></symbol>
+  <symbol id="i-mark" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 19.5l2.5-9h2l2.5 9M11 10.5l1-3 1 3"/></symbol>
   <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V4h10v5M7 17H5a1.5 1.5 0 0 1-1.5-1.5v-5A1.5 1.5 0 0 1 5 9h14a1.5 1.5 0 0 1 1.5 1.5v5A1.5 1.5 0 0 1 19 17h-2M7 14h10v6H7z"/></symbol>
-  <symbol id="i-note" viewBox="0 0 24 24"><rect x="6" y="3.5" width="12" height="17" rx="2"/><path d="M9 8.5h6M9 12h6M9 15.5h3"/></symbol>
-  <symbol id="i-mark" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.2"/><path d="M9.2 16.2l2.8-8.2 2.8 8.2M10.3 13.6h3.4"/></symbol>
-  <!-- home-screen tiles. Drawn from scratch as plain pictures (a flower, a camera, a clock).
-       They are not Apple's artwork and there is no Apple logo. -->
-  <symbol id="a-photos" viewBox="0 0 60 60"><rect width="60" height="60" fill="#fff"/><g transform="translate(30 30)">
-    <ellipse cy="-12.5" rx="6.4" ry="10.5" fill="#f9a51f" opacity=".88"/>
-    <ellipse cy="-12.5" rx="6.4" ry="10.5" fill="#e9cf24" opacity=".88" transform="rotate(45)"/>
-    <ellipse cy="-12.5" rx="6.4" ry="10.5" fill="#86c440" opacity=".88" transform="rotate(90)"/>
-    <ellipse cy="-12.5" rx="6.4" ry="10.5" fill="#37b5a0" opacity=".88" transform="rotate(135)"/>
-    <ellipse cy="-12.5" rx="6.4" ry="10.5" fill="#3f8fe6" opacity=".88" transform="rotate(180)"/>
-    <ellipse cy="-12.5" rx="6.4" ry="10.5" fill="#8a68d8" opacity=".88" transform="rotate(225)"/>
-    <ellipse cy="-12.5" rx="6.4" ry="10.5" fill="#de519b" opacity=".88" transform="rotate(270)"/>
-    <ellipse cy="-12.5" rx="6.4" ry="10.5" fill="#f2603a" opacity=".88" transform="rotate(315)"/></g></symbol>
-  <symbol id="a-camera" viewBox="0 0 60 60"><rect width="60" height="60" fill="url(#g-grey)"/><path d="M14 23.5a4 4 0 0 1 4-4h4.2l2.4-3.6h10.8l2.4 3.6H42a4 4 0 0 1 4 4V40a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4z" fill="#2b2b2e"/><circle cx="30" cy="31.5" r="7.6" fill="none" stroke="#d6d6db" stroke-width="2.4"/><circle cx="30" cy="31.5" r="3.2" fill="#6b6b70"/></symbol>
-  <symbol id="a-clock" viewBox="0 0 60 60"><rect width="60" height="60" fill="#111"/><circle cx="30" cy="30" r="22.5" fill="#fff"/><path d="M30 10.5v3.5M30 46v3.5M10.5 30H14M46 30h3.5" stroke="#111" stroke-width="2" stroke-linecap="round"/><path d="M30 30V17.5M30 30l9.5 4" stroke="#111" stroke-width="2.6" stroke-linecap="round" fill="none"/><path d="M30 30L21 41" stroke="#ff9500" stroke-width="1.3" stroke-linecap="round"/><circle cx="30" cy="30" r="1.9" fill="#ff9500"/></symbol>
+  <!-- app tiles, drawn from scratch as plain pictures. They are not Apple's artwork and there is no Apple logo. -->
   <!-- the KinDeals icon, drawn here so the page holds no picture file (tests/test_plain_page.py). Size and place matched by eye to icon-192.png, 10 Nov 2026 (guess). -->
   <symbol id="a-kin" viewBox="0 0 60 60"><rect width="60" height="60" fill="#FFD500"/><text x="30" y="45" text-anchor="middle" font-family="Lexend, system-ui, sans-serif" font-style="normal" font-weight="800" font-size="40" fill="#111">%</text></symbol>
-  <symbol id="a-phone" viewBox="0 0 60 60"><rect width="60" height="60" fill="url(#g-green)"/><path transform="translate(12 12) scale(1.5)" d="M6 4l3 .5 1.5 4-2 1.5a11 11 0 0 0 5.5 5.5l1.5-2 4 1.5.5 3c-1 1.5-2.5 2-4 2C10 20 4 14 4 8c0-1.5.5-3 2-4z" fill="#fff"/></symbol>
-  <symbol id="a-compass" viewBox="0 0 60 60"><rect width="60" height="60" fill="#fff"/><circle cx="30" cy="30" r="21" fill="url(#g-sky)"/><path d="M39 21l-5.5 12.5L21 39l5.5-12.5z" fill="#fff"/><path d="M39 21l-12.5 5.5 7 7z" fill="#ff3b30"/></symbol>
+  <symbol id="a-air" viewBox="0 0 60 60"><rect width="60" height="60" fill="url(#g-sky)"/><g fill="none" stroke="#fff" stroke-linecap="round"><path d="M19 38a14 14 0 1 1 22 0" stroke-width="3" opacity=".55"/><path d="M23.5 34.5a8.5 8.5 0 1 1 13 0" stroke-width="3" opacity=".8"/></g><circle cx="30" cy="28" r="3.6" fill="#fff"/><path d="M30 31.5L22 47h16z" fill="#fff"/></symbol>
   <symbol id="a-bubble" viewBox="0 0 60 60"><rect width="60" height="60" fill="url(#g-green)"/><path transform="translate(12 12) scale(1.5)" d="M12 4.5c4.7 0 8.5 3 8.5 6.8S16.7 18 12 18c-1 0-2-.1-2.9-.4L5 19.5l1-3.3C4.6 15 3.5 13.3 3.5 11.3 3.5 7.5 7.3 4.5 12 4.5z" fill="#fff"/></symbol>
-  <symbol id="a-music" viewBox="0 0 60 60"><rect width="60" height="60" fill="url(#g-red)"/><g transform="translate(12 12) scale(1.5)" fill="#fff" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17V6l9-2v11" fill="none"/><circle cx="7" cy="17" r="2"/><circle cx="16" cy="15" r="2"/></g></symbol>
 </svg>
 
 <main>
@@ -81,21 +66,21 @@ if (window.navigator.standalone || matchMedia('(display-mode: standalone)').matc
 <p class="where">Odpri to stran v Safariju. Če je stran odprta v sporočilu, tapni ikono Safari.</p>
 <ol>
 
-<!-- 1. her iPhone 11, 10 Nov 2026, 19:56. Share is the arrow in the bottom row.
-     The three lines by the address open a different menu. -->
+<!-- 1. the bottom of Safari on her iPhone 11, iOS 27, bottom toolbar (her photos, 11 Nov 2026).
+     The hand points at the share arrow in the middle of the bottom row. The three lines by the
+     address open a different menu. -->
 <li>
 <p class="say">Tapni puščico iz kvadratka.</p>
 <p class="aside">Je na sredini spodnje vrstice. Tri črte ob naslovu odprejo drug meni.</p>
 <div class="pic d y" aria-hidden="true"><div class="cv"><div class="ph bot y1">
-  <div class="addr">
-    <svg class="i"><use href="#i-menu"/></svg>
-    <span class="dom">kindeals.vercel.app</span>
-    <svg class="i"><use href="#i-reload"/></svg>
+  <div class="ln"></div><div class="ln s"></div>
+  <div class="bar">
+    <span class="gl pill"><svg class="i"><use href="#i-lines"/></svg><span class="dom">kindeals.vercel.app</span><svg class="i"><use href="#i-reload"/></svg></span>
   </div>
   <div class="tools">
     <svg class="i"><use href="#i-back"/></svg>
     <svg class="i"><use href="#i-fwd"/></svg>
-    <span class="tool tap"><svg class="i"><use href="#i-share"/></svg></span>
+    <span class="tap"><svg class="i"><use href="#i-share"/></svg></span>
     <svg class="i"><use href="#i-book"/></svg>
     <svg class="i"><use href="#i-tabs"/></svg>
   </div>
@@ -103,36 +88,34 @@ if (window.navigator.standalone || matchMedia('(display-mode: standalone)').matc
 </div></div></div>
 </li>
 
-<!-- 2. her share sheet, 11 Nov 2026, 08:40. The row to tap is Prikaži več.
-     Names of people are left out. The list under it was not on this screen. -->
+<!-- 2. the share sheet (her photo, 11 Nov 2026, 08:40). The hand points at Prikaži več, its bottom row.
+     The row of people is left out: no names. -->
 <li>
 <p class="say">Tapni Prikaži več.</p>
-<p class="aside">Odpre se daljši seznam.</p>
-<div class="pic d y" aria-hidden="true"><div class="cv"><div class="ph bot yshare">
-  <div class="preview">
+<p class="aside">Je spodnja vrstica, s puščico navzdol.</p>
+<div class="pic d y" aria-hidden="true"><div class="cv"><div class="ph bot y2">
+  <div class="pv">
     <i class="ic4"><svg><use href="#a-kin"/></svg></i>
-    <div class="n">
-      <span>KinDeals</span>
-      <small>kindeals.vercel.app</small>
-      <b class="opt">Možnosti ›</b>
-    </div>
+    <div class="n"><span>KinDeals</span><small>kindeals.vercel.app</small><b class="opt"><span>Možnosti</span><svg class="i"><use href="#i-fwd"/></svg></b></div>
   </div>
-  <div class="dest">
-    <span><i class="blob air"></i>AirDrop</span>
-    <span><i class="blob msg"></i>Sporočila</span>
+  <div class="r apps">
+    <span class="ap"><i class="ic"><svg><use href="#a-air"/></svg></i><span>AirDrop</span></span>
+    <span class="ap"><i class="ic"><svg><use href="#a-bubble"/></svg></i><span>Sporočila</span></span>
   </div>
-  <div class="more tap"><i class="down"></i><span>Prikaži več</span></div>
+  <div class="r tap"><i class="chev"><svg class="i"><use href="#i-down"/></svg></i><span>Prikaži več</span></div>
   <div class="hind"></div>
 </div></div></div>
 </li>
 
-<!-- 3. her list after Prikaži več, 11 Nov 2026, 08:55. Dodaj na domači zaslon is the
-     last row of that grey box, under Poišči na strani. Names of people are left out. -->
+<!-- 3. the list after Prikaži več, scrolled down (her photos, 11 Nov 2026, 08:55). The hand points at
+     Dodaj na domači zaslon, the last row of its grey box, under Poišči na strani. Icons on the left,
+     as on her phone. -->
 <li>
 <p class="say">Pomakni se navzdol. Tapni Dodaj na domači zaslon.</p>
 <p class="aside">Je zadnja vrstica v sivem okvirju, pod Poišči na strani.</p>
 <div class="pic d y" aria-hidden="true"><div class="cv"><div class="ph bot y3">
   <div class="grp cut">
+    <div class="r"><svg class="i"><use href="#i-star"/></svg><span>Dodaj med priljubljene</span></div>
     <div class="r"><svg class="i"><use href="#i-note"/></svg><span>Dodaj v hitri zapisek</span></div>
     <div class="r"><svg class="i"><use href="#i-find"/></svg><span>Poišči na strani</span></div>
     <div class="r tap"><svg class="i"><use href="#i-plus"/></svg><span>Dodaj na domači zaslon</span></div>
@@ -145,31 +128,10 @@ if (window.navigator.standalone || matchMedia('(display-mode: standalone)').matc
 </div></div></div>
 </li>
 
-<!-- 4. words only. The Add sheet after this row has not been photographed. -->
+<!-- 4. words only. The sheet after Dodaj na domači zaslon was not photographed, so it is not drawn
+     and its button is not named. -->
 <li>
-<p class="say">Odpri kot spletno aplikacijo pusti vklopljeno. Ime pusti KinDeals. Tapni Dodaj.</p>
-<p class="aside">Izklopljeno odpre stran v Safariju.</p>
-</li>
-
-<!-- 5. the bottom of the home screen; the hand points at the new KinDeals icon -->
-<li>
-<p class="say">Nato tapni ikono.</p>
-<div class="pic d y" aria-hidden="true"><div class="cv"><div class="ph bot y5">
-  <div class="grid5">
-    <span class="ap"><i class="ic"><svg><use href="#a-photos"/></svg></i><span>Fotografije</span></span>
-    <span class="ap"><i class="ic"><svg><use href="#a-camera"/></svg></i><span>Kamera</span></span>
-    <span class="ap"><i class="ic"><svg><use href="#a-clock"/></svg></i><span>Ura</span></span>
-    <span class="ap tap"><i class="ic"><svg><use href="#a-kin"/></svg></i><span>KinDeals</span></span>
-  </div>
-  <div class="dots5"><b></b><b></b></div>
-  <div class="dock">
-    <i class="ic"><svg><use href="#a-phone"/></svg></i>
-    <i class="ic"><svg><use href="#a-compass"/></svg></i>
-    <i class="ic"><svg><use href="#a-bubble"/></svg></i>
-    <i class="ic"><svg><use href="#a-music"/></svg></i>
-  </div>
-  <div class="hind"></div>
-</div></div></div>
+<p class="say">Na koncu tapni gumb zgoraj desno.</p>
 </li>
 
 </ol>
