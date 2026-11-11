@@ -241,17 +241,32 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 0 var(--side) calc(56px + env(safe-area-inset-bottom));
 }
 
+/* The top bar of an open store: a yellow strip that stays at the top of the screen, with the
+   back button at its right end. A stuck section name lies in the same strip, left of the button,
+   so there is one bar, not two (Aleksej asked for a back button that is always there, 11 Nov 2026).
+   6, 62, 68, 10 and 150 below are guesses from the button's 56px height and its 130px width, measured
+   in Chromium at 390 wide, 11 Nov 2026; not tried on her phone. */
 #back {
-  position: sticky; /* stays on screen while the list scrolls (Aleksej asked, 11 Nov 2026) */
-  top: 0;
-  z-index: 1; /* above the sticky section headers */
+  position: sticky;
+  top: 6px;
+  z-index: 1; /* above the bar and the stuck section names */
+  display: block;
   min-height: 56px;
-  margin-top: 20px;
+  margin: 6px 0 -62px auto; /* takes no room of its own: it lies on #bar, which follows it */
   padding: 0 20px 0 16px;
   background: var(--paper);
   border: 2px solid var(--ink);
   border-radius: 4px;
   font-weight: 700;
+}
+#bar { display: none; }
+#back:not([hidden]) + #bar { /* only while a store is open */
+  display: block;
+  position: sticky;
+  top: 0;
+  height: 68px; /* 6 + the button's 56 + 6 */
+  margin: 0 calc(-1 * var(--side));
+  background: var(--tag);
 }
 #back::before { /* a drawn arrowhead, so the control reads as "back" before the word is read */
   content: "";
@@ -308,9 +323,9 @@ button.shop:active::after { border-color: var(--paper); }
 .greeting + .group { margin-top: 0; }
 .section {
   position: sticky; /* she can see which section she is in */
-  top: 56px; /* just below the stuck #back: its min-height, not measured */
+  top: 10px; /* a one-line name (48px tall) sits in the middle of the 68px bar */
   margin: 0 calc(-1 * var(--side));
-  padding: 12px var(--side);
+  padding: 12px calc(var(--side) + 150px) 12px var(--side); /* the right side is left free for the back button */
   background: var(--tag);
   font-size: 20px;
   line-height: 1.2;
