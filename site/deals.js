@@ -150,20 +150,34 @@
       section = [];
     }
 
+    var hideBatch = false;
     for (var i = 1; i < body.length; i++) {
       var line = body[i];
       if (line === '') continue;
+      /* A preview batch header hides its own deals until the next batch header.
+         A loose internal line is dropped on its own. */
+      if (isInternal(line)) {
+        if (isValidity(line) || /^\s*\d+\)/.test(line)) hideBatch = true;
+        continue;
+      }
+      if (hideBatch) {
+        if (isValidity(line) || /^\s*\d+\)/.test(line)) hideBatch = false;
+        continue;
+      }
       if (PRICE.test(line)) {
         if (keep(line)) section.push(line);
         continue;
       }
-      if (section.length && line.toUpperCase() !== line) {
+      if (isValidity(line)) continue;
+      /* "Babi, …" is the preamble. The greeting already names the store. */
+      if (line.indexOf('Babi,') === 0) continue;
+      if (isHeading(line)) {
         flush();
-        footer = line;
+        section.push(line);
         continue;
       }
       flush();
-      section.push(line);
+      footer = line;
     }
     flush();
     if (!kept && carry) return {kind: 'none', lines: [MISSING]};
@@ -277,11 +291,33 @@
     return {type: 'message', title: text.slice(0, cut + 1), body: text.slice(cut + 2)};
   }
 
+  /* "velja" as its own word. "veljajo" is a sentence, not a second date. */
+  var INTERNAL = /samo za pregled|not valid|preview/i;
+  var RANGE_ONLY = /^\s*\d{1,2}\.(\s*\d{1,2}\.)?(\s*\d{4})?\s*[–—-]\s*\d{1,2}\.\s*\d{1,2}\.(\s*\d{4})?\s*$/;
+
+  function isInternal(line) {
+    return INTERNAL.test(line);
+  }
+
+  function isValidity(line) {
+    if (PRICE.test(line)) return false;
+    return /velja(?![a-z])/i.test(line) || RANGE_ONLY.test(line);
+  }
+
+  function isHeading(line) {
+    var t = line.trim();
+    if (PRICE.test(t) || isInternal(t) || isValidity(t)) return false;
+    if (t.toLowerCase() === t.toUpperCase()) return false;
+    if (t.charAt(0) === '+' || /[.!?]$/.test(t)) return false;
+    if (t.toUpperCase() === t) return true;
+    return t.split(/\s+/).length <= 5; /* five words: guess, 11 Nov 2026, so Hofer's title lines count */
+  }
+
   /* One of: first line, section name, deal line, store note. Blank lines are spacing, drawn by the CSS. */
   function kindOf(line, index) {
     if (index === 0) return 'greeting';
     if (PRICE.test(line)) return 'deal';
-    return line.toUpperCase() === line ? 'section' : 'note';
+    return isHeading(line) ? 'section' : 'note';
   }
 
   function clock(now) {
@@ -308,6 +344,7 @@
     host.textContent = '';
     lines.forEach(function (line, i) {
       if (line === '') return;
+      if (i > 0 && isInternal(line)) return;
       var kind = kindOf(line, i);
       var row = el(kind === 'section' ? 'h2' : 'p', kind, line);
       if (kind === 'section') {
@@ -468,6 +505,7 @@
   var api = {
     showText: showText, loadBatch: loadBatch, validSendDay: validSendDay, ljubljanaToday: ljubljanaToday,
     isoOf: isoOf, liveStores: liveStores, canOpen: canOpen, viewOf: viewOf, kindOf: kindOf,
+    isInternal: isInternal,
     KNOWN: KNOWN, LOOK_BACK: LOOK_BACK, previousSendDay: previousSendDay, fileUrl: fileUrl,
     tileOf: tileOf,
     MISSING: MISSING, OFFLINE: OFFLINE, PUBLIC: PUBLIC

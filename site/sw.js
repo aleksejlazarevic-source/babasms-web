@@ -2,7 +2,7 @@
    GitHub Pages also caches a file for 600 seconds (seen 9 Nov 2026). The fresh
    query asks for a new copy. CACHE is the shell hash from tests/test_page_shell.py.
    A changed page file changes this name, so the installed icon drops the old shell. */
-var CACHE = 'kindeals-819903665e2a';
+var CACHE = 'kindeals-066680faf35b';
 
 self.addEventListener('install', function () { self.skipWaiting(); });
 self.addEventListener('activate', function (event) {
