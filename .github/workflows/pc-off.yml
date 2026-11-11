@@ -1,0 +1,22 @@
+# babasms-web: say when the PC did not publish a Lidl send morning.
+# The PC cannot report that it is off. This job only sends a message. It does not publish texts.
+# Secrets (set in the GitHub repo, never in the file): TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID.
+name: pc-off
+on:
+  schedule:
+    # 09:45 Europe/Ljubljana is 08:45 UTC in winter and 07:45 UTC in summer. Run both; the script
+    # checks the Ljubljana clock and does nothing before 09:30.
+    - cron: '45 7 * * *'
+    - cron: '45 8 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pc-off:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/pc_off.py .
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

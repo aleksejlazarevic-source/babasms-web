@@ -1,0 +1,411 @@
+/* The look of the two screens. A shelf price tag: ink on yellow.
+   Yellow means deals are here. A dashed outline means not here yet.
+   Aleksej approved this look on 10 Nov 2026. Sizes, spaces and colours are Claude's, 9 Nov 2026.
+   Sizes are CSS pixels and were tried on the 8 Nov Lidl lines in Chromium at 320, 375 and 430 wide.
+   Not tried on a phone, and not in Safari. */
+
+/* Lexend, SIL Open Font License 1.1 (fonts/OFL.txt). The ranges are the ones the
+   @fontsource-variable/lexend 5.3.0 package ships with these two files. č, š and ž are in latin-ext. */
+@font-face {
+  font-family: "Lexend";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(fonts/lexend-latin-ext-wght-normal.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Lexend";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(fonts/lexend-latin-wght-normal.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152, U+0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --ink: #111111;    /* all text she reads; 18.9 to 1 on paper, 13.3 to 1 on tag (WCAG formula, 9 Nov 2026) */
+  --paper: #FFFFFF;
+  --tag: #FFD500;    /* behind the pitch, a section name, and a store she can open */
+  --rule: #8A8A8A;   /* thin lines and dashed outlines; never text */
+  --quiet: #595959;  /* a store that is not open yet, and the "checked at" line; 7.0 to 1 on paper */
+  --line: 22px;      /* a deal line. 22 of the 40 lines of 8 Nov fit on one line at 375 wide; at 24px, 16 do */
+  --side: 20px;
+  color-scheme: light; /* one look, so her phone shows the page he checked */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { font-size: 100%; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Lexend", system-ui, sans-serif;
+  font-size: var(--line);
+  line-height: 1.3;
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, p, ol, ul { margin: 0; padding: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+/* ---------- The pitch (index.html) ---------- */
+
+.pitch main { min-height: 100vh; min-height: 100dvh; }
+.tag {
+  background: var(--tag);
+  border-bottom: 2px solid var(--ink);
+  padding: 24px 24px 40px;
+}
+.name { font-size: 20px; line-height: 1.2; font-weight: 700; margin-bottom: 44px; }
+.tag h1 {
+  max-width: 7.5em; /* breaks as "All your / discounts, in / one place." at every width */
+  font-size: 44px;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.setup { padding: 28px 24px 48px; }
+.setup h2 { font-size: 16px; line-height: 1.2; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.where { margin-top: 14px; max-width: 22em; font-size: 22px; line-height: 1.35; }
+.setup ol { list-style: none; counter-reset: step; margin-top: 8px; }
+.setup li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 1.8em 1fr;
+  column-gap: 4px;
+  padding: 22px 0 18px;
+  border-bottom: 1px solid var(--rule);
+}
+.setup li:last-child { border-bottom: 0; }
+.setup li::before {
+  content: counter(step) ".";
+  grid-column: 1;
+  grid-row: 1;
+  font-weight: 700;
+  padding-top: 3px;
+}
+.setup li > p,
+.setup li > .pic { grid-column: 2; }
+.setup .say { font-size: 26px; line-height: 1.25; font-weight: 700; }
+.setup .aside { margin-top: 8px; font-size: 20px; line-height: 1.35; font-weight: 400; }
+
+/* The five setup pictures, drawn to look like the real iPhone screens. Version B of three (Aleksej
+   picked it 10 Nov 2026), then polished three ways; he picked "Y" the same day: half a phone as a thin
+   line, and a black hand as the mark. The other two were not picked and are not in the repo. */
+/* ----- The iPhone parts, shared by the five pictures -----
+   Drawn to look like the real screens (version B, Aleksej picked it 10 Nov 2026). Nothing here was
+   checked on her phone: iOS 27 is drawn from iOS 26 Safari (guess). The words
+   follow the phone's language (setup-lang.js). No Apple logo, no product photo.
+   Every size is in em, and the em is set from the picture's width, so 320 and 430 wide are the same
+   drawing, smaller or bigger. All em sizes below are guesses by eye in Chromium, 10 Nov 2026. */
+.setup li > .pic.d { grid-column: 1 / -1; max-width: 420px; margin-top: 16px; } /* 420: the cap the first sketches had. 16: by eye (guess) */
+.d .cv {
+  position: relative;
+  color: #000;
+  font-family: -apple-system, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.25;
+  -webkit-font-smoothing: antialiased;
+}
+.d svg.i { width: 1.4em; height: 1.4em; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.d .tap { position: relative; }
+
+/* Safari's bottom bar: three glass pieces */
+.d .gl { background: #f5f5f7; border: 0.06em solid rgba(0, 0, 0, 0.06); box-shadow: 0 0.1em 0.5em rgba(0, 0, 0, 0.14), 0 0 0.06em rgba(0, 0, 0, 0.22); }
+.d .bar { display: flex; align-items: center; gap: 0.6em; }
+.d .circ { width: 3em; height: 3em; border-radius: 50%; display: grid; place-items: center; flex: none; --r: 1.5em; }
+.d .pill { flex: 1; min-width: 0; height: 3em; border-radius: 1.5em; display: flex; align-items: center; gap: 0.35em; padding: 0 0.75em; }
+.d .pill .aa { font-size: 0.72em; color: #555; letter-spacing: -0.02em; }
+.d .pill .aa big { font-size: 1.25em; }
+.d .pill .dom { flex: 1; min-width: 0; text-align: center; font-size: 0.84em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d .pill .i { width: 1.1em; height: 1.1em; color: #555; } /* pill sizes: so the whole address shows at 320 to 430 wide (tried 10 Nov 2026) */
+.d .hind { width: 8.4em; height: 0.32em; border-radius: 0.2em; background: #000; margin: 0 auto; } /* the line at the very bottom of her screen */
+.d .ln { height: 0.7em; border-radius: 0.35em; background: #e5e5ea; }   /* a line of the page behind, as a grey bar. No copy of the headline. */
+
+/* a menu or list row: the word on the left, its sign on the right. A long word wraps; it never leaves the row. */
+.d .r { display: flex; align-items: center; gap: 0.7em; min-height: 2.95em; padding: 0.45em 1.05em; font-size: 1.05em; border-top: 0.05em solid rgba(60, 60, 67, 0.18); --r: 0.9em; }
+.d .r:first-child { border-top: 0; }
+.d .r > span { flex: 1; min-width: 0; overflow-wrap: break-word; }
+.d .r .i { color: #1c1c1e; }
+.d .menu { background: #fbfbfc; border-radius: 1.4em; box-shadow: 0 0.25em 1.4em rgba(0, 0, 0, 0.2), 0 0 0.06em rgba(0, 0, 0, 0.3); }
+.d .menu .r:first-child { --r: 1.4em; }
+.d .grp { background: #fff; border-radius: 1.1em; }
+.d .edit { display: block; text-align: center; font-size: 1.05em; color: #007aff; } /* #007aff: iOS system blue, light mode (from memory) */
+
+/* the Add to Home Screen sheet */
+.d .nav4 { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; font-size: 0.86em; } /* 0.86 so the Slovenian title stays on one line, as on the phone (tried at 320, 375, 430) */
+.d .nav4 .t { font-weight: 600; text-align: center; padding: 0 0.5em; min-width: 0; overflow-wrap: break-word; }
+.d .nav4 .c { justify-self: start; padding: 0.5em 0.2em; color: #007aff; }
+.d .nav4 .dd { justify-self: end; padding: 0.5em 0.7em; font-weight: 600; color: #007aff; --r: 1.2em; }
+.d .app4 { display: flex; align-items: center; gap: 0.9em; padding: 0.8em 1em; }
+.d .app4 .ic4 { display: block; width: 3.4em; height: 3.4em; border-radius: 0.8em; overflow: hidden; flex: none; border: 0.05em solid rgba(0, 0, 0, 0.12); background: var(--tag); }
+.d .app4 .ic4 svg { display: block; width: 100%; height: 100%; }
+.d .app4 .n { flex: 1; min-width: 0; font-size: 1.1em; }
+.d .app4 .n span { display: block; border-bottom: 0.05em solid #e5e5ea; padding-bottom: 0.4em; margin-bottom: 0.3em; }
+.d .app4 .n small { display: block; font-size: 0.8em; color: #8e8e93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d .note4 { margin: 0.6em 0.5em 0.8em; font-size: 0.78em; line-height: 1.3; color: #6c6c70; }
+.d .web4 { display: flex; align-items: center; gap: 0.6em; padding: 0.7em 0.9em; font-size: 0.95em; }
+.d .web4 > span:first-child { flex: 1; min-width: 0; overflow-wrap: break-word; }
+.d .sw { width: 3.2em; height: 1.95em; border-radius: 1em; background: #34c759; position: relative; flex: none; } /* iOS green: the switch is on */
+.d .sw::after { content: ""; position: absolute; top: 0.15em; right: 0.15em; width: 1.65em; height: 1.65em; border-radius: 50%; background: #fff; box-shadow: 0 0.1em 0.3em rgba(0, 0, 0, 0.3); }
+
+/* a home-screen app: a drawn tile and its name */
+.d .ap { display: flex; flex-direction: column; align-items: center; gap: 0.4em; min-width: 0; font-size: 0.72em; color: #fff; text-shadow: 0 0.05em 0.25em rgba(0, 0, 0, 0.45); --r: 1.5em; }
+.d .ap .ic { display: block; width: 5em; height: 5em; border-radius: 1.15em; overflow: hidden; flex: none; box-shadow: 0 0.08em 0.4em rgba(0, 0, 0, 0.25); background: #fff; }
+.d .ap .ic svg { display: block; width: 100%; height: 100%; }
+.d .ap > span { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } /* a long app name is cut with dots; setup-lang.js shrinks it first */
+.d .dock { display: flex; justify-content: space-around; align-items: center; border-radius: 1.8em; background: rgba(255, 255, 255, 0.3); }
+.d .dock .ic { display: block; width: 3.7em; height: 3.7em; border-radius: 0.85em; overflow: hidden; box-shadow: 0 0.06em 0.3em rgba(0, 0, 0, 0.25); }
+.d .dock .ic svg { display: block; width: 100%; height: 100%; }
+
+/* ----- How the five pictures are put together: half a phone, and a hand -----
+   The phone is still drawn, as one thin black line, but only the end of it where the step happens:
+   the bottom for steps 1, 2, 3 and 5, the top for step 4. The other end fades into the page.
+   The mark is a black hand that comes in from the right margin and touches the thing to tap.
+   It lies beside the target, never on it, so it covers none of the target's words. */
+.setup li > .pic.y { container-type: inline-size; }
+.y .cv {
+  --u: calc(100cqw / 22.4);     /* 1em = 14.6px when the picture is 328px wide, a 375 phone. (guess) */
+  font-size: var(--u);
+  padding-right: 2.3em;         /* the margin the hand lies in (guess) */
+}
+
+/* the phone: a thin line, cut off at one end */
+.y .ph { position: relative; border: 0.14em solid var(--ink); background: #fff; }
+.y .ph.bot { border-top: 0; border-radius: 0 0 2.6em 2.6em; }   /* 2.6em: about the corner of an iPhone 11 screen at this size (guess) */
+.y .ph.top { border-bottom: 0; border-radius: 2.6em 2.6em 0 0; }
+.y .ph::before {               /* the fade at the cut end. It also fades the black line. */
+  content: "";
+  position: absolute;
+  left: -0.2em;
+  right: -0.2em;
+  height: 2.8em;
+  z-index: 4;
+  pointer-events: none;
+}
+.y .ph.bot::before { top: 0; background: linear-gradient(var(--paper), rgba(255, 255, 255, 0)); }
+.y .ph.top::before { bottom: 0; background: linear-gradient(rgba(255, 255, 255, 0), var(--paper)); }
+
+/* the mark: the hand. Drawn here as a small picture so it can sit outside the phone's edge. */
+.y .tap::after {
+  content: "";
+  position: absolute;
+  left: calc(100% - var(--u) * 0.15);
+  top: 50%;
+  width: calc(var(--u) * 3.85);
+  height: calc(var(--u) * 3.5);
+  transform: translateY(-37.5%);   /* the fingertip is 37.5% down the hand picture */
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='1.5 3 22 20'%3E%3Cpath transform='matrix(0 1 1 0 0 0)' d='M9 14.2V4.5a1.5 1.5 0 0 1 3 0V9a1.5 1.5 0 0 1 3 0v1a1.5 1.5 0 0 1 3 0v1a1.5 1.5 0 0 1 3 0v5a6 6 0 0 1-6 6h-2.2c-1.9 0-3.3-.8-4.3-2.3L5.1 15.2c-.6-.9-.4-2 .4-2.5.8-.5 1.8-.3 2.5.4z' fill='%23111' stroke='%23fff' stroke-width='1.3' stroke-linejoin='round' paint-order='stroke'/%3E%3Cpath transform='matrix(0 1 1 0 0 0)' d='M12 9.5v3.8M15 10.5v3.3M18 11.5v2.8' fill='none' stroke='%23fff' stroke-width='.7' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat 0 0 / 100% 100%;
+  filter: drop-shadow(0 0.1em 0.15em rgba(0, 0, 0, 0.25));
+  z-index: 6;
+  pointer-events: none;
+}
+
+/* 1. her bottom row, seen 10 Nov 2026 at 19:56. The arrow is share. The three lines are not. */
+.y .y1 { padding: 2.4em 0.2em 0.45em; }
+.y1 .addr {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  height: 2.5em;
+  margin: 0 0.7em;
+  padding: 0 0.7em;
+  border-radius: 0.7em;
+  background: #f2f2f7;
+}
+.y1 .addr .dom { flex: 1; min-width: 0; text-align: center; font-size: 0.86em; font-weight: 600; white-space: nowrap; overflow: hidden; }
+.y1 .addr .i { width: 1.15em; height: 1.15em; color: #1c1c1e; }
+.y1 .tools { display: flex; align-items: center; justify-content: space-between; margin: 0.85em 0.85em 0; }
+.y1 .tools > .i { width: 1.55em; height: 1.55em; color: #1c1c1e; }
+.y1 .tool {
+  width: 2.7em;
+  height: 2.7em;
+  border-radius: 50%;
+  background: var(--tag);
+  display: grid;
+  place-items: center;
+}
+.y1 .tool .i { width: 1.45em; height: 1.45em; color: #1c1c1e; }
+
+/* 2. her share sheet, copied from the 11 Nov 2026 08:40 photo. No people's names. */
+.y .yshare { padding: 1.5em 0.7em 0.45em; background: #f2f2f7; }
+.yshare .preview { display: flex; gap: 0.7em; align-items: center; background: #fff; border-radius: 1em; padding: 0.7em; }
+.yshare .preview .n { min-width: 0; }
+.yshare .preview .n span { display: block; font-weight: 700; font-size: 1em; }
+.yshare .preview .n small { display: block; color: #8e8e93; font-size: 0.78em; }
+.yshare .opt { display: inline-block; margin-top: 0.35em; padding: 0.15em 0.55em; border-radius: 1em; background: #f2f2f7; color: #3a3a3c; font-size: 0.72em; font-weight: 600; }
+.yshare .dest { display: flex; gap: 1.2em; margin: 0.9em 0.3em; font-size: 0.72em; font-weight: 600; }
+.yshare .dest span { display: flex; flex-direction: column; align-items: center; gap: 0.25em; }
+.yshare .blob { width: 2.8em; height: 2.8em; border-radius: 0.7em; }
+.yshare .air { background: #0a84ff; }
+.yshare .msg { background: #30d158; }
+.yshare .more { display: flex; align-items: center; gap: 0.55em; background: #fff; border-radius: 0.8em; min-height: 2.6em; padding: 0.4em 0.8em; font-weight: 600; font-size: 0.95em; }
+.yshare .down { width: 0.55em; height: 0.55em; border-right: 0.14em solid #1c1c1e; border-bottom: 0.14em solid #1c1c1e; transform: rotate(45deg) translateY(-0.15em); }
+.y .ph .bar { padding: 0 0.8em; margin-top: 1.1em; gap: 0.45em; }
+.y .ph .dom { font-size: 0.74em; }   /* so the whole address shows (tried at 320, 375, 430) */
+.y .ph .hind { margin-top: 0.75em; }
+
+/* 2. the menu above the bar. The page behind is a little darker, as it is when a menu is open. */
+.y .y2 { padding: 3em 0 0.55em; background: #d2d2d6; } /* white under a light shade; no yellow behind it, so no olive (guess) */
+.y2 .menu { width: 15em; margin: 0 0.8em 0 auto; }
+.y2 .bar { margin-top: 0.6em; }
+
+/* 3. her list after Prikaži več, 11 Nov 2026 08:55. Icons sit on the left, as on her sheet. */
+.y .y3 { padding: 0 0.7em 0.55em; background: #f2f2f7; }
+.y3 .grp { background: #e9e9ee; }
+.y3 .cut { border-radius: 0 0 1.1em 1.1em; margin-bottom: 0.7em; padding-top: 1.4em; }
+.y3 .r { font-size: 0.92em; font-weight: 600; }
+.y3 .edit { margin: 1em 0 1.1em; }
+
+/* 4. the top of the phone with the Add to Home Screen sheet */
+.y .y4 { background: #c4c4c9; } /* the page behind the sheet, shaded (guess) */
+.y4 .stat { display: flex; justify-content: space-between; align-items: center; height: 2.3em; padding: 0 1.9em; font-size: 0.85em; font-weight: 600; }
+.y4 .notch { position: absolute; top: -0.02em; left: 50%; width: 10em; height: 1.5em; margin-left: -5em; border-radius: 0 0 1em 1em; background: var(--ink); } /* an iPhone 11 has a notch */
+.y4 .bat { width: 1.9em; height: 0.9em; border: 0.1em solid #000; border-radius: 0.28em; padding: 0.1em; }
+.y4 .bat::after { content: ""; display: block; width: 75%; height: 100%; border-radius: 0.1em; background: #000; }
+.y4 .sheet4 { background: #f2f2f7; border-radius: 1.6em 1.6em 0 0; margin-top: 0.5em; padding: 0.7em 0.9em 3.2em; }
+.y4 .nav4 { margin-bottom: 0.8em; }
+
+/* 5. the bottom of the home screen */
+.y .y5 { padding: 3.2em 0 0.5em; background: linear-gradient(170deg, #7ea3e6, #4f69c8 55%, #3b3f98); } /* a plain blue wallpaper (guess) */
+.y5 .grid5 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 0 0.6em; }
+.y5 .ap { font-size: 0.78em; }   /* the app names are 9.5px on a 320 phone, not 8.7 (tried 10 Nov 2026) */
+.y5 .dots5 { display: flex; justify-content: center; gap: 0.5em; margin: 1.3em 0 0.9em; }
+.y5 .dots5 b { width: 0.5em; height: 0.5em; border-radius: 50%; background: rgba(255, 255, 255, 0.45); }
+.y5 .dots5 b:first-child { background: #fff; }
+.y5 .dock { margin: 0 0.8em; height: 5.1em; padding: 0 0.4em; }
+.y5 .hind { background: #fff; }
+
+@media (max-width: 359px) {
+  .tag h1 { font-size: 38px; }
+}
+@media (min-width: 700px) {
+  .tag, .setup { padding-left: calc(50vw - 280px); padding-right: calc(50vw - 280px); }
+  .tag { padding-top: 40px; padding-bottom: 64px; }
+  .name { margin-bottom: 80px; }
+  .tag h1 { font-size: 64px; }
+}
+
+/* ---------- The icon (deals.html) ---------- */
+
+.app {
+  padding: 0 var(--side) calc(56px + env(safe-area-inset-bottom));
+}
+
+#back {
+  min-height: 56px;
+  margin-top: 20px;
+  padding: 0 20px 0 16px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  font-weight: 700;
+}
+#back::before { /* a drawn arrowhead, so the control reads as "back" before the word is read */
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin: 0 0.45em 0 0.15em;
+  border-left: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  transform: rotate(45deg);
+  vertical-align: 0.1em;
+}
+#back:active { background: var(--ink); color: var(--paper); }
+#back:active::before { border-color: var(--paper); }
+
+#store { font-size: 40px; line-height: 1.1; font-weight: 800; margin: 24px 0 8px; }
+
+/* The stores */
+#list { list-style: none; display: grid; gap: 16px; margin-top: 16px; }
+.shop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 16px;
+  width: 100%;
+  min-height: 76px;
+  padding: 14px 20px;
+  border-radius: 4px;
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 700;
+  text-align: left;
+}
+button.shop { background: var(--tag); border: 2px solid var(--ink); }
+button.shop::after {
+  content: "";
+  width: 0.45em;
+  height: 0.45em;
+  margin-right: 0.1em;
+  border-right: 3px solid var(--ink);
+  border-top: 3px solid var(--ink);
+  transform: rotate(45deg);
+}
+button.shop:active { background: var(--ink); color: var(--paper); }
+button.shop:active::after { border-color: var(--paper); }
+.shop.shut { border: 2px dashed var(--rule); color: var(--quiet); }
+.shop.shut small { font-size: 20px; font-weight: 400; }
+
+/* One store's lines */
+.greeting { margin-bottom: 24px; line-height: 1.35; }
+.greeting::first-letter { text-transform: uppercase; } /* the line starts small once the name is taken out */
+.group { margin-top: 28px; }
+.greeting + .group { margin-top: 0; }
+.section {
+  position: sticky; /* she can see which section she is in */
+  top: 0;
+  margin: 0 calc(-1 * var(--side));
+  padding: 12px var(--side);
+  background: var(--tag);
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.deal { padding: 14px 0; border-bottom: 1px solid var(--rule); overflow-wrap: break-word; }
+.deal:last-child { border-bottom: 0; }
+.note { margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--ink); line-height: 1.35; }
+
+/* When there are no lines to show: the batch is not on the page yet, or the phone is offline */
+.msg { margin-top: 20px; padding: 28px 20px 32px; border: 2px dashed var(--rule); border-radius: 4px; }
+.msg-title { font-size: 28px; line-height: 1.2; font-weight: 700; }
+.msg-body { margin-top: 12px; line-height: 1.35; }
+.retry {
+  display: block;
+  width: 100%;
+  min-height: 64px;
+  margin-top: 20px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  font-weight: 700;
+}
+.retry:active { background: var(--paper); color: var(--ink); }
+.retry:disabled { background: var(--paper); color: var(--ink); border-style: dashed; cursor: default; }
+.checked { margin-top: 16px; font-size: 20px; color: var(--quiet); }
+
+/* Shown only if the network is slow, so a fast load does not flash it. Half a second is a guess, 9 Nov 2026. */
+.loading { margin-top: 24px; opacity: 0; animation: appear 0s linear 0.5s forwards; }
+@keyframes appear { to { opacity: 1; } }
+
+/* Install offer. Android only inserts it. Desktop never gets these nodes. */
+.kd-install { margin: 0 0 24px; }
+.kd-install-btn {
+  display: block; width: 100%; min-height: 76px; padding: 12px 16px;
+  font: inherit; font-size: 28px; font-weight: 700; line-height: 1.2;
+  background: var(--tag); color: var(--ink); border: 2px solid var(--ink); border-radius: 4px; cursor: pointer;
+}
+.kd-install-note { margin: 12px 0 0; font-size: 22px; line-height: 1.35; color: var(--ink); }
+.kd-later {
+  display: block; width: 100%; min-height: 56px; margin: 16px 0 0; padding: 10px 20px;
+  font: inherit; font-size: 22px; line-height: 1.2;
+  background: transparent; color: var(--ink); border: 2px solid var(--ink); border-radius: 4px; cursor: pointer;
+}
