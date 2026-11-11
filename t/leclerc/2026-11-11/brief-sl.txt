@@ -23,9 +23,9 @@ Mariniran goveji zrezek, 240 g 5,90
 Sočni zrezki z gorčico in česnom Perutnina Ptuj Natur Premium, 500 g 5,49 (7,08)
 Piščančji file Pivka, 800 g 7,49 (9,99)
 Piščančja bedra Perutnina Ptuj Natur, 800 g 5,79 (8,59)
-File postrvi/šarenke gojena v Sloveniji 16,99/kg
-Postrv/šarenka očiščena, gojena v Sloveniji 9,89/kg
-Pagar gojen v Grčiji 18,99/kg
+File postrvi/šarenke, gojene v Sloveniji 16,99/kg
+Postrv/šarenka, očiščena, gojena v Sloveniji 9,89/kg
+Pagar, gojen v Grčiji 18,99/kg
 Grebenaste pokrovače, očiščene 19,99/kg
 Kmečka salama Kras 16,99/kg (24,95/kg)
 Španski pršut Reserva Valent 23,99/kg
@@ -36,7 +36,7 @@ Sir gauda Holland Master 15,49/kg (20,59/kg)
 Dimljeni ementaler 10,99/kg (16,16/kg)
 Sir gorgonzola dolce DOP Defendi 12,99/kg (16,95/kg)
 Čebulni kruh, 450 g 1,69
-Sirova štučka x 4, 320 g 2,96
+Sirova štručka x 4, 320 g 2,96
 Beli kruh, 450 g 1,45
 Pšenični mešani kruh z vsebnostjo koruzne moke, 450 g 1,59
 Pecivo s semeni x 4, 320 g 1,96
@@ -87,7 +87,7 @@ Domači skutni štruklji Zlato polje, 1 kg 7,38 (10,68)
 Sladoled v lončku Häagen-Dazs, 321 g 5,99 (7,95)
 Jagode Douceur du Verger, 650 g 2,79 (3,49)
 Orehovi štrukeljčki Pekarna Pečjak, 1 kg 9,99 (14,68)
-Mini francoski rogljiči Pekarna Pečjak s čokoladno-lešnikovim nadevom, 510 g 3,55 (5,08)
+Mini francoski rogljički Pekarna Pečjak s čokoladno-lešnikovim nadevom, 510 g 3,55 (5,08)
 Čokoladni kolaček Côté Table s čokoladno sredico, 180 g 2,39
 Mini francoski masleni rogljički Pekarna Pečjak, 1 kg 7,39 (11,48)
 Ekstra deviško oljčno olje Iliada, 0,75 l 9,98 (16,98)
@@ -95,7 +95,7 @@ Goveja jušna osnova Knorr, 224 g 2,98 (3,98)
 Štajersko prekmursko bučno olje Jeruzalem Sat, 0,75 l 15,98 (19,98)
 Mešana solata v kisu Droga, 620 g 1,79 (2,58)
 Omaka v tubi Zvijezda, 165 g 1,78
-Kamniške kumarice Natureta, 4x 1 kg 10,98
+Kamniške kumarice Natureta, 4 × 1 kg 10,98
 Instant juha z rezanci Indomie s piščancem, 5 × 70 g 1,29 (2,58)
 Skuša z zelenjavo Delamaris, 5 × 125 g 8,38 (10,98)
 Tunina v oljčnem olju Rio Mare, 2 × 160 g 5,48 (7,94)
@@ -104,7 +104,7 @@ Pesto Genovese Barilla, 190 g 2,48 (3,96)
 Testenine Barilla, spaghetti št. 5, 1 kg 1,98
 Riž Scotti Arborio, 1 kg 3,48
 Instant napitek cappuccino Barcaffè, 100 g 2,38 (2,98)
-Turška kava Black'n'easy Barcaffè, 80 g 2,68 (3,38)
+Turška kava Black'n'Easy Barcaffè, 80 g 2,68 (3,38)
 Trsni sladkor Sun Sugar, 500 g 1,48 (2,14)
 Mleta kava Zlatna Džezva, 100 g 1,38 (2,38)
 Kosmiči muesli Grainea, 500 g 2,29
@@ -188,7 +188,7 @@ Sončnično olje Zvezda, 1 l 1,88 (2,69)
 Pečen fižol Heinz v paradižnikovi omaki, 415 g 1,99 (3,98)
 Zelene olive v olju Delizeus, 250 g 2,58 (3,69)
 Pšenična bela moka Žito, 1 kg 0,78 (1,11)
-Skuša na žaru Rio Mare v ekstradeviškem oljčnem olju, 120 g 2,30 (3,28)
+Skuša na žaru Rio Mare v ekstra deviškem oljčnem olju, 120 g 2,30 (3,28)
 Žitni kosmiči Nestlé Fitness, 625 g 4,40 (6,77)
 Masleni toast Ölz, 500 g 2,59 (3,24)
 Napolitanke Crunchies Manner White Mix, 130 g 1,98 (2,48)
