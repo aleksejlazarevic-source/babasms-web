@@ -253,6 +253,16 @@
     // android and other non-iOS phones: one install button, always shown
     var deferred = null, go = null, timer = null;
 
+    /* Full Chrome on Android. A WebView, another browser, or Gmail's in-app tab is not. */
+    function chromeProper(ua, referrer) {
+      ua = String(ua || '');
+      if (!/Android/.test(ua)) return false;
+      if (/;\s*wv\b/.test(ua) || /Version\/4\.0/.test(ua)) return false;
+      if (/SamsungBrowser|EdgA\/|Edg\/|OPR\/|UCBrowser|YaBrowser|DuckDuckGo|GSA\/|Instagram|FBAN|FBAV|FB_IAB|Line\/|Twitter|Snapchat|MicroMessenger|MiuiBrowser|Silk\//.test(ua)) return false;
+      if (/^android-app:\/\/com\.google\.android\.gm\b/i.test(referrer || '')) return false;
+      return /Chrome\/\d/.test(ua);
+    }
+
     /* No captured event: the ⋮ line takes the note's place for a while. */
     function menuHint() {
       if (!go || !go.hint) return;
@@ -286,7 +296,18 @@
         go.button.addEventListener('click', function () {
           var ev = deferred;
           deferred = null;
-          if (!ev) { menuHint(); return; }
+          if (!ev) {
+            var ua = (window.navigator && window.navigator.userAgent) || '';
+            var ref = '';
+            try { ref = document.referrer || ''; } catch (err) { ref = ''; }
+            /* Gmail's in-app browser has no install prompt. Open the same page in Chrome. */
+            if (/Android/.test(ua) && !chromeProper(ua, ref)) {
+              window.location.href = 'intent://kindeals.vercel.app/#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https%3A%2F%2Fkindeals.vercel.app%2F;end';
+              return;
+            }
+            menuHint();
+            return;
+          }
           try {
             var p = ev.prompt();
             if (p && typeof p.then === 'function') p.then(null, menuHint);
