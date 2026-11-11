@@ -23,6 +23,9 @@ Nanoška salama 1,99 (2,49) do 14.11.+
 Schwarzwaldska šunka 0,99 (1,49) od 13.11.
 Narezek 1,39 (1,79) do 14.11.
 Ljubljanska klobasa 1,55 (1,94) do 14.11.
+Domači zašinek 12,79 (15,99) do 14.11.
+Sušeni kare 100 g 1,59 (2,79) do 14.11.+
+Domače sušeno stegno 1,59 (2,09) do 14.11.
 
 RIBE
 Svež brancin s Kornatov 11,49 (13,99) do 14.11.
@@ -43,7 +46,6 @@ Cvetača 1,79 (2,49) do 14.11.+
 Pomaranče 2,29 (2,99)
 Mango 0,89 (1,49) od 13.11.
 Bučka 1,29 (1,79) do 14.11.
-Pomarančni sok 0,99 (1,35)+
 Kaki 0,55 (0,79) do 14.11.
 
 KRUH IN PECIVO
@@ -58,6 +60,7 @@ Mlečni kifeljc 0,49 (0,59), ob nakupu vsaj 6 kosov
 Pizza žepek 0,49 (0,59), ob nakupu vsaj 6 kosov
 Pirina štručka 0,25 (0,29), ob nakupu vsaj 6 kosov
 Pšenična štručka 0,21 (0,25), ob nakupu vsaj 6 kosov
+Štrudle s sadnim polnilom 0,89 (0,99)
 
 SLADKO
 Mister Choc Čokoladni pralineji (več vrst) 1,69 (2,49) od 13.11.
@@ -67,30 +70,27 @@ Sadni mousse 0,49 (0,89)
 Čokoladne kapljice 3,69 (3,99)
 Riževa čokolada 1,79 (1,99)
 Bonboni z okusom češnje 0,85 (0,89)
+Lizike 1,35 (1,49)
 
 ZA SHRAMBO
 Chef Select Svaljki/vlivanci 1,39 (2,09) od 13.11.
 Baresa Pesto alla Calabrese 0,85 (1,19) od 13.11.
 Pšenična polnozrnata moka 0,69 (0,99) do 14.11.
 Testenine polžki 0,79 (1,05) do 14.11.
+Crownfield Hrustljavi kosmiči s karamelo in kakavom 1,59 (2,69) od 13.11.
 
 ZAMRZNJENO
 Pomfrit 2,49 (3,65) od 13.11.
 Pizza trikotnik 0,99 (1,49)
 
 PIJAČE
-Crownfield Hrustljavi kosmiči s karamelo in kakavom 1,59 (2,69) od 13.11.
 Bellarom Kava brez kofeina 2,19 (3,19) od 13.11.
+Pomarančni sok 0,99 (1,35)+
+Panaché 2,79 (3,99) od 13.11.+
+Ovseni smoothie 0,69 (0,99) od 13.11.
 
 DRUGO ZA KUHANJE
-Domači zašinek 12,79 (15,99) do 14.11.
-Panaché 2,79 (3,99) od 13.11.+
-Sušeni kare 100 g 1,59 (2,79) do 14.11.+
 Mini rezine 2,69 (3,59) od 13.11.
 Hribovc 1,49 (2,25)+
-Domače sušeno stegno 1,59 (2,09) do 14.11.
-Ovseni smoothie 0,69 (0,99) od 13.11.
-Lizike 1,35 (1,49)
-Štrudle s sadnim polnilom 0,89 (0,99)
 
 + pomeni Lidl Plus.
