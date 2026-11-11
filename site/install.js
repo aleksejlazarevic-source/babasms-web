@@ -28,7 +28,6 @@
 
   var IPAD_FIRST_ASIDE = 'Je zgoraj desno, ne spodaj.';
   var CANNOT_ADD = 'Ta brskalnik na tej napravi ne zna dodati ikone. Odpri to stran v Safariju. Če je stran odprta v sporočilu, tapni ikono Safari.';
-  var LATER = 'Ne zdaj';
 
   function iosBrowser(ua) {
     if (/CriOS/.test(ua)) return 'chrome';
@@ -48,7 +47,6 @@
     env = env || {};
     var ua = String(env.ua || '');
     var mtp = Number(env.maxTouchPoints) || 0;
-    var dismissed = env.dismissed === true;
     var out = { kind: 'desktop', showButton: false, showGuide: true, dismissible: false, guide: null };
 
     if (env.standalone === true || env.displayModeStandalone === true) {
@@ -76,8 +74,10 @@
         canAdd = !!v && (v[0] > 16 || (v[0] === 16 && v[1] >= 4));
       }
       out.kind = 'ios';
-      out.showGuide = !dismissed;
-      out.dismissible = out.showGuide;
+      /* The guide is the whole page in Safari. It stays up, including after an
+         older visit stored kindeals.install.dismissed. No Ne zdaj. */
+      out.showGuide = true;
+      out.dismissible = false;
       out.guide = { device: device, browser: browser, share: share, canAdd: canAdd };
       return out;
     }
@@ -100,11 +100,11 @@
   function hide(el) { if (el) el.setAttribute('hidden', ''); }
   function show(el) { if (el) el.removeAttribute('hidden'); }
 
-  function readDismissed() {
-    try { return window.localStorage.getItem(KEY) === '1'; } catch (e) { return false; }
-  }
-  function writeDismissed() {
-    try { window.localStorage.setItem(KEY, '1'); } catch (e) { /* ignore */ }
+  function clearDismissed() {
+    try {
+      var store = window.localStorage;
+      if (store && typeof store.removeItem === 'function') store.removeItem(KEY);
+    } catch (e) { /* ignore */ }
   }
 
   function whenReady(fn) {
@@ -170,15 +170,6 @@
     setAside(li, aside);
   }
 
-  function laterButton(onClick) {
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'kd-later';
-    b.textContent = LATER;
-    b.addEventListener('click', onClick);
-    return b;
-  }
-
   function applyIos(dom, guide) {
     var items = dom.items;
     if (!guide.canAdd) {
@@ -214,6 +205,7 @@
   }
 
   function boot() {
+    clearDismissed();
     var nav = window.navigator || {};
     var mm = false;
     try { mm = !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches); } catch (e) { mm = false; }
@@ -222,7 +214,6 @@
       maxTouchPoints: nav.maxTouchPoints || 0,
       standalone: nav.standalone === true,
       displayModeStandalone: mm,
-      dismissed: readDismissed(),
       beforeInstallPrompt: false
     };
     var choice = installChoice(env);
@@ -240,12 +231,6 @@
         var dom = findDom();
         if (!choice.showGuide) { hide(dom.setup); return; }
         applyIos(dom, choice.guide);
-        if (choice.dismissible && dom.setup) {
-          dom.setup.appendChild(laterButton(function () {
-            writeDismissed();
-            hide(dom.setup);
-          }));
-        }
       });
       return;
     }

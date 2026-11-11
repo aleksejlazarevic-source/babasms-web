@@ -41,8 +41,7 @@ const KD_TEXT = {
     markup: "Označevanje",
     print: "Natisni",
     menuHint: "Tapni ⋮ zgoraj desno. Nato tapni Namesti aplikacijo.",
-    installNote: "Doda ikono KinDeals na zaslon. Nato tapni ikono.",
-    notNow: "Ne zdaj"
+    installNote: "Doda ikono KinDeals na zaslon. Nato tapni ikono."
   },
   en: {
     pitch: "All your discounts, in one place.",
@@ -67,8 +66,7 @@ const KD_TEXT = {
     markup: "Markup",
     print: "Print",
     menuHint: "Tap ⋮ at the top right. Then tap Install app.",
-    installNote: "Adds the KinDeals icon to your screen. Then tap the icon.",
-    notNow: "Not now"
+    installNote: "Adds the KinDeals icon to your screen. Then tap the icon."
   },
   de: {
     pitch: "Alle deine Rabatte an einem Ort.",
