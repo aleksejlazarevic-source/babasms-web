@@ -14,13 +14,20 @@ function priced(lines) {
 }
 
 test('showText on the day file drops priced lines whose do date is already past', () => {
-  const file = path.join(__dirname, '../t/tus/2026-11-18/brief-sl.txt');
-  const text = fs.readFileSync(file, 'utf8');
-  const shown = api.showText(text, '2026-11-18');
+  const day = '2026-11-18';
+  const text = [
+    'BABASMS1',
+    'Babi, to so Tušovi popusti za kuhanje od 11.11. do 24.11.:',
+    '',
+    'MESO',
+    'Potekla akcija 1,99 (2,49) s kartico do 17.11.',
+    'Še velja 2,49 (3,49) s kartico do 24.11.',
+  ].join('\n');
+  const shown = api.showText(text, day);
   assert.equal(shown.kind, 'deals');
   const deals = priced(shown.lines);
   assert.ok(
-    deals.every((line) => line.indexOf('do 17.11.') < 0),
+    !deals.some((line) => line.indexOf('do 17.11.') >= 0),
     'expired do 17.11. lines must not appear as current deals'
   );
   assert.ok(
