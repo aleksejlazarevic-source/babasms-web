@@ -98,8 +98,8 @@
       .slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
   }
 
-  /* carried: the asked day's own file is missing and this is an earlier batch (T3.4b).
-     Only lines whose own end day reaches the asked day are kept. */
+  /* Each deal line shows only from its start day through its end day.
+     carried: the asked day's own file is missing and this is an earlier batch (T3.4b). */
   function showText(approved, dayIso, carried) {
     var today = parseIso(dayIso);
     var lines = approved.replace(/\n$/, '').split('\n');
@@ -127,10 +127,10 @@
       var begun = START_ON.exec(line);
       var ended = END_ON.exec(line);
       /* A carried file's undated line was built for its own send day. Drop it. */
-      if (carried && !ended) return false;
+      if (carry && !ended) return false;
       var validFrom = begun ? leafletDate(begun[1], begun[2], today.getUTCFullYear(), windowStart) : windowStart;
       var validTo = ended ? leafletDate(ended[1], ended[2], today.getUTCFullYear(), windowStart) : windowEnd;
-      var ok = validTo >= today && validFrom <= windowEnd;
+      var ok = validTo >= today && validFrom <= today;
       if (ok && validTo > lastEnd) lastEnd = validTo;
       return ok;
     }
@@ -254,10 +254,11 @@
     });
   }
 
+  /* Today in Ljubljana, not the last send day for the store. ?day= overrides. */
   function askedDay() {
     var q = new URLSearchParams(location.search).get('day');
     if (q && DAY.test(q)) return q;
-    return isoOf(validSendDay(ljubljanaToday(new Date()), current));
+    return isoOf(ljubljanaToday(new Date()));
   }
 
   function byOrder(list) {
