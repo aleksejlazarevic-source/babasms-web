@@ -7,6 +7,7 @@ const vm = require('node:vm');
 const test = require('node:test');
 
 const { SITE, localAssetRefs, siteFileExists } = require('./helpers/site-paths');
+const { assertSwShellPaths } = require('./helpers/site-shell-assert');
 
 const SW_PATH = path.join(SITE, 'sw.js');
 const INDEX_PATH = path.join(SITE, 'index.html');
@@ -34,11 +35,11 @@ function extractInstallPrecachePaths(source) {
   return paths;
 }
 
-/** Paths the install page pulls in; offline shell when no explicit precache list. */
+/** Paths the install page and PWA start_url pull in when sw has no addAll list. */
 function shellPathsFromIndex() {
   const html = fs.readFileSync(INDEX_PATH, 'utf8');
   const fromHtml = localAssetRefs(html);
-  return [...new Set(['index.html', 'sw.js', ...fromHtml])];
+  return [...new Set(['index.html', 'sw.js', 'deals.html', 'deals.js', ...fromHtml])];
 }
 
 function normalizeSitePath(p) {
@@ -55,11 +56,23 @@ test('site/sw.js: precached / shell paths exist under site/', () => {
   const source = readSw();
   let paths = extractInstallPrecachePaths(source).map(normalizeSitePath);
   if (paths.length === 0) paths = shellPathsFromIndex().map(normalizeSitePath);
+  assertSwShellPaths(paths);
   const missing = paths.filter((p) => !siteFileExists(p));
   assert.deepEqual(
     missing,
     [],
     `missing site file(s) for sw shell/precache: ${missing.join(', ')}`
+  );
+});
+
+test('validator fails when sw shell path list is empty (temp)', () => {
+  assert.throws(
+    () => assertSwShellPaths([]),
+    (err) => err && /at least 5 paths/.test(String(err.message))
+  );
+  assert.throws(
+    () => assertSwShellPaths(['index.html', 'sw.js', 'look.css', 'setup-lang.js', 'install.js']),
+    (err) => err && /deals\.js/.test(String(err.message))
   );
 });
 
