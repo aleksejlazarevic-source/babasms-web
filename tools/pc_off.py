@@ -40,7 +40,10 @@ def send(text: str) -> None:
         return
     data = urllib.parse.urlencode({'chat_id': chat, 'text': text}).encode()
     url = f'https://api.telegram.org/bot{token}/sendMessage'
-    urllib.request.urlopen(urllib.request.Request(url, data), timeout=20).read()
+    try:
+        urllib.request.urlopen(urllib.request.Request(url, data), timeout=20).read()
+    except OSError:
+        print('Telegram send failed')
 
 
 def main(root: Path, now: datetime | None = None) -> int:
