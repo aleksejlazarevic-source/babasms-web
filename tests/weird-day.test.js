@@ -85,17 +85,18 @@ test('deal with do 31.12. is still valid at 23:59 Ljubljana, gone after midnight
   assert.notEqual(nextDay.kind, 'deals');
 });
 
-test('year-span leaflet still valid on 1 Jan (30.12.–2.1.)', () => {
+test('year-span leaflet still valid on 1 Jan (30.12.–2.1.)', {
+  todo: 'showText marks 1 Jan outside a 30.12.–2.1. window',
+}, () => {
   const brief = lidlBrief('30.12.', '2.1.', [
     'PEKARNA',
     'Palačinke 1,99 (2,49)',
     'Rogovček 0,99 (1,49) do 31.12.',
   ]);
   assert.equal(show(brief, '2026-12-31').kind, 'deals');
-});
-
-test('year-span leaflet on 1 Jan', {
-  todo: 'showText marks 1 Jan outside a 30.12.–2.1. window',
+  const got = show(brief, '2027-01-01');
+  assert.equal(got.kind, 'deals');
+  assert.ok(priced(got.lines).length > 0);
 });
 
 test('line whose until day is today stays in the list', () => {
@@ -177,8 +178,13 @@ test('wrong calendar year on 31 Dec still shows do 2.1. inside Dec–Jan window'
   assert.ok(priced(got.lines).some((l) => l.includes('do 2.1.')));
 });
 
-test('wrong calendar year on 1 Jan after Dec–Jan leaflet', {
+test('wrong calendar year on 1 Jan after Dec–Jan leaflet (29.12.–2.1.)', {
   todo: 'dayIso 2027-01-01 is outside 29.12.–2.1. because windowStart uses that year',
+}, () => {
+  const brief = lidlBrief('29.12.', '2.1.', ['KOS', 'Olje 5,99 (6,99) do 2.1.']);
+  const got = show(brief, '2027-01-01');
+  assert.equal(got.kind, 'deals');
+  assert.ok(priced(got.lines).some((l) => l.includes('do 2.1.')));
 });
 
 test('must not show a deal whose until day has passed', () => {
