@@ -29,7 +29,7 @@ Pršut Jamón Serrano, narezek, 100 g 1,85 (2,65)
 Piščančji burger Perutnina Ptuj, 4 × 115 g 3,98 (6,68)
 
 RIBE
-File postrvi/šarenke, gojene v Sloveniji 16,99/kg
+File postrvi/šarenke, gojena v Sloveniji 16,99/kg
 Postrv/šarenka, očiščena, gojena v Sloveniji 9,89/kg
 Pagar, gojen v Grčiji 18,99/kg
 Grebenaste pokrovače, očiščene 19,99/kg
@@ -77,7 +77,7 @@ Domače masleno makovo pecivo, kos 1,39
 Mini donny x 10, 200 g 4,50
 Eclair x 2 2,50
 Orehovi štrukeljčki Pekarna Pečjak, 1 kg 9,99 (14,68)
-Mini francoski rogljički Pekarna Pečjak s čokoladno-lešnikovim nadevom, 510 g 3,55 (5,08)
+Mini francoski rogljički Pekarna Pečjak s čokoladno-lešnikovim ali mareličnim nadevom, 510 g 3,55 (5,08)
 Mini francoski masleni rogljički Pekarna Pečjak, 1 kg 7,39 (11,48)
 
 SLADKO
@@ -195,7 +195,7 @@ Sončnično olje Zvezda, 1 l 1,88 (2,69)
 Pečen fižol Heinz v paradižnikovi omaki, 415 g 1,99 (3,98)
 Zelene olive v olju Delizeus, 250 g 2,58 (3,69)
 Pšenična bela moka Žito, 1 kg 0,78 (1,11)
-Skuša na žaru Rio Mare v ekstra deviškem oljčnem olju, 120 g 2,30 (3,28)
+Skuša na žaru Rio Mare v ekstradeviškem oljčnem olju ali v naravnem soku, 120 g 2,30 z bonom, na blagajni 3,28
 Žitni kosmiči Nestlé Fitness, 625 g 4,40 (6,77)
 Masleni toast Ölz, 500 g 2,59 (3,24)
 Napolitanke Crunchies Manner White Mix, 130 g 1,98 (2,48)
