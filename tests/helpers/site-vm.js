@@ -30,6 +30,7 @@ function makeElement(tag, id) {
     getAttribute(name) { return this.attributes[name]; },
     setAttribute(name, val) { this.attributes[name] = val; },
     removeAttribute(name) { delete this.attributes[name]; },
+    hasAttribute(name) { return Object.prototype.hasOwnProperty.call(this.attributes, name); },
     insertBefore() {},
     appendChild(child) {
       child.parentNode = this;

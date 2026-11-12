@@ -1,6 +1,7 @@
 /* The icon: Lidl's approved lines, one store on the screen, no name (Aleksej, 9 Nov 2026).
    The look is the shelf price tag (Aleksej approved Fable's page, 10 Nov 2026).
-   Lidl stays live. Spar, E.Leclerc, Hofer and Tuš are live.
+   Lidl, Tuš and Spar stay live. Hofer, E.Leclerc and Mercator say kmalu.
+   A private preview parameter opens one kmalu store the way it would look live. The page reads it and never writes it into a link.
    The date cut is babasms/message.py filter_published. The send day follows store.days. */
 (function (root) {
   'use strict';
@@ -98,8 +99,10 @@
       .slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
   }
 
-  /* Each deal line shows only from its start day through its end day.
-     carried: the asked day's own file is missing and this is an earlier batch (T3.4b). */
+  /* carried: the asked day's own file is missing and this is an earlier batch (T3.4b).
+     A line is shown from the morning it starts through the day it ends.
+     No start day means the leaflet's first morning. No end day means its last day.
+     Once that last day is past, a carried file keeps only a line with its own later end. */
   function showText(approved, dayIso, carried) {
     var today = parseIso(dayIso);
     var lines = approved.replace(/\n$/, '').split('\n');
@@ -126,7 +129,7 @@
       if (!PRICE.test(line)) return true;
       var begun = START_ON.exec(line);
       var ended = END_ON.exec(line);
-      /* A carried file's undated line was built for its own send day. Drop it. */
+      /* Past the leaflet, a carried line with no end day ended with the leaflet. */
       if (carry && !ended) return false;
       var validFrom = begun ? leafletDate(begun[1], begun[2], today.getUTCFullYear(), windowStart) : windowStart;
       var validTo = ended ? leafletDate(ended[1], ended[2], today.getUTCFullYear(), windowStart) : windowEnd;
@@ -202,7 +205,9 @@
       return {kind: 'empty', lines: [sentence]};
     }
     if (footer) out = out.concat(['', footer]);
-    return {kind: 'deals', lines: out};
+    /* until is the last day this draw already worked out: the leaflet end, or the
+       carried batch's last kept day. lines and kind stay as they were. */
+    return {kind: 'deals', lines: out, until: isoOf(carry ? lastEnd : windowEnd)};
   }
 
   function fresh(url) {
@@ -254,10 +259,33 @@
     });
   }
 
-  /* Today in Ljubljana, not the last send day for the store. ?day= overrides. */
+  function pageSearch() {
+    if (typeof location === 'undefined' || !location || location.search == null) return '';
+    return location.search;
+  }
+
+  /* The preview parameter names one hidden store. A live id, or one that is not
+     in the list, is ignored so the page stays as it is. */
+  function askedPreview() {
+    var q = new URLSearchParams(pageSearch()).get('preview');
+    return q == null ? '' : q;
+  }
+
+  function previewTarget(list) {
+    var id = askedPreview();
+    if (!id) return null;
+    var found = (list || []).filter(function (s) {
+      return s && s.id === id && s.soon === true && s.live !== true;
+    });
+    return found.length === 1 ? found[0] : null;
+  }
+
   function askedDay() {
-    var q = new URLSearchParams(location.search).get('day');
+    var q = new URLSearchParams(pageSearch()).get('day');
     if (q && DAY.test(q)) return q;
+    /* The morning in Ljubljana, not the send day. A line that starts Friday is
+       hidden on Thursday and shown on Friday. Sunday drops a line that ended
+       Saturday. The file is still the send day's: loadBatch looks back. */
     return isoOf(ljubljanaToday(new Date()));
   }
 
@@ -266,9 +294,11 @@
       .slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
   }
 
-  /* She can open a store only when he has set it live and this page can read its file. */
+  /* She can open a store when he has set it live, or when this page's private
+     preview names that kmalu store, and this page can read its file. */
   function canOpen(store, files) {
-    if (liveStores([store]).length !== 1) return false;
+    if (!store) return false;
+    if (liveStores([store]).length !== 1 && !previewTarget([store])) return false;
     if (files) return files[store.id] === true;
     if (store && Object.prototype.hasOwnProperty.call(store, 'readable')) return store.readable === true;
     return READABLE[store.id] === true;
@@ -276,7 +306,7 @@
 
   /* What to draw for one answer from the network. The deal lines are showText's, unchanged. */
   function viewOf(got, dayIso) {
-    if (got.kind === 'deals') return {type: 'deals', lines: got.lines};
+    if (got.kind === 'deals') return {type: 'deals', lines: got.lines, until: got.until};
     if (got.kind === 'missing') {
       var d = parseIso(dayIso);
       return {type: 'message', title: MISSING, body:
@@ -338,6 +368,252 @@
   var current = null; /* the store on the screen, or null on the list */
   var shown = '';     /* what is drawn now, so the same lines are not drawn twice */
   var lastLoad = 0;
+  /* The screen stays awake while a leaflet is open. Nazaj, or the page going
+     into the background, lets the phone lock. A phone without wakeLock, or a
+     request it refuses, changes nothing on the screen. (Aleksej, 12 Nov 2026.) */
+  var screenLock = null;
+  var screenGen = 0;
+  var screenAsked = false;
+  /* preview.html sets data-list="1". deals.html does not, and then nothing is stored. */
+  var LIST_ON = typeof document !== 'undefined' && document.body
+    ? document.body.getAttribute('data-list') === '1' : false;
+  var picks = null;
+  var batchUntil = null;
+  var placeBook = null;
+  var placeOn = false;   /* false while a resume must not overwrite her place */
+  var placeTimer = 0;
+  var resumeHold = false;
+  var resumeName = '';
+  var drawnDay = '';
+  var PLACE_MS = 250; /* guess: how often a scroll may write her place */
+
+  function tickBook() {
+    if (!picks) picks = root.KinDealsPicks.open(root.localStorage);
+    return picks;
+  }
+
+  function placeApi() {
+    if (!placeBook) placeBook = root.KinDealsPlace.open(root.localStorage);
+    return placeBook;
+  }
+
+  function storeById(id) {
+    var i;
+    for (i = 0; i < stores.length; i++) {
+      if (stores[i].id === id) return stores[i];
+    }
+    return null;
+  }
+
+  /* A live store whose file answered, or one the network could not check.
+     A 404 is not openable. probeError is set only after a failed fetch. */
+  function fileReady(store) {
+    if (store && store.probeError === true && liveStores([store]).length === 1) return true;
+    return canOpen(store);
+  }
+
+  function untilOf(storeId) {
+    var raw;
+    var data;
+    try {
+      raw = root.localStorage.getItem('kindeals.picks');
+    } catch (e) {
+      return null;
+    }
+    if (!raw) return null;
+    try {
+      data = JSON.parse(raw);
+    } catch (e2) {
+      return null;
+    }
+    if (!data || !data.stores || !data.stores[storeId]) return null;
+    return data.stores[storeId].until;
+  }
+
+  function sectionName() {
+    var nodes = document.querySelectorAll('#text h2.section');
+    var headings = [];
+    var i;
+    var bar = $('bar');
+    var bottom = bar ? bar.getBoundingClientRect().bottom : 0;
+    for (i = 0; i < nodes.length; i++) {
+      headings.push({text: nodes[i].textContent, top: nodes[i].getBoundingClientRect().top});
+    }
+    return root.KinDealsPlace.sectionAt(headings, bottom);
+  }
+
+  function savePlace() {
+    if (!LIST_ON || !placeOn || resumeHold || !current) return;
+    placeApi().save(current.id, sectionName(), askedDay());
+  }
+
+  function onPlaceScroll() {
+    if (!LIST_ON || !placeOn || resumeHold || !current) return;
+    if (placeTimer) return;
+    placeTimer = setTimeout(function () {
+      placeTimer = 0;
+      savePlace();
+    }, PLACE_MS);
+  }
+
+  /* Put that section's heading flush with the underside of the bar.
+     Returns false when the heading is not on the page. */
+  function scrollSectionUnderBar(name) {
+    var nodes = document.querySelectorAll('#text h2.section');
+    var i;
+    var node = null;
+    var bar;
+    var delta;
+    for (i = 0; i < nodes.length; i++) {
+      if (nodes[i].textContent === name) {
+        node = nodes[i];
+        break;
+      }
+    }
+    if (!node) return false;
+    bar = $('bar').getBoundingClientRect().bottom;
+    delta = node.getBoundingClientRect().top - bar;
+    window.removeEventListener('scroll', onPlaceScroll);
+    window.scrollTo(0, window.scrollY + delta);
+    setTimeout(listenForPlace, PLACE_MS);
+    return true;
+  }
+
+  function listenForPlace() {
+    if (window.removeEventListener) window.removeEventListener('scroll', onPlaceScroll);
+    if (LIST_ON) window.addEventListener('scroll', onPlaceScroll);
+  }
+
+  function settleResume(view) {
+    var name;
+    var found;
+    if (!resumeHold) return;
+    if (view.type !== 'deals') {
+      /* The load failed. Her place stays as it was. Poskusi znova still
+         scrolls to this section, and saving starts only after that scroll. */
+      placeOn = false;
+      return;
+    }
+    name = resumeName;
+    resumeName = '';
+    found = !name || scrollSectionUnderBar(name);
+    if (!found) {
+      resumeHold = false;
+      placeOn = false;
+      return;
+    }
+    resumeHold = false;
+    placeOn = true;
+  }
+
+  function euroUnit(numeral, unit) {
+    var text = root.KinDealsPrice.euro(numeral);
+    if (unit === '/kg') text += '/kg';
+    return text;
+  }
+
+  function markLine(line, on) {
+    var rows = document.querySelectorAll('#text .pick');
+    var i;
+    for (i = 0; i < rows.length; i++) {
+      if (rows[i].getAttribute('data-line') === line) {
+        rows[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+      }
+    }
+  }
+
+  function clearSum() {
+    var bar = $('sum');
+    if (bar && bar.parentNode) bar.parentNode.removeChild(bar);
+    if (document.body) document.body.classList.remove('has-sum');
+  }
+
+  function paintSum() {
+    var tot;
+    var bar;
+    var text;
+    clearSum();
+    if (!LIST_ON || !current || !picks) return;
+    tot = picks.total(current.id);
+    if (!tot.count) return;
+    text = 'Moj seznam: ' + tot.count;
+    if (tot.unsummed < tot.count) {
+      text += ' · Skupaj ' + root.KinDealsPrice.euroCents(tot.cents);
+    }
+    if (tot.unsummed > 0) text += ' · ' + tot.unsummed + ' brez seštevka';
+    bar = el('p', null, text);
+    bar.id = 'sum';
+    document.body.appendChild(bar);
+    document.body.classList.add('has-sum');
+  }
+
+  function shownDeals(lines) {
+    var out = [];
+    var i;
+    for (i = 0; i < lines.length; i++) {
+      if (lines[i] === '') continue;
+      if (i > 0 && isInternal(lines[i])) continue;
+      if (kindOf(lines[i], i) === 'deal') out.push(lines[i]);
+    }
+    return out;
+  }
+
+  function pickRow(line, store, keep) {
+    var parsed = root.KinDealsPrice.parse(line);
+    var cents = parsed ? root.KinDealsPrice.summable(parsed) : null;
+    var row = document.createElement('button');
+    var cost;
+    var was;
+    var whenText;
+    var nowNum;
+    var nowUnit;
+    if (!store) store = current;
+    row.type = 'button';
+    row.className = 'deal pick';
+    row.setAttribute('data-line', line);
+    row.setAttribute('aria-pressed', tickBook().has(store.id, line) ? 'true' : 'false');
+    row.appendChild(el('span', 'tick'));
+    if (!parsed) {
+      row.appendChild(el('span', 'what', line));
+      if (store && store.card === true) row.appendChild(el('span', 'who', 's kartico'));
+    } else {
+      row.appendChild(el('span', 'what', parsed.name));
+      cost = el('span', 'cost');
+      nowNum = parsed.who === 'voucher' ? parsed.till : parsed.now;
+      nowUnit = parsed.who === 'voucher' ? '' : parsed.nowUnit;
+      cost.appendChild(el('span', 'now', euroUnit(nowNum, nowUnit)));
+      if (parsed.was && parsed.who !== 'voucher') {
+        was = el('s', 'was');
+        was.appendChild(el('span', null, 'prej '));
+        was.appendChild(document.createTextNode(euroUnit(parsed.was, parsed.wasUnit)));
+        cost.appendChild(was);
+      }
+      if (parsed.who === 'plus') cost.appendChild(el('span', 'who', 'z Lidl Plus'));
+      if (parsed.who === 'voucher') {
+        cost.appendChild(el('span', 'who', 'z bonom ' + root.KinDealsPrice.euro(parsed.now)));
+      }
+      if (store && store.card === true) cost.appendChild(el('span', 'who', 's kartico'));
+      whenText = parsed.when || '';
+      if (parsed.cond) whenText = whenText ? whenText + ', ' + parsed.cond : parsed.cond;
+      if (whenText) cost.appendChild(el('span', 'when', whenText));
+      row.appendChild(cost);
+    }
+    /* The leaflet end, read while the store still has it. A retick after the
+       last line was removed must not store until null. */
+    var keptUntil = keep ? untilOf(store.id) : null;
+    row.addEventListener('click', function () {
+      var until = keep ? keptUntil : batchUntil;
+      var on = tickBook().toggle(store.id, line, cents, until);
+      if (keep) {
+        /* Untick now. The row stays until this screen is drawn again. */
+        row.setAttribute('aria-pressed', on ? 'true' : 'false');
+        return;
+      }
+      markLine(line, on);
+      paintSum();
+    });
+    return row;
+  }
 
   function drawDeals(lines) {
     var host = $('text');
@@ -347,7 +623,7 @@
       if (line === '') return;
       if (i > 0 && isInternal(line)) return;
       var kind = kindOf(line, i);
-      var row = el(kind === 'section' ? 'h2' : 'p', kind, line);
+      var row = kind === 'deal' && LIST_ON ? pickRow(line) : el(kind === 'section' ? 'h2' : 'p', kind, line);
       if (kind === 'section') {
         group = el('section', 'group');
         host.appendChild(group);
@@ -379,8 +655,17 @@
     var key = JSON.stringify(view);
     if (view.type === 'deals' && key === shown) return; /* same lines: leave her place on the page */
     shown = key;
-    if (view.type === 'deals') drawDeals(view.lines);
-    else drawMessage(view);
+    if (view.type === 'deals') {
+      batchUntil = view.until == null ? null : view.until;
+      /* A failed load never reaches here, so a miss drops nothing. */
+      if (LIST_ON) tickBook().sync(current.id, shownDeals(view.lines), batchUntil);
+      drawDeals(view.lines);
+      if (LIST_ON) paintSum();
+    } else {
+      drawMessage(view);
+      if (LIST_ON) clearSum();
+    }
+    if (LIST_ON) settleResume(view);
   }
 
   function load(asked) {
@@ -404,6 +689,8 @@
   function openStore(store) {
     current = store;
     shown = '';
+    if (LIST_ON) clearSum();
+    clearMine();
     $('list').hidden = true;
     $('store').textContent = store.name;
     $('store').hidden = false;
@@ -411,23 +698,95 @@
     $('text').textContent = '';
     $('text').hidden = false;
     window.scrollTo(0, 0);
+    /* A resume open must not write a place. Saving starts after the restore. */
+    if (LIST_ON && placeOn && !resumeHold) placeApi().save(store.id, '', askedDay());
     load(false);
+    holdScreen();
   }
 
   /* Same two tiles as before. Open is button.shop. Closed is div.shop.shut plus a small.
-     A live store with no file says there are no deals this week. Mercator says kmalu. */
+     A live store with no file says there are no deals this week. Mercator says kmalu.
+     A preview of one kmalu store uses the live tile, and only on that page. */
   function tileOf(store) {
-    if (canOpen(store) && !store.soon) return {tag: 'button', className: 'shop', note: ''};
+    var preview = !!previewTarget([store]);
+    if ((fileReady(store) && !store.soon) || (preview && canOpen(store))) {
+      return {tag: 'button', className: 'shop', note: ''};
+    }
     return {
       tag: 'div',
       className: 'shop shut',
-      note: store.soon ? 'kmalu' : (store.live ? 'Ta teden ni akcij' : SHUT)
+      note: (store.soon && !preview) ? 'kmalu' : ((store.live || preview) ? 'Ta teden ni akcij' : SHUT)
     };
+  }
+
+  function clearMine() {
+    var mine = $('mine');
+    if (mine && mine.parentNode) mine.parentNode.removeChild(mine);
+  }
+
+  function paintMine() {
+    var groups;
+    var mine;
+    var i;
+    var j;
+    var group;
+    var store;
+    var block;
+    var tot;
+    clearMine();
+    if (!LIST_ON || current) return;
+    groups = tickBook().list();
+    if (!groups.length) return;
+    mine = el('div');
+    mine.id = 'mine';
+    mine.appendChild(el('h2', 'mine-title', 'Moj seznam'));
+    for (i = 0; i < groups.length; i++) {
+      group = groups[i];
+      store = storeById(group.storeId);
+      if (!store) store = {id: group.storeId, name: group.storeId};
+      block = el('section', 'mine-store');
+      block.appendChild(el('h3', 'mine-name', store.name));
+      for (j = 0; j < group.lines.length; j++) {
+        block.appendChild(pickRow(group.lines[j].line, store, true));
+      }
+      tot = tickBook().total(group.storeId);
+      block.appendChild(el('p', 'mine-sum', 'Skupaj ' + root.KinDealsPrice.euroCents(tot.cents)));
+      if (tot.unsummed > 0) {
+        block.appendChild(el('p', 'mine-rest', tot.unsummed + ' brez seštevka'));
+      }
+      mine.appendChild(block);
+    }
+    $('list').parentNode.insertBefore(mine, $('list'));
+  }
+
+  /* Nazaj only. The stores screen start shows must not clear a place. */
+  function backToList() {
+    if (LIST_ON) {
+      placeOn = true;
+      resumeHold = false;
+      resumeName = '';
+      placeApi().clear();
+    }
+    showList();
+  }
+
+  /* The store the icon opens. A readable kmalu preview wins. Anything else follows
+     the usual rule: one open store, or the list. */
+  function storeToOpen(list) {
+    var rows = list || [];
+    var hidden = previewTarget(rows);
+    if (hidden && canOpen(hidden)) return hidden;
+    var open = rows.filter(function (store) { return canOpen(store); });
+    if (open.length === 1) return open[0];
+    return null;
   }
 
   function showList() {
     var list = $('list');
     current = null;
+    resumeHold = false;
+    if (LIST_ON) clearSum();
+    dropScreen();
     shown = '';
     list.textContent = '';
     stores.forEach(function (store) {
@@ -450,18 +809,122 @@
     $('back').hidden = true;
     $('text').hidden = true;
     $('text').textContent = '';
+    if (LIST_ON) paintMine();
     window.scrollTo(0, 0);
   }
 
-  /* The icon stays open in the background. When she comes back to it, ask again. */
+  function openCount() {
+    var open = [];
+    var i;
+    for (i = 0; i < stores.length; i++) {
+      if (fileReady(stores[i]) && !stores[i].soon) open.push(stores[i]);
+    }
+    return open;
+  }
+
+  /* allowResume is false after the day has rolled: a fresh open, not yesterday's store. */
+  function chooseStart(allowResume) {
+    var saved = null;
+    var savedStore = null;
+    var open;
+    drawnDay = askedDay();
+    placeOn = true;
+    resumeHold = false;
+    resumeName = '';
+    if (LIST_ON && allowResume) {
+      saved = placeApi().read(drawnDay);
+      if (saved) savedStore = storeById(saved.storeId);
+      if (saved && savedStore && fileReady(savedStore) && !savedStore.soon) {
+        resumeName = saved.section || '';
+        resumeHold = true;
+        placeOn = false;
+        openStore(savedStore);
+        return;
+      }
+      if (saved && savedStore && !fileReady(savedStore)) {
+        /* The saved store is still listed, but its file is gone. The list, no error.
+           Leave the place: this screen is not Nazaj. */
+        showList();
+        return;
+      }
+    }
+    open = openCount();
+    if (open.length === 1) openStore(open[0]);
+    else showList();
+  }
+
+  /* The icon stays open in the background. When she comes back to it, ask again.
+     A later Ljubljana day drops expired ticks and starts as a fresh open. */
   function wake() {
+    var today;
+    if (LIST_ON && drawnDay) {
+      today = askedDay();
+      if (today > drawnDay) {
+        tickBook().expire(today);
+        chooseStart(false);
+        return;
+      }
+    }
     if (document.visibilityState === 'visible' && current && Date.now() - lastLoad > STALE_MS) load(false);
   }
 
+  function releaseSentinel(held) {
+    if (!held || typeof held.release !== 'function') return;
+    try {
+      var done = held.release();
+      if (done && typeof done.then === 'function') done.then(function () {}, function () {});
+    } catch (err) {}
+  }
+
+  function holdScreen() {
+    if (!current || document.visibilityState === 'hidden') return;
+    if (screenLock || screenAsked) return;
+    if (typeof navigator === 'undefined' || !navigator.wakeLock) return;
+    var ask;
+    try {
+      ask = navigator.wakeLock.request('screen');
+    } catch (err) {
+      return;
+    }
+    if (!ask || typeof ask.then !== 'function') return;
+    var gen = ++screenGen;
+    screenAsked = true;
+    ask.then(function (lock) {
+      if (gen !== screenGen) {
+        releaseSentinel(lock);
+        return;
+      }
+      screenAsked = false;
+      if (!current || document.visibilityState === 'hidden') {
+        releaseSentinel(lock);
+        return;
+      }
+      screenLock = lock;
+    }, function () {
+      if (gen === screenGen) screenAsked = false;
+    });
+  }
+
+  function dropScreen() {
+    screenGen += 1;
+    screenAsked = false;
+    var held = screenLock;
+    screenLock = null;
+    releaseSentinel(held);
+  }
+
+  function onVisibility() {
+    if (document.visibilityState === 'hidden') dropScreen();
+    else if (current) holdScreen();
+  }
+
   function start() {
-    $('back').addEventListener('click', showList);
+    if (LIST_ON) tickBook().expire(askedDay());
+    $('back').addEventListener('click', backToList);
     document.addEventListener('visibilitychange', wake);
+    document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('pageshow', wake);
+    listenForPlace();
     /* page/deals.html in this repo sits one folder below t2/. On babasms-web the
        same file is the site root, beside t2/. (Aleksej, 10 Nov 2026.) */
     var storesUrl = /\/page\/[^/]*$/.test(location.pathname) ? '../t2/stores.json' : 't2/stores.json';
@@ -477,9 +940,9 @@
       stores = byOrder(list);
       return Promise.all(stores.map(probeStore));
     }).then(function () {
-      var open = stores.filter(function (store) { return canOpen(store); });
-      if (open.length === 1) openStore(open[0]); /* one store: the icon opens its deals */
-      else showList();
+      var hidden = previewTarget(stores);
+      if (hidden && canOpen(hidden)) openStore(hidden); /* a private kmalu preview wins */
+      else chooseStart(true);
     });
   }
 
@@ -498,8 +961,10 @@
       });
     }, Promise.resolve(false)).then(function (found) {
       store.readable = found;
+      store.probeError = false;
     }, function () {
       store.readable = READABLE[store.id] === true;
+      store.probeError = true;
     });
   }
 
@@ -508,7 +973,7 @@
     isoOf: isoOf, liveStores: liveStores, canOpen: canOpen, viewOf: viewOf, kindOf: kindOf,
     isInternal: isInternal,
     KNOWN: KNOWN, LOOK_BACK: LOOK_BACK, previousSendDay: previousSendDay, fileUrl: fileUrl,
-    tileOf: tileOf,
+    tileOf: tileOf, storeToOpen: storeToOpen,
     MISSING: MISSING, OFFLINE: OFFLINE, PUBLIC: PUBLIC
   };
   root.KinDealsPage = api;

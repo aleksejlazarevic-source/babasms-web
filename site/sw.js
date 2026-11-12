@@ -1,10 +1,21 @@
 /* Network first, so a saved copy does not hide a correction (Aleksej, 9 Nov 2026).
    GitHub Pages also caches a file for 600 seconds (seen 9 Nov 2026). The fresh
    query asks for a new copy. CACHE is the shell hash from tests/test_page_shell.py.
-   A changed page file changes this name, so the installed icon drops the old shell. */
-var CACHE = 'kindeals-spar-back-1112';
+   A changed page file changes this name, so the installed icon drops the old shell.
+   Install saves offline.html and the look it uses. A navigation with no network and no saved copy gets that page. */
+var CACHE = 'kindeals-bcf5db4efbbe';
+var OFFLINE = 'offline.html';
 
-self.addEventListener('install', function () { self.skipWaiting(); });
+self.addEventListener('install', function (event) {
+  event.waitUntil(caches.open(CACHE).then(function (cache) {
+    return cache.addAll([
+      OFFLINE,
+      'look.css',
+      'fonts/lexend-latin-wght-normal.woff2',
+      'fonts/lexend-latin-ext-wght-normal.woff2'
+    ]);
+  }).then(function () { return self.skipWaiting(); }));
+});
 self.addEventListener('activate', function (event) {
   event.waitUntil(caches.keys().then(function (keys) {
     return Promise.all(keys.filter(function (key) { return key !== CACHE; }).map(function (key) {
@@ -55,7 +66,18 @@ function networkFirst(req) {
   }).catch(function () {
     return caches.open(CACHE).then(function (cache) { return cache.match(key); }).then(function (hit) {
       if (hit) return hit;
+      /* A saved deals page already returned above. Only a navigation with nothing saved
+         gets the calm page. A stylesheet or a deal file keeps the empty 503. */
+      if (req.mode === 'navigate' || req.destination === 'document') return offlinePage();
       return new Response('', {status: 503});
+    });
+  });
+}
+
+function offlinePage() {
+  return caches.open(CACHE).then(function (cache) {
+    return cache.match(OFFLINE).then(function (page) {
+      return page || new Response('', {status: 503});
     });
   });
 }

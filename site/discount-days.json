@@ -1,0 +1,267 @@
+{
+  "read_on": "2026-11-12",
+  "wired": false,
+  "mercator_on_the_page": "kmalu",
+  "offers": [
+    {
+      "id": "mercator-upokojenci-2026-11-12",
+      "shown": true,
+      "store": "mercator",
+      "dates": [
+        "2026-11-12"
+      ],
+      "sentence": "V četrtek, 12.11., imajo upokojenci v Mercatorju 10 % popusta na cel nakup nad 20 evrov: s Pika kartico v klubu Senior se popust obračuna sam, brez kluba Senior pa na blagajni pokažete kartico upokojenca.",
+      "sentence_en": "On Thursday, 12.11., pensioners get 10% off the whole Mercator shop over 20 euros: with a Pika card in Klub Senior the discount comes off by itself, and without Klub Senior you show the pensioner card at the till.",
+      "conditions": [
+        "Celoten nakup nad 20 EUR.",
+        "Velja za vse upokojence, tudi za izdelke v akciji.",
+        "Živilske in franšizne prodajalne Mercator in spletna trgovina Mercator.",
+        "Član kluba Senior s Pika kartico: popust se obračuna sam, kartice upokojenca ni treba pokazati.",
+        "Kdor ni v klubu Senior, na blagajni pokaže kartico upokojenca.",
+        "Stran ne pravi, da je to vsak četrtek. Piše samo ta teden, četrtek, 12. 11. 2026.",
+        "Za nekatere izdelke popust ne velja. Seznam je na strani."
+      ],
+      "source_url": "https://www.mercator.si/akcije-in-ugodnosti/upokojenski-popust/",
+      "source_quote": "10-% upokojenski popust za celoten nakup ob nakupu nad 20 EUR prejmete v vseh živilskih in franšiznih prodajalnah Mercator. Popust velja za vse upokojence. Velja tudi za izdelke v akciji. Ta teden lahko upokojenski popust koristite v četrtek, 12. 11. 2026. Popust za upokojence velja tudi v spletni trgovini Mercator. Včlanite se v Klub Senior! Več o tem kako se včlanite Prednosti kluba Senior Imetnikom Pika kartice se z včlanitvijo v klub Senior avtomatično obračuna 10 % popusta na prodajnem mestu in ni potrebno pokazati kartice upokojenca. V kolikor niste član kluba Senior, pa je na prodajnem mestu potrebno pokazati kartico upokojenca.",
+      "snippet": "research/discount-days/mercator-upokojenski.html",
+      "weekdays": [],
+      "from": "2026-11-12",
+      "to": "2026-11-12",
+      "when": null,
+      "read_on": "2026-11-12"
+    },
+    {
+      "id": "mercator-pika-izbira-2026-11-13-14",
+      "shown": true,
+      "store": "mercator",
+      "dates": [
+        "2026-11-13",
+        "2026-11-14"
+      ],
+      "sentence": "V petek, 13.11., ali v soboto, 14.11., s Pika kartico v Mercatorju izberete 25 % na en izdelek, če je ostalo brez tega izdelka nad 5 evrov, ali 10 % na cel nakup nad 30 evrov.",
+      "sentence_en": "On Friday, 13.11., or Saturday, 14.11., with a Pika card at Mercator you choose 25% off one item if the rest of the basket without that item is over 5 euros, or 10% off the whole shop over 30 euros.",
+      "conditions": [
+        "En izbrani popust, samo enkrat, ob predložitvi Pika kartice, v petek ali v soboto.",
+        "25 % je na en izbrani izdelek. Preostali del košarice mora biti nad 5 €, brez tega izdelka.",
+        "10 % je na celoten nakup nad 30 €, tudi na izdelke v akciji.",
+        "Živilske in franšizne trgovine Mercator. Ne velja v spletni trgovini.",
+        "Popusti se med seboj ne seštevajo.",
+        "Na blagajni je treba reči, da želite popust.",
+        "Stran ne pravi, da je to vsak petek in vsako soboto. Piše ta konec tedna, 13. 11. ali 14. 11. 2026.",
+        "Za nekatere izdelke kupon ne velja. Seznam je na strani."
+      ],
+      "source_url": "https://www.mercator.si/akcije-in-ugodnosti/novo-ta-vikend-dobite-vec/",
+      "source_quote": "Ta konec tedna, v petek, 13. 11. ali soboto, 14. 11. 2026, lahko izberete svoj popust: 25 % popusta na izbrani izdelek ob nakupu preostalega dela košarice v vrednosti nad 5 € (brez izdelka, na katerega unovčujete kupon) ali 10 % popusta na celoten nakup v vrednosti nad 30 €, ki vključuje tudi izdelke v akciji. Ta vikend pa boste prejeli še več! Ob nakupu nad 30 € vam podarimo DODATNI 25 % BONUS KUPON za 25 % popusta na izdelek po izbiri ob nakupu preostalega dela košarice v vrednosti nad 5 € (brez izdelka, na katerega unovčujete kupon), ki ga boste lahko unovčili enkrat med 16. 11. in 18. 11. 2026 s Pika kartico, na kateri je bil kupon izpisan. Koda za 25 % popusta na izbrani izdelek (ob nakupu preostalega dela košarice v vrednosti nad 5 €, brez izdelka, na katerega unovčujete kupon). Koda za 10 % popusta na celoten nakup - tudi na izdelke v akciji. Ta petek ali soboto lahko en izbrani popust ob predložitvi Pika kartice unovčite le enkrat. Kuponi veljajo v vseh živilskih in franšiznih trgovinah Mercator, NE veljajo pa v spletni trgovini Mercator Online. Kupec je dolžan ob uveljavljanju popusta na to opozoriti pri blagajni (ob nakupu na Tik Tak blagajni za unovčenje kupona pokličite asistenta). Storno po zaključenem računu ni možen. Popusti se med seboj ne seštevajo.",
+      "snippet": "research/discount-days/mercator-pika-vikend.html",
+      "weekdays": [],
+      "from": "2026-11-13",
+      "to": "2026-11-14",
+      "when": null,
+      "read_on": "2026-11-12"
+    },
+    {
+      "id": "mercator-pika-bonus-2026-11-16-18",
+      "shown": true,
+      "store": "mercator",
+      "from": "2026-11-16",
+      "to": "2026-11-18",
+      "sentence": "Ob nakupu nad 30 evrov v petek, 13.11., ali v soboto, 14.11., dobite kupon, ki ga enkrat med ponedeljkom, 16.11., in sredo, 18.11., porabite s Pika kartico, na kateri je bil kupon izpisan, za 25 % na en izdelek, če je ostalo brez tega izdelka nad 5 evrov.",
+      "sentence_en": "When you spend over 30 euros on Friday, 13.11., or Saturday, 14.11., you get a coupon you use once between Monday, 16.11., and Wednesday, 18.11., with the Pika card the coupon was printed on, for 25% off one item if the rest without that item is over 5 euros.",
+      "conditions": [
+        "Kupon dobite ob nakupu nad 30 € v petek, 13. 11., ali v soboto, 14. 11. 2026.",
+        "Unovčite ga enkrat med 16. 11. in 18. 11. 2026, s Pika kartico, na kateri je bil izpisan.",
+        "25 % na en izdelek. Preostali del košarice nad 5 €, brez tega izdelka.",
+        "17. 11. ni napisan posebej. Stran pravi med 16. 11. in 18. 11.",
+        "Kuponi veljajo v živilskih in franšiznih trgovinah, ne v spletni trgovini.",
+        "Popusti se ne seštevajo."
+      ],
+      "source_url": "https://www.mercator.si/akcije-in-ugodnosti/novo-ta-vikend-dobite-vec/",
+      "source_quote": "Ta konec tedna, v petek, 13. 11. ali soboto, 14. 11. 2026, lahko izberete svoj popust: 25 % popusta na izbrani izdelek ob nakupu preostalega dela košarice v vrednosti nad 5 € (brez izdelka, na katerega unovčujete kupon) ali 10 % popusta na celoten nakup v vrednosti nad 30 €, ki vključuje tudi izdelke v akciji. Ta vikend pa boste prejeli še več! Ob nakupu nad 30 € vam podarimo DODATNI 25 % BONUS KUPON za 25 % popusta na izdelek po izbiri ob nakupu preostalega dela košarice v vrednosti nad 5 € (brez izdelka, na katerega unovčujete kupon), ki ga boste lahko unovčili enkrat med 16. 11. in 18. 11. 2026 s Pika kartico, na kateri je bil kupon izpisan.",
+      "snippet": "research/discount-days/mercator-pika-vikend.html",
+      "weekdays": [],
+      "dates": [],
+      "when": null,
+      "read_on": "2026-11-12"
+    },
+    {
+      "id": "spar-upokojenci-10",
+      "shown": false,
+      "store": "spar",
+      "when": "Vsako drugo ali tretjo sredo v mesecu in vsak zadnji delovni dan v mesecu",
+      "sentence": "Vsako drugo ali tretjo sredo in zadnji delovni dan v mesecu imajo upokojenci 10 % popusta na cel nakup nad 20 evrov, če je status upokojenca na Spar plus kartici.",
+      "sentence_en": "On every second or third Wednesday and on the last working day of the month, pensioners get 10% off the whole shop over 20 euros if the pensioner status is on the Spar plus card.",
+      "conditions": [
+        "Status upokojenca mora biti že na Spar plus kartici.",
+        "Samo prvi nakup tega dne, nad 20 €.",
+        "Trgovine SPAR, INTERSPAR in SPAR partner. Kupona ni treba prinesti.",
+        "Popusti na celoten nakup se ne seštevajo.",
+        "Stran pravi »vsako drugo ali tretjo sredo« in »vsak zadnji delovni dan«. Datumov ne našteje. V koledar jih ne pišemo.",
+        "V vsoto ne gredo izdelki iz opombe na strani."
+      ],
+      "source_url": "https://www.spar.si/spar-plus",
+      "source_quote": "Kdaj so Sparovi dnevi za upokojence? • Vsako drugo ali tretjo sredo v mesecu in • Vsak zadnji delovni dan v mesecu vsi upokojenci s SPAR plus kartico prejmejo 10% popust na celoten nakup nad 20 €*. 10 % popust je možno uveljavljati le z urejenim statusom upokojenca na SPAR plus kartici. Upokojenci lahko ob prvem nakupu nad 20 €* na dan upokojencev s SPAR plus kartico uveljavljate 10 % popust pri blagajnah v trgovinah SPAR, INTERSPAR in SPAR partner. Kupona ni potrebno predložiti. Popusti na celoten nakup se med seboj ne seštevajo.",
+      "snippet": "research/discount-days/spar-plus-dnevi.html",
+      "weekdays": [],
+      "dates": [],
+      "from": null,
+      "to": null,
+      "read_on": "2026-11-12"
+    },
+    {
+      "id": "spar-to-go-20-2026-11-11-18",
+      "shown": true,
+      "store": "spar",
+      "from": "2026-11-11",
+      "to": "2026-11-18",
+      "sentence": "Kupon za 20 % na jedi Spar to go so upokojenci dobili v sredo, 11.11., in ga v izbranih trgovinah porabijo od srede, 11.11., do prodaje zalog ali najkasneje do srede, 18.11., kar je prej, s Spar plus kartico z urejenim statusom upokojenca.",
+      "sentence_en": "Pensioners received a coupon for 20% off Spar to go meals on Wednesday, 11.11., and in selected shops they use it from Wednesday, 11.11., until the meals are sold out or until Wednesday, 18.11., whichever comes first, with a Spar plus card that has pensioner status.",
+      "conditions": [
+        "Kupon so upokojenci prejeli v sredo, 11. 11. 2026, ob nakupu s Spar plus kartico z urejenim statusom.",
+        "Velja najkasneje do srede, 18. 11. 2026, ali do porabe zalog, kar je prej.",
+        "Samo jedi na oddelku Spar to go, v izbranih trgovinah Spar in Interspar.",
+        "Ne v franšiznih prodajalnah Spar Partner.",
+        "Datumi so s strani aktualnih promocij. Na strani Spar plus piše samo »v določenem terminu«."
+      ],
+      "source_url": "https://www.spar.si/promocije-in-projekti/aktualne-promocije",
+      "source_quote": "V SREDO, 11. 11. 2026, ste upokojenci ob nakupu s SPAR plus kartico z urejenim statusom upokojenca v izbranih trgovinah* Spar in Interspar prejeli kupon za 20 % POPUST NA VSE JEDI na oddelku SPAR TO GO. SPAR plus kupon je možno unovčiti OD SREDE, 11. 11. 2026, do prodaje zalog oz. najkasneje DO SREDE, 18. 11. 2026, ob predložitvi SPAR plus kartice z urejenim statusom upokojenca.",
+      "snippet": "research/discount-days/spar-aktualne-promocije.txt",
+      "weekdays": [],
+      "dates": [],
+      "when": null,
+      "read_on": "2026-11-12"
+    },
+    {
+      "id": "spar-restavracija-20-2026-11-12-18",
+      "shown": true,
+      "store": "spar",
+      "from": "2026-11-12",
+      "to": "2026-11-18",
+      "sentence": "Kupon za 20 % na jedi so upokojenci dobili v sredo, 11.11., in ga od četrtka, 12.11., do srede, 18.11., porabijo v vseh restavracijah Interspar s Spar plus kartico z urejenim statusom upokojenca.",
+      "sentence_en": "Pensioners received a coupon for 20% off meals on Wednesday, 11.11., and from Thursday, 12.11., until Wednesday, 18.11., they use it in every Interspar restaurant with a Spar plus card that has pensioner status.",
+      "conditions": [
+        "Kupon so prejeli v sredo, 11. 11., v izbranih Intersparih.",
+        "Uporaba od četrtka, 12. 11. 2026, do srede, 18. 11. 2026, v restavracijah Interspar, s Spar plus kartico z urejenim statusom.",
+        "En kupon na nakup. Ne velja za party box, študentska kosila in naročila Wolt.",
+        "Ne sešteva se z drugimi kuponi in akcijami.",
+        "Datumi so s strani aktualnih promocij. Na strani Spar plus piše samo »v določenem terminu«."
+      ],
+      "source_url": "https://www.spar.si/promocije-in-projekti/aktualne-promocije",
+      "source_quote": "V SREDO, 11. 11., ste upokojenci ob nakupu s SPAR plus kartico z urejenim statusom upokojenca v izbranih trgovinah** Interspar prejeli kupon* za 20 % POPUST NA VSE JEDI v Restavracijah Interspar. SPAR plus kupon je možno unovčiti OD ČETRTKA, 12. 11. 2026, DO SREDE, 18. 11. 2026, ob predložitvi SPAR plus kartice z urejenim statusom upokojenca v vseh Restavracijah Interspar. Kupon se ne sešteva z ostalimi kuponi in akcijami ter z njim ni možno uveljavljati popusta na ponudbo party box, študentska kosila in naročila Wolt. Pri enem nakupu lahko unovčite en kupon. Kupon velja za nakup več različnih jedi.",
+      "snippet": "research/discount-days/spar-aktualne-promocije.txt",
+      "weekdays": [],
+      "dates": [],
+      "when": null,
+      "read_on": "2026-11-12"
+    }
+  ],
+  "not_included": [
+    {
+      "id": "mercator-ne-vsak-cetrtek",
+      "store": "mercator",
+      "reason": "Stran ne pravi, da imajo upokojenci popust vsak četrtek. Piše samo ta teden: četrtek, 12. 11. 2026. Vsakega četrtka zato ni na seznamu.",
+      "source_url": "https://www.mercator.si/akcije-in-ugodnosti/upokojenski-popust/",
+      "source_quote": "Ta teden lahko upokojenski popust koristite v četrtek, 12. 11. 2026.",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/mercator-upokojenski.html"
+    },
+    {
+      "id": "mercator-pika-ne-vsak-vikend",
+      "store": "mercator",
+      "reason": "Stran ne pravi, da je izbira s Pika kartico vsak petek in vsako soboto. Piše ta konec tedna: petek, 13. 11., ali sobota, 14. 11. 2026.",
+      "source_url": "https://www.mercator.si/akcije-in-ugodnosti/novo-ta-vikend-dobite-vec/",
+      "source_quote": "Ta konec tedna, v petek, 13. 11. ali soboto, 14. 11. 2026, lahko izberete svoj popust:",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/mercator-pika-vikend.html"
+    },
+    {
+      "id": "mercator-vikend-akcija-ni-drugi-popust",
+      "store": "mercator",
+      "reason": "Ista petek in sobota in istih 10 % nad 30 € s Pika kartico kot pri izbiri na drugi strani. Tam piše, da se popusti ne seštevajo in da izberete en popust enkrat. To ni drugi popust. Izdelki v vikend akciji so na sliki, v besedilu imen ni.",
+      "source_url": "https://www.mercator.si/akcije-in-ugodnosti/vikend-akcija/",
+      "source_quote": "V petek, 13. 11., in soboto, 14. 11. 2026, vas v Mercatorju čaka vikend akcija. Akcija velja v okviru razpoložljivega prodajnega asortimana. Za vse izdelke v vikend akciji velja tudi 10-% vikend popust na celoten nakup nad 30 € s Pika kartico (ne velja za nakupe v spletni trgovini Mercator Online). Oglejte si izdelke v akciji. V spletno trgovino V Vikend akciji najdete naslednje izdelke:",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/mercator-vikend-akcija.html"
+    },
+    {
+      "id": "spar-sreda-ni-datum",
+      "store": "spar",
+      "reason": "Stran pravi »vsako drugo ali tretjo sredo«. Ne pravi, katera od obeh, in ne pravi, da sta obe. Datumov ne našteje. Zato 10 % nima seznama datumov in ni »vsaka sreda«.",
+      "source_url": "https://www.spar.si/spar-plus",
+      "source_quote": "Vsako drugo ali tretjo sredo v mesecu",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/spar-plus-dnevi.html"
+    },
+    {
+      "id": "spar-pogoji-10-je-primer",
+      "store": "spar",
+      "reason": "V pogojih je 10 % samo primer (»npr.«) in velja »če in kadar« Spar popust nudi. Despar in restavracije Interspar so v tem stavku, ne v stavku, ki našteje dneve in 10 %. V ponudbo 10 % jih ne dodajamo.",
+      "source_url": "https://www.spar.si/spar-plus",
+      "source_quote": "5.4.4. Če in kadar SPAR upokojencem nudi poseben (npr. 10 - odstotni) upokojenski popust, ga imetniki SPAR plus kartice z evidentiranim statusom upokojenca lahko uveljavljajo le ob prvem nakupu v tem dnevu v trgovinah Spar, Interspar, Despar, franšiznih trgovinah SPAR partner ali v Restavracijah Interspar.",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/spar-plus-pogoji-5-4.html"
+    },
+    {
+      "id": "spar-dan-za-upokojence-ni-popust",
+      "store": "spar",
+      "reason": "Meni na Spar plus vodi na to stran (Dan za upokojence). Na njej so prehranski nasveti. Ni popusta, ni odstotka in ni nakupovalnega dne.",
+      "source_url": "https://www.spar.si/promocije-in-projekti/aktualni-projekti/dan-za-upokojence",
+      "source_quote": "DAN ZA UPOKOJENCE Ker nam je mar za vaše zdravje in počutje",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/spar-dan-za-upokojence.txt"
+    },
+    {
+      "id": "spar-plus-20-nima-datumov",
+      "store": "spar",
+      "reason": "Na strani Spar plus za kupon 20 % na jedi piše samo »v določenem terminu«. Dni ne našteje. Datumov od tam ne jemljemo. Datumi kuponov so na strani aktualnih promocij.",
+      "source_url": "https://www.spar.si/spar-plus",
+      "source_quote": "SPAR plus kupon je možno unovčiti v določenem terminu, ob predložitvi SPAR plus kartice z urejenim statusom upokojenca.",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/spar-plus-dnevi.html"
+    },
+    {
+      "id": "spar-redni-kuponi-nimajo-dneva",
+      "store": "spar",
+      "reason": "Redni kupon za 25 % na en izdelek in za 10 % na cel nakup nima dneva in nima datuma. »Redno« ni jutro, na katero bi napisali stavek.",
+      "source_url": "https://www.spar.si/promocije-in-projekti/aktualne-promocije",
+      "source_quote": "imetniki SPAR plus kartice lahko redno koristite kupon za 25 % popust na en izdelek po vaši izbiri ter kupon za 10 % popust na celoten nakup.",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/spar-aktualne-promocije.txt"
+    },
+    {
+      "id": "spar-koledar-brez-odstotka",
+      "store": "spar",
+      "reason": "Na strani sta naslova za četrtek, 12. 11. 2026, in za petek, 13. 11., ter soboto, 14. 11. 2026. Pod njima v prebranem besedilu ni odstotka. Odstotka ne dopolnjujemo. Kupona za upokojence, ki sledita, sta posebej na seznamu.",
+      "source_url": "https://www.spar.si/promocije-in-projekti/aktualne-promocije",
+      "source_quote": "V ČETRTEK, 12. 11. 2026 V PETEK, 13. 11. IN SOBOTO, 14. 11. 2026",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/spar-aktualne-promocije.txt"
+    },
+    {
+      "id": "spar-praznicni-izdelki-brez-odstotka",
+      "store": "spar",
+      "reason": "Besedilo našteje petek, 13. 11., in soboto, 14. 11. 2026, in blago (piščanec in drugo), odstotka pa ne. Odstotka ne dopolnjujemo.",
+      "source_url": "https://www.spar.si/promocije-in-projekti/aktualne-promocije",
+      "source_quote": "SLOVENSKO SVEŽE POSTREŽNO PIŠČANČJE MESO IK Popust se obračuna pri blagajni. Izdelek ni na voljo v vseh naših trgovinah. Ne velja za izdelke, vključene v promocijo ZNIŽANI FAVORITI. V PETEK, 13. 11., IN SOBOTO, 14. 11. 2026.",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/spar-aktualne-promocije.txt"
+    },
+    {
+      "id": "spar-ekstra-sreda-brez-odstotka",
+      "store": "spar",
+      "reason": "Ekstra sreda pravi, da so cene samo v sredo, odstotka in izdelkov pa ne. Izbor naj bi bil znan v torek. Stavka brez odstotka ne pišemo.",
+      "source_url": "https://www.spar.si/promocije-in-projekti/aktualne-promocije",
+      "source_quote": "Promocija Ekstra sreda je izbor akcijskih izdelkov po še posebej močno znižanih cenah, ki veljajo samo v sredo. Izbor vam razkrijemo v torek, do takrat pa preverite naše preostale ugodnosti.",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/spar-aktualne-promocije.txt"
+    },
+    {
+      "id": "spar-ribji-torek-brez-odstotka",
+      "store": "spar",
+      "reason": "Ribji torek v prebranem besedilu nima odstotka in nima datuma. Stavka ne pišemo.",
+      "source_url": "https://www.spar.si/promocije-in-projekti/aktualne-promocije",
+      "source_quote": "Ponudba svežih postrežnih rib velja v trgovinah z ribarnico, ponudba postrežnih zamrznjenih rib pa le v izbranih trgovinah. Popusti se ne seštevajo. Popust ne velja za izdelke, vključene v promocijo TRAJNO ZNIŽANO. Ponudba velja za imetnike SPAR plus kartice. Popust se obračuna pri blagajni. Slika je simbolična.",
+      "read_on": "2026-11-12",
+      "snippet": "research/discount-days/spar-aktualne-promocije.txt"
+    }
+  ]
+}

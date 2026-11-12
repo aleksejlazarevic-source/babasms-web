@@ -1,7 +1,25 @@
 'use strict';
 
 const fs = require('node:fs');
+const path = require('node:path');
 const vm = require('node:vm');
+
+const SITE = path.join(__dirname, '..', '..', 'site');
+const BASE = 'https://kindeals.example/';
+
+function cacheKey(req) {
+  const raw = typeof req === 'string' ? req : req.url;
+  const u = new URL(raw, BASE);
+  u.searchParams.delete('fresh');
+  return u.toString();
+}
+
+function siteFileFor(url) {
+  const rel = new URL(typeof url === 'string' ? url : url, BASE).pathname.replace(/^\//, '');
+  const file = path.resolve(SITE, rel);
+  if (!file.startsWith(SITE + path.sep) && file !== SITE) return null;
+  return fs.existsSync(file) ? file : null;
+}
 
 /** Run site/sw.js in a minimal service-worker sandbox for fetch-handler tests. */
 function loadServiceWorker(swPath) {
@@ -30,24 +48,32 @@ function loadServiceWorker(swPath) {
     open(name) {
       if (!cacheData.has(name)) cacheData.set(name, new Map());
       const store = cacheData.get(name);
-      return Promise.resolve({
+      const cache = {
         match(req) {
-          const raw = typeof req === 'string' ? req : req.url;
-          const u = new URL(raw);
-          u.searchParams.delete('fresh');
-          const key = u.toString();
-          const hit = store.get(key);
+          const hit = store.get(cacheKey(req));
           if (!hit) return Promise.resolve(undefined);
           return Promise.resolve(new Response(hit.body, { status: hit.status }));
         },
         put(url, res) {
           return res.clone().text().then((body) => {
-            const u = new URL(url);
-            u.searchParams.delete('fresh');
-            store.set(u.toString(), { body, status: res.status });
+            store.set(cacheKey(url), { body, status: res.status });
           });
         },
-      });
+        addAll(urls) {
+          return Promise.all(urls.map((url) => {
+            const file = siteFileFor(url);
+            if (file) {
+              store.set(cacheKey(url), { body: fs.readFileSync(file), status: 200 });
+              return null;
+            }
+            return Promise.resolve(fetchImpl(url)).then((res) => {
+              if (!res || !res.ok) throw new TypeError('Failed to fetch ' + url);
+              return cache.put(url, res);
+            });
+          }));
+        },
+      };
+      return Promise.resolve(cache);
     },
   };
 
@@ -67,15 +93,21 @@ function loadServiceWorker(swPath) {
 
   const cacheName = fs.readFileSync(swPath, 'utf8').match(/var CACHE = '([^']+)'/)[1];
 
-  async function runLifecycle() {
-    for (const fn of listeners.install || []) {
-      fn({ waitUntil: (p) => p });
-    }
-    for (const fn of listeners.activate || []) {
-      await new Promise((resolve) => {
-        fn({ waitUntil: (p) => Promise.resolve(p).then(() => resolve()) });
+  async function waitFor(fn) {
+    await new Promise((resolve, reject) => {
+      let pending = Promise.resolve();
+      fn({
+        waitUntil(p) {
+          pending = Promise.resolve(p);
+        },
       });
-    }
+      Promise.resolve(pending).then(resolve, reject);
+    });
+  }
+
+  async function runLifecycle() {
+    for (const fn of listeners.install || []) await waitFor(fn);
+    for (const fn of listeners.activate || []) await waitFor(fn);
   }
 
   function respondFor(request) {

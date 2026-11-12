@@ -189,7 +189,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .y1 .ln { margin: 0 1.4em 0.8em; }
 .y1 .ln.s { width: 48%; }
 .y .ph .bar { padding: 0 0.8em; margin-top: 1.1em; gap: 0.45em; }
-.y .ph .dom { font-size: 0.74em; }   /* so the whole address shows (tried at 320, 375, 430) */
+.y .ph .dom { font-size: max(16px, 0.74em); }   /* 16px floor: this line was 11.3px at 390 wide (readability check, 12 Nov 2026). 0.74em still grows if the picture is wider. */
 .y1 .pill .i { width: 1.25em; height: 1.25em; color: #1c1c1e; }
 .y1 .tools { display: flex; align-items: center; justify-content: space-between; margin: 0.7em 1.3em 0; height: 3em; }
 .y1 .tools .i { width: 1.6em; height: 1.6em; color: #1c1c1e; }
@@ -206,12 +206,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .y2 .pv { display: flex; align-items: center; gap: 0.9em; padding: 0 0.15em 0.8em; }
 .y2 .pv .n { flex: 1; min-width: 0; }
 .y2 .pv .n > span { display: block; font-size: 1.15em; font-weight: 700; }
-.y2 .pv .n small { display: block; font-size: 0.9em; color: #8e8e93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.y2 .opt { display: inline-flex; align-items: center; gap: 0.15em; margin-top: 0.35em; padding: 0.25em 0.45em 0.25em 0.75em; border-radius: 1em; background: #f2f2f7; font-size: 0.85em; font-weight: 400; }
+.y2 .pv .n small { display: block; font-size: max(16px, 0.9em); color: var(--quiet); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }   /* 16px and --quiet: this line was 13.7px and 3.26:1 grey on white at 390 wide (readability check, 12 Nov 2026). --quiet is 7.0:1 on paper. */
+.y2 .opt { display: inline-flex; align-items: center; gap: 0.15em; margin-top: 0.35em; padding: 0.25em 0.45em 0.25em 0.75em; border-radius: 1em; background: #f2f2f7; font-size: max(16px, 0.85em); font-weight: 400; }   /* 16px floor: "Options" was 13.0px at 390 wide (readability check, 12 Nov 2026) */
 .y2 .opt .i { width: 1em; height: 1em; color: #8e8e93; }
 .y2 .r { padding-left: 0.15em; padding-right: 0.15em; }
 .y2 .apps { gap: 1.6em; padding-top: 0.8em; padding-bottom: 0.8em; }
 .y2 .apps > .ap { flex: none; }
+.y2 .apps > .ap > span { font-size: max(16px, 1em); }   /* 16px floor: AirDrop and Messages were 12.5px at 390 wide (readability check, 12 Nov 2026). 1em is this tile's own size, so a wider picture still grows the names. */
 .y2 .tap { margin-bottom: 0.9em; }
 
 /* 3. the list after Prikaži več, scrolled down. A white sheet with grey boxes, the sign on the left,
@@ -336,6 +337,112 @@ button.shop:active::after { border-color: var(--paper); }
 .deal:last-child { border-bottom: 0; }
 .note { margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--ink); line-height: 1.35; }
 
+/* Tick rows on preview.html. Sizes are the Design guesses, 12 Nov 2026, until seen on a phone.
+   12px beside the tick, the check's place, and the 140px under the list are guesses too. */
+.pick {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+  min-height: 56px;
+  margin: 0;
+  padding: 14px 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  background: var(--paper);
+  text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.tick {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+  box-sizing: border-box;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  background: var(--paper);
+}
+.pick[aria-pressed="true"] .tick { background: var(--ink); position: relative; }
+.pick[aria-pressed="true"] .tick::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 3px;
+  width: 6px;
+  height: 11px;
+  border-style: solid;
+  border-color: var(--paper);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+.what {
+  grid-column: 2;
+  grid-row: 1;
+  font-size: 22px;
+  font-weight: 400;
+  overflow-wrap: break-word;
+}
+.cost { grid-column: 2; grid-row: 2; overflow-wrap: break-word; }
+.now { font-size: 26px; font-weight: 700; }
+.was { position: relative; font-size: 20px; color: var(--quiet); margin-left: 8px; }
+.was span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+.who {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  outline: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+.when { display: inline-block; margin-left: 8px; font-size: 20px; font-weight: 400; }
+#sum {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 22px;
+  font-weight: 700;
+  padding: 14px var(--side);
+  padding-bottom: calc(14px + env(safe-area-inset-bottom));
+}
+.app.has-sum { padding-bottom: calc(140px + env(safe-area-inset-bottom)); }
+
+/* Moj seznam on the stores screen. Sizes are guesses, 12 Nov 2026, until seen on a phone. */
+#mine { margin-top: 8px; }
+.mine-title { font-size: 28px; font-weight: 800; line-height: 1.15; }
+.mine-store { margin-top: 16px; }
+.mine-name {
+  margin: 0;
+  padding-top: 10px;
+  border-top: 2px solid var(--ink);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+}
+.mine-sum { margin-top: 8px; font-size: 26px; font-weight: 700; line-height: 1.2; }
+.mine-rest { margin-top: 4px; font-size: 20px; font-weight: 400; color: var(--quiet); line-height: 1.2; }
+
 /* When there are no lines to show: the batch is not on the page yet, or the phone is offline */
 .msg { margin-top: 20px; padding: 28px 20px 32px; border: 2px dashed var(--rule); border-radius: 4px; }
 .msg-title { font-size: 28px; line-height: 1.2; font-weight: 700; }
@@ -379,10 +486,11 @@ button.shop:active::after { border-color: var(--paper); }
    pins it. It reuses the iOS 27 parts (.d, .y, .y2, .y3). Drawn from English photos of iOS 26 and
    26.2 (see index.html); not checked on a phone. Sizes are measured off those photos, 11 Nov 2026:
    the screen is 19.8em wide here and 393pt on the phone, so 1pt is about 0.05em. Where a size is
-   not from a photo it is a guess by eye. Colours are guesses: the photos are of dark screens. */
+   not from a photo it is a guess by eye. Colours are guesses: the photos are of dark screens.
+   .framed is this guide's frame and hand. iOS 17, iOS 18 and the fallback use the same class. */
 
 /* Liquid Glass: a clear, bright piece floating over the page, with a light rim and a soft shadow. */
-#setup-ios26 .gl {
+.framed .gl {
   background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
   -webkit-backdrop-filter: blur(0.6em) saturate(1.8);
   backdrop-filter: blur(0.6em) saturate(1.8);
@@ -442,7 +550,7 @@ button.shop:active::after { border-color: var(--paper); }
 .z3 .acts .chev .i { width: 3.1em; height: 3.1em; color: #1c1c1e; stroke-width: 1.45; }   /* the paper and the bookmark are 0.46 of the button high, as in the photo; the lines are thin, like the system's */
 .z3 .acts { padding-bottom: 0; }
 .z3 .acts .tap { margin-bottom: 0; }
-#setup-ios26 .z3 .acts .tap::after { top: calc(var(--u) * 1.66); }   /* the fingertip at the middle of the round button, not of its words */
+.framed .z3 .acts .tap::after { top: calc(var(--u) * 1.66); }   /* the fingertip at the middle of the round button, not of its words */
 
 /* 4. the opened sheet, scrolled (photos of 20 Aug 2025 and iOS 26.2): it fills the screen to the
    sides and the bottom. One line a row, 56pt apart, and the lines between rows start at the words. */
@@ -480,22 +588,22 @@ button.shop:active::after { border-color: var(--paper); }
    the drawings had before the frame, so nothing in them got smaller. Only one end of the phone is
    shown; the other end is cut off by the picture's edge, under a fade into the page.
    The numbers below are that frame's sizes times 19.8 / 390; the rest are guesses by eye. */
-#setup-ios26 .cv.fr {
+.framed .cv.fr {
   --s: tan(atan2(calc(var(--u) * 19.8), 390px));   /* a length over a length, as a plain number */
   padding: 0 0 2.31em;                             /* the frame's edge (0.91em) and room for its shadow */
   clip-path: inset(0 -4em);                        /* cuts the phone above and below; the hand and the shadow may pass the sides */
 }
-#setup-ios26 .cv.fr.up { padding: 1.215em 0 0; }
-#setup-ios26 .fone { position: absolute; left: -1.015em; bottom: 1.4em; width: 21.73em; height: 44.07em; pointer-events: none; }   /* -1.015em: the screen's left edge on the picture's, the phone a little into the left margin, so the hand fits in the right one */
-#setup-ios26 .up .fone { bottom: auto; top: 0.2em; }
-#setup-ios26 .fone .inner { width: 428px; height: 868px; transform: scale(var(--s)); transform-origin: 0 0; }
-#setup-ios26 .fone .device { filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.18)); }
-#setup-ios26 .fone .device-screen { background: #c9c9cf; }
-#setup-ios26 .fr .ph { z-index: 1; width: 19.84em; margin-left: -0.02em; border: 0; border-radius: 0 0 2.49em 2.49em; }   /* a hair wider than the screen, so no gap shows at the frame */
-#setup-ios26 .fr .ph.top { border-radius: 2.49em 2.49em 0 0; }
-#setup-ios26 .fr .ph::before { display: none; }
-#setup-ios26 .fr .z5 { background: none; }   /* the frame's own grey screen shows, with its black island */
-#setup-ios26 .cv.fr::after {   /* the fade at the cut end, over the frame too */
+.framed .cv.fr.up { padding: 1.215em 0 0; }
+.framed .fone { position: absolute; left: -1.015em; bottom: 1.4em; width: 21.73em; height: 44.07em; pointer-events: none; }   /* -1.015em: the screen's left edge on the picture's, the phone a little into the left margin, so the hand fits in the right one */
+.framed .up .fone { bottom: auto; top: 0.2em; }
+.framed .fone .inner { width: 428px; height: 868px; transform: scale(var(--s)); transform-origin: 0 0; }
+.framed .fone .device { filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.18)); }
+.framed .fone .device-screen { background: #c9c9cf; }
+.framed .fr .ph { z-index: 1; width: 19.84em; margin-left: -0.02em; border: 0; border-radius: 0 0 2.49em 2.49em; }   /* a hair wider than the screen, so no gap shows at the frame */
+.framed .fr .ph.top { border-radius: 2.49em 2.49em 0 0; }
+.framed .fr .ph::before { display: none; }
+.framed .fr .z5 { background: none; }   /* the frame's own grey screen shows, with its black island */
+.framed .cv.fr::after {   /* the fade at the cut end, over the frame too */
   content: "";
   position: absolute;
   left: -1.3em;
@@ -506,14 +614,21 @@ button.shop:active::after { border-color: var(--paper); }
   z-index: 8;
   pointer-events: none;
 }
-#setup-ios26 .cv.fr.up::after { top: auto; bottom: -1px; background: linear-gradient(rgba(255, 255, 255, 0), var(--paper) 80%); }
+.framed .cv.fr.up::after { top: auto; bottom: -1px; background: linear-gradient(rgba(255, 255, 255, 0), var(--paper) 80%); }
 /* the hand: hand.png (Microsoft Fluent UI Emoji, MIT), 233 by 214, its fingertip at the left edge,
    36.7% down. In every step the fingertip lies 0.35em inside the right edge of the thing to tap,
    at the middle of its height. It comes in over the frame from the right margin.
    Aleksej, 11 Nov 2026: "too puffy/fatty". So it is drawn smaller, and 0.86 as tall as its own
    shape for that width (guess by eye): a slimmer finger and a flatter fist. The fingertip stays
-   36.7% down whatever the height. */
-#setup-ios26 .y .tap::after {
+   36.7% down whatever the height.
+   Aleksej, 12 Nov 2026: "still a little too puffed up especially fingers", and keep this hand. So
+   the picture itself was reshaped: the pointing finger 0.76 as thick about its own middle line,
+   the curled fingers 8px further in and the fist 11px shorter underneath (all three guesses by
+   eye). Same 233 by 214, and the fingertip did not move.
+   Aleksej, 12 Nov 2026: "the thumb doesn't look like it was changed". So the thumb was drawn in
+   too: 0.72 as thick about its own middle line, fading out where it meets the palm, about as
+   thick as the pointing finger (guess by eye). The fingers and the fingertip are unchanged. */
+.framed .y .tap::after {
   left: calc(100% - var(--u) * 0.42);
   width: calc(var(--u) * 4.1);
   height: calc(var(--u) * 3.24);
@@ -521,4 +636,425 @@ button.shop:active::after { border-color: var(--paper); }
   background: url("hand.png") no-repeat 0 0 / 100% 100%;
   filter: drop-shadow(0 calc(var(--u) * 0.2) calc(var(--u) * 0.3) rgba(0, 0, 0, 0.3));
   z-index: 12;
+  transform-origin: 0 36.7%; /* the tap squashes toward the fingertip. It stays on this rule, not in the keyframes, so the move is only translate and scale. */
+  /* The finger lifts off, comes back in from the right, and taps. The still place above
+     is never animated: the motion is an extra offset, and that offset is 0 whenever the
+     finger is resting, so the fingertip ends where this rule already put it.
+     2.8s, the distances, and the 0.28s stagger are guesses by eye, 12 Nov 2026. */
+  animation: ios26-hand 2.8s linear infinite both;
 }
+#setup-ios26 ol > li:nth-child(2) .tap::after { animation-delay: 0.28s; }
+#setup-ios26 ol > li:nth-child(3) .tap::after { animation-delay: 0.56s; }
+#setup-ios26 ol > li:nth-child(4) .tap::after { animation-delay: 0.84s; }
+#setup-ios26 ol > li:nth-child(5) .tap::after { animation-delay: 1.12s; }
+@keyframes ios26-hand {
+  /* resting on the target: the same fingertip as the still drawing */
+  0%, 38% {
+    translate: 0 0;
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.55, 0, 0.85, 0.35);
+  }
+  /* lift off to the right, a little low */
+  48% {
+    translate: 1.25em 0.5em;
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  /* a small pull-back before the finger comes in */
+  54% {
+    translate: 1.42em 0.58em;
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.15, 0.85, 0.22, 1);
+  }
+  /* lands a hair past the still point */
+  70% {
+    translate: -0.2em 0.02em;
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.33, 0, 0.2, 1);
+  }
+  /* the tap: the fist gives toward the fingertip, which stays put */
+  76% {
+    translate: -0.1em 0.07em;
+    scale: 0.95 0.92;
+    animation-timing-function: cubic-bezier(0.16, 1.2, 0.32, 1);
+  }
+  /* back on the still point, and held there through the loop */
+  86%, 100% {
+    translate: 0 0;
+    scale: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #setup-ios26 .y .tap::after { animation: none; }
+}
+
+/* Looping preview: opacity only. The loop does not add .on, so the hand stays still. Reduced motion still crossfades. 20px under the phone, tried at 390×844 on 12 Nov 2026. */
+body.pitch:has(.guide-loop) {
+  height: 100dvh;
+  overflow: hidden;
+}
+body.pitch:has(.guide-loop) .pitch-scroll {
+  position: fixed;
+  z-index: 1;
+  top: var(--guide-h, 100dvh);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+}
+#setup.guide-loop,
+#setup-ios26.guide-loop {
+  position: fixed;
+  z-index: 6;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 20px;
+  background: var(--paper);
+}
+.guide-loop > ol { display: grid; }
+.guide-loop > ol > li {
+  grid-area: 1 / 1;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  align-self: stretch;
+  width: 100%;
+  border-bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+  animation-name: guide-crossfade;
+  animation-duration: var(--guide-cycle);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  animation-delay: var(--guide-delay, 0ms);
+}
+.guide-loop > ol > li::before { grid-row: 1; align-self: start; }
+.guide-loop > ol > li > .say { grid-row: 1; align-self: start; }
+.guide-loop > ol > li > .aside { grid-row: 2; align-self: start; }
+.guide-loop > ol > li > .pic { grid-row: 3; align-self: end; }
+.guide-loop > ol > li.on {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* The tap already written for this hand. It plays once while that step is showing.
+     The iOS 27 hand uses this same tap (its rules are at the end of the file, after
+     the still place). The keyframes were fitted to hand.png. */
+  #setup-ios26.guide-loop .y .tap::after {
+    animation: none;
+    will-change: translate, scale;
+  }
+  #setup-ios26.guide-loop > ol > li.on .y .tap::after {
+    animation: ios26-hand 2.8s linear 1 both;
+    animation-delay: 0s;
+  }
+}
+
+/* ---------- The iOS 27 guide (#setup): the same phone and hand as the iOS 26 guide ----------
+   It stands here, and the frame is put in by a small script at the end of index.html, because
+   tests/test_iphone_guide.py pins the iOS 27 markup and its rules above to 45b131e. The script
+   copies the iOS 26 guide's frame into each drawing and adds .fr; every rule here needs .fr, so
+   without the script the drawings stay as they were (thin line, black hand).
+   These are the iOS 26 frame and hand rules above (the numbers are explained there), for #setup.
+   The screen is 19.8em wide: the width the drawings had inside the thin line, so nothing in them
+   got smaller. All three drawings are the bottom of the phone, so the last one ends with the
+   phone's own bottom edge; the top is cut off under a fade into the page. */
+#setup .cv.fr {
+  --s: tan(atan2(calc(var(--u) * 19.8), 390px));   /* a length over a length, as a plain number */
+  padding: 0 0 2.31em;                             /* the frame's edge (0.91em) and room for its shadow */
+  clip-path: inset(0 -4em);                        /* cuts the phone above; the hand and the shadow may pass the sides */
+}
+#setup .fr .fone { position: absolute; left: -1.015em; bottom: 1.4em; width: 21.73em; height: 44.07em; pointer-events: none; }
+#setup .fr .fone .inner { width: 428px; height: 868px; transform: scale(var(--s)); transform-origin: 0 0; }
+#setup .fr .fone .device { filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.18)); }
+#setup .fr .fone .device-screen { background: #fff; }   /* her iOS 27 screens are white to the edges */
+#setup .fr .ph { z-index: 1; width: 19.84em; margin-left: -0.02em; border: 0; border-radius: 0 0 2.49em 2.49em; }   /* a hair wider than the screen, so no gap shows at the frame */
+#setup .fr .ph::before { display: none; }
+#setup .cv.fr::after {   /* the fade at the cut end, over the frame too */
+  content: "";
+  position: absolute;
+  left: -1.3em;
+  right: -1.3em;
+  top: -1px;
+  height: calc(3.4em + 1px);
+  background: linear-gradient(var(--paper) 12%, rgba(255, 255, 255, 0));
+  z-index: 8;
+  pointer-events: none;
+}
+/* the drawings start just under that fade, so no empty screen shows above them (guesses by eye,
+   not seen in a browser, 12 Nov 2026) */
+#setup .fr .y1 { padding-top: 3.3em; }
+#setup .fr .y2 { padding-top: 3em; }
+#setup .fr .y3 .cut { padding-top: 2em; }
+/* Step 3's sheet, measured off docs/ios-refs/ios27/step2-sheet.png (12 Nov 2026).
+   The screen in that file is x 22–466, 445px wide. This drawing's screen is 19.84em,
+   so 1em is 22.43px of the photo. Sampled, not guessed:
+   sheet #fff; groups #ebebeb, inset 18px (0.80em), corner meeting the top at 26px (1.16em);
+   row pitch 57px (2.54em); gap between the groups 22px (0.98em);
+   divider 1px #d4d4d5, from the words (x 103, 2.85em into the group) to 18px short of the right;
+   row cap 13px and x-height 10px, so the size is 0.827em, weight 400, #000,
+   tracking -0.008em. The face is Inter here, listed before -apple-system,
+   because -apple-system on this machine is Noto Sans; a phone has no Inter,
+   so -apple-system there is SF Pro;
+   the baseline is 36px down the 57px row, so the words are shifted 0.089em;
+   the words start 65px (2.90em) into the group;
+   the small icons are centered 36.5px in, in a 26px box, stroke 1.6px;
+   round actions 75px (3.34em), fill #e9e9e9, 33px (1.47em) in from the screen,
+   label cap 10px (0.63em), 10px under the circle, 32px from the two-line labels to the group.
+   The four glyphs are drawn in the photo's pixels: copy 30×38, bookmark 23×36,
+   glasses 50×19, chevron 29×16, each stroke 2px. */
+#setup .fr .y3 {
+  padding: 0 0.8em 0;
+  background: #fff;
+  color: #000;
+}
+#setup .fr .y3 .acts {
+  display: grid;
+  grid-template-columns: repeat(4, calc(3.34 * var(--u)));
+  justify-content: space-between;
+  align-items: start;
+  margin: 0 calc(-0.8 * var(--u));
+  /* 2.35em clears the fade. The bottom pad is the labels (they hang past the
+     circles) plus the 32px from those labels down to the grey group. */
+  padding: calc(2.35 * var(--u)) calc(1.47 * var(--u)) calc(3.53 * var(--u));
+}
+#setup .fr .y3 .acts .ap {
+  position: relative;
+  width: calc(3.34 * var(--u));
+  margin: 0;
+  gap: calc(0.49 * var(--u));
+  font-size: 1em;
+  overflow: visible;
+}
+#setup .fr .y3 .acts .chev {
+  width: calc(3.34 * var(--u));
+  height: calc(3.34 * var(--u));
+  background: #e9e9e9;
+  box-shadow: none;
+}
+/* Each glyph's viewBox is the photo's pixels, so 1 unit is 1px of the 445px screen
+   and the 2.1 stroke is the measured 2px. The box is that viewBox in em (÷ 22.43). */
+#setup .fr .y3 .acts .chev .i {
+  color: #000;
+  stroke-width: 2.1;
+}
+#setup .fr .y3 .acts .ap:nth-child(1) .i { width: calc(1.427 * var(--u)); height: calc(1.783 * var(--u)); }
+#setup .fr .y3 .acts .ap:nth-child(2) .i { width: calc(1.115 * var(--u)); height: calc(1.694 * var(--u)); }
+#setup .fr .y3 .acts .ap:nth-child(3) .i { width: calc(2.363 * var(--u)); height: calc(0.981 * var(--u)); }
+#setup .fr .y3 .acts .ap:nth-child(4) .i { width: calc(1.382 * var(--u)); height: calc(0.803 * var(--u)); }
+#setup .fr .y3 .acts .ap > span {
+  position: absolute;
+  left: 50%;
+  top: calc(3.58 * var(--u));
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(4.35 * var(--u));
+  font-size: calc(0.63 * var(--u));
+  font-weight: 400;
+  line-height: 1.28;
+  letter-spacing: -0.012em;
+  color: #000;
+  text-align: center;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+#setup .fr .y3 .grp {
+  background: #ebebeb;
+  border-radius: calc(1.16 * var(--u));
+}
+#setup .fr .y3 .grp:not(:last-of-type) { margin-bottom: calc(0.98 * var(--u)); }
+#setup .fr .y3 .grp:last-of-type { margin-bottom: 0; }   /* the shared rule's 1em would leave a white band; the photo's grey runs into the screen corner */
+#setup .fr .y3 .r {
+  position: relative;
+  border-top: 0;
+  /* Inter is the SF-metric face installed here, so it has to be first: on this
+     machine -apple-system is Noto Sans and would hide it. A phone has no Inter,
+     so the next name, -apple-system, is SF Pro. */
+  font-family: Inter, -apple-system, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif;
+  font-size: calc(0.827 * var(--u));
+  font-weight: 400;
+  letter-spacing: -0.008em;
+  line-height: 1.15;
+  color: #000;
+  min-height: calc(2.54 * var(--u));
+  padding: 0 calc(0.8 * var(--u)) 0 calc(1.05 * var(--u));
+  gap: calc(0.62 * var(--u));
+}
+#setup .fr .y3 .r > span {
+  transform: translateY(calc(0.089 * var(--u)));
+}
+#setup .fr .y3 .r .i {
+  width: calc(1.16 * var(--u));
+  height: calc(1.16 * var(--u));
+  color: #000;
+  stroke-width: 1.8;
+}
+/* Find on Page is 28px tall in the photo; the other row icons fit the 26px box. */
+#setup .fr .y3 .r .i:has(use[href="#i27-find"]) { height: calc(1.248 * var(--u)); }
+#setup .fr .y3 .r + .r::before {
+  content: "";
+  position: absolute;
+  left: calc(2.85 * var(--u));
+  right: calc(0.8 * var(--u));
+  top: 0;
+  border-top: calc(0.045 * var(--u)) solid #d4d4d5;
+}
+#setup .fr .y3 .tap > span { max-width: none; }
+/* the hand: hand.png, its fingertip 0.42em inside the right edge of the thing to tap, at the middle
+   of its height, coming in from the right over the frame. The same in all three steps, and the same
+   as the iOS 26 guide. In step 1 the thing to tap is the arrow in the middle of the row, so the
+   hand lies over the next sign.
+   Step 2's .tap is the whole row, and that row runs to the phone's edge, so the same right-edge
+   rule put the fingertip on the bezel. The button is the circle plus its words. The words already
+   sit on the left; they keep that place. The fingertip sits just past the last letter, not on it. */
+#setup .fr .tap::after,
+#setup .fr .y2 .tap > span::after {
+  left: calc(100% - var(--u) * 0.42);
+  top: 50%;
+  width: calc(var(--u) * 4.1);
+  height: calc(var(--u) * 3.24);
+  transform: translateY(-36.7%);
+  background: url("hand.png") no-repeat 0 0 / 100% 100%;
+  filter: drop-shadow(0 calc(var(--u) * 0.2) calc(var(--u) * 0.3) rgba(0, 0, 0, 0.3));
+  z-index: 12;
+}
+#setup .fr .y2 .tap > span {
+  flex: none;
+  width: max-content;
+  position: relative;
+}
+#setup .fr .y2 .tap::after { content: none; }
+#setup .fr .y2 .tap > span::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  /* 0.32em past the glyphs. hand.png's tip is 4/233 in from the picture's left, so at a 390px
+     page the tip is about 6px clear of the last letter (measured 12 Nov 2026). */
+  left: calc(100% + var(--u) * 0.32);
+}
+#setup li > .pic.y:has(.fr .y1) { margin-bottom: 0; }   /* the hand no longer hangs under the phone */
+
+/* iOS 17, iOS 18 and the fallback (index.html). The same frame and hand as iOS 26.
+   The bar is the docked Tab Bar of those versions, not iOS 26's floating glass.
+   Sizes below are guesses by eye, 12 Nov 2026. Not checked on a phone. */
+.framed .dock {
+  margin: 0.35em 0.5em 0;
+  padding: 0.42em 0.3em 0.1em;
+  background: #e7e7ec;
+  border-radius: 1.15em 1.15em 2.05em 2.05em;
+}
+.framed .dock .bar { margin-top: 0; padding: 0 0.3em; }
+.framed .dock .pill {
+  height: 2.3em;
+  border-radius: 0.55em;
+  background: #fff;
+  padding: 0 0.5em;
+  box-shadow: 0 0.04em 0.08em rgba(0, 0, 0, 0.06);
+}
+.framed .dock .pill .aa { font-weight: 500; color: #1c1c1e; font-size: 0.78em; letter-spacing: -0.03em; }
+.framed .dock .pill .aa big { font-size: 1.35em; font-weight: 500; }
+.framed .dock .pill .pmenu { width: 1.15em; height: 1.15em; color: #1c1c1e; }
+.framed .dock .tools { margin: 0.28em 0.65em 0.1em; }
+.framed .y1 .hind { margin-top: 0.4em; }
+
+/* Share sits in the middle of the row, so the hand comes up from under the phone.
+   The fingertip (left edge of hand.png, 36.7% down) meets the arrow. */
+.framed .y1 .tools .tap::after {
+  left: 50%;
+  top: 100%;
+  transform-origin: 0 36.7%;
+  transform: translate(-0.15em, calc(-36.7% - 0.55em)) rotate(90deg);
+}
+/* Room under the frame for that hand, without moving the frame off the drawing. */
+.framed .cv.fr:has(.y1) { padding-bottom: 6.3em; }
+.framed .cv.fr:has(.y1) .fone { bottom: 5.4em; }
+
+/* The last sheet on iOS 17 and 18: Cancel and Add are blue words, not iOS 26's filled pill. */
+.framed .oldadd .stop,
+.framed .oldadd .go {
+  background: none;
+  box-shadow: none;
+  color: #007aff;
+  font-size: 0.92em;
+  font-weight: 400;
+  height: auto;
+  padding: 0.15em 0.05em;
+  border-radius: 0;
+}
+.framed .oldadd .go { font-weight: 600; }
+.framed .oldadd .hd { padding: 0.2em 0.55em 0; gap: 0.35em; }
+.framed .oldadd .hd b { font-size: 0.7em; line-height: 1.15; }
+
+/* The iOS 27 hand taps like the iOS 26 hand (Aleksej, 12 Nov 2026).
+   These sit after the still place above, so a tie goes to the tap.
+   2.8s and the 0.28s stagger are the iOS 26 hand's (guesses by eye, 12 Nov 2026). */
+#setup .fr .tap::after,
+#setup .fr .y2 .tap > span::after {
+  transform-origin: 0 36.7%;
+  animation: ios26-hand 2.8s linear infinite both;
+}
+#setup .fr .y2 .tap > span::after { animation-delay: 0.28s; }
+#setup .fr .y3 .tap::after { animation-delay: 0.56s; }
+@media (prefers-reduced-motion: reduce) {
+  #setup .fr .tap::after,
+  #setup .fr .y2 .tap > span::after { animation: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  #setup.guide-loop .fr .tap::after,
+  #setup.guide-loop .fr .y2 .tap > span::after {
+    animation: none;
+    will-change: translate, scale;
+  }
+  #setup.guide-loop > ol > li.on .fr .tap::after,
+  #setup.guide-loop > ol > li.on .fr .y2 .tap > span::after {
+    animation: ios26-hand 2.8s linear 1 both;
+    animation-delay: 0s;
+  }
+}
+
+/* iOS 27 steps 1-2, measured off docs/ios-refs/ios27. */
+#setup .fr .y1{min-height:17.4em;padding:3.6em 0 0;}
+#setup .fr .y1 > .ln{position:relative;z-index:1;height:0.46em;margin:0 1.4em 0.48em;background:#e6e6eb;}
+#setup .fr .y1 .pg{position:absolute;left:0;right:0;top:6.5em;bottom:2.9em;z-index:0;background:radial-gradient(ellipse at 28% 42%, rgba(255, 255, 255, 0.5), transparent 46%), radial-gradient(ellipse at 80% 72%, rgba(214, 140, 0, 0.28), transparent 48%), linear-gradient(165deg, #ffe566, #ffd500 52%, #f0b400);}
+#setup .fr .y1 .cap{position:absolute;left:0;right:0;bottom:1.02em;z-index:1;}
+#setup .fr .y1 .cap .ln{height:0.4em;margin:0 1.35em 0.34em;background:#ececf0;}
+#setup .fr .y1 .cap .ln.s{width:72%;}
+#setup .fr .y1 .bar{position:absolute;left:0;right:0;bottom:1.77em;z-index:2;margin:0;padding:0 1.73em;gap:0.4em;}
+#setup .fr .y1 .gl{background:rgba(239, 239, 250, 0.58);-webkit-backdrop-filter:blur(0.62em) saturate(1.6);backdrop-filter:blur(0.62em) saturate(1.6);border:0.045em solid rgba(255, 255, 255, 0.78);box-shadow:0 0.1em 0.38em rgba(0, 0, 0, 0.12), 0 0.02em 0.06em rgba(0, 0, 0, 0.06), inset 0 0.05em 0.08em rgba(255, 255, 255, 0.92), inset 0 -0.04em 0.08em rgba(0, 0, 0, 0.05);}
+#setup .fr .y1 .rnd{width:2.39em;height:2.39em;border-radius:50%;display:grid;place-items:center;flex:none;color:#1c1c1e;}
+#setup .fr .y1 .pill{height:2.39em;border-radius:1.195em;padding:0 1.25em 0 0.28em;gap:0;justify-content:center;position:relative;}
+#setup .fr .y1 .rnd .i, #setup .fr .y1 .pill .i{width:calc(1.12 * var(--u));height:calc(1.12 * var(--u));color:#1c1c1e;stroke-width:1.7;}
+#setup .fr .y1 .rnd.tap .i{stroke-width:1.55;color:#3a3a3c;}
+#setup .fr .y1 .pill .i{position:absolute;right:0.32em;width:calc(0.9 * var(--u));height:calc(0.9 * var(--u));}
+#setup .fr .y1 .pill .dom{flex:1;min-width:0;max-width:100%;text-align:center;font-size:11.5px;font-weight:500;letter-spacing:-0.03em;color:#111;text-overflow:clip;}
+#setup .fr .y1 .hind{position:absolute;left:0;right:0;bottom:0.26em;z-index:4;width:6.6em;height:0.24em;margin:0 auto;}
+#setup .fr .y1 .tap::after{left:50%;top:100%;transform-origin:0 36.7%;transform:translate(-0.06em, calc(-36.7% - 0.85em)) rotate(90deg);}
+#setup .cv.fr:has(.y1){padding-bottom:3.8em;}
+#setup .cv.fr:has(.y1) .fone{bottom:2.89em;}
+#setup .fr .y2{padding:3.7em 0 0.35em;background:#fff;}
+#setup .fr .y2 .pv{position:relative;align-items:flex-start;gap:0.7em;padding:0.1em 3.15em 0.85em 1.42em;}
+#setup .fr .y2 .pv .ic4{width:3.25em;height:3.25em;border-radius:0.72em;}
+#setup .fr .y2 .pv .n > span{font-size:max(17px, 1.12em);font-weight:600;letter-spacing:-0.02em;}
+#setup .fr .y2 .opt{height:calc(1.427 * var(--u));margin-top:calc(0.61 * var(--u));padding:0 calc(0.43 * var(--u)) 0 calc(0.669 * var(--u));gap:calc(0.09 * var(--u));border-radius:calc(0.714 * var(--u));background:#f9f9f9;font-size:calc(0.759 * var(--u));font-weight:400;line-height:1;letter-spacing:-0.011em;color:#2e2e2e;}
+#setup .fr .y2 .opt .i{width:calc(0.84 * var(--u));height:calc(0.84 * var(--u));color:#646464;stroke-width:1.8;}
+#setup .fr .y2 .x{position:absolute;top:0.02em;right:0.72em;width:2.05em;height:2.05em;border-radius:50%;background:#e8e8ed;display:grid;place-items:center;color:#1c1c1e;}
+#setup .fr .y2 .x .i{width:0.82em;height:0.82em;stroke-width:2.3;}
+#setup .fr .y2 .apps{display:grid;grid-template-columns:repeat(5, 3.38em);column-gap:1.16em;justify-content:start;align-items:start;margin:0;padding:0.95em 0 1.15em 1.42em;border-top:0.045em solid rgba(60, 60, 67, 0.16);overflow:hidden;}
+#setup .fr .y2 .apps > .ap{width:calc(3.38 * var(--u));max-width:calc(3.38 * var(--u));min-width:0;gap:calc(0.42 * var(--u));}
+#setup .fr .y2 .apps .ic{width:calc(3.38 * var(--u));height:calc(3.38 * var(--u));border-radius:calc(0.76 * var(--u));}
+#setup .fr .y2 .apps .nb .ic{box-shadow:inset 0 0 0 0.04em rgba(0, 0, 0, 0.08);}
+#setup .fr .y2 .apps > .ap > span{width:max-content;max-width:none;margin:0;position:relative;left:50%;transform:translateX(-50%);text-align:center;font-size:14px;letter-spacing:-0.02em;line-height:1.15;white-space:nowrap;overflow:visible;text-overflow:clip;}
+#setup .fr .y2 .acts{display:grid;grid-template-columns:repeat(4, calc(3.34 * var(--u)));justify-content:space-between;align-items:start;margin:0;padding:0.85em calc(1.47 * var(--u)) calc(2.2 * var(--u));border-top:0.045em solid rgba(60, 60, 67, 0.16);}
+#setup .fr .y2 .acts .ap{position:relative;width:calc(3.34 * var(--u));margin:0;gap:calc(0.49 * var(--u));font-size:1em;overflow:visible;}
+#setup .fr .y2 .acts .chev{width:calc(3.34 * var(--u));height:calc(3.34 * var(--u));background:#e9e9e9;box-shadow:none;}
+#setup .fr .y2 .acts .chev .i{color:#000;stroke-width:2.1;}
+#setup .fr .y2 .acts .ap:nth-child(1) .i{width:calc(1.427 * var(--u));height:calc(1.783 * var(--u));}
+#setup .fr .y2 .acts .ap:nth-child(2) .i{width:calc(1.115 * var(--u));height:calc(1.694 * var(--u));}
+#setup .fr .y2 .acts .ap:nth-child(3) .i{width:calc(2.363 * var(--u));height:calc(0.981 * var(--u));}
+#setup .fr .y2 .acts .ap:nth-child(4) .i{width:calc(1.382 * var(--u));height:calc(0.803 * var(--u));}
+#setup .fr .y2 .acts .ap > span{position:absolute;left:50%;top:calc(3.58 * var(--u));transform:translateX(-50%);width:max-content;max-width:calc(4.35 * var(--u));font-size:calc(0.63 * var(--u));font-weight:400;line-height:1.28;letter-spacing:-0.012em;color:#000;text-align:center;white-space:normal;overflow:visible;text-overflow:clip;}
+#setup .fr .y2 .acts .tap{margin:0;}
+#setup .fr .y2 .hind{margin-top:0.85em;}
