@@ -45,6 +45,29 @@ class SendRedactionTest(unittest.TestCase):
         self.assertNotIn('api.telegram.org', combined, msg=combined)
         self.assertIn('Telegram send failed', combined)
 
+    def test_send_does_not_leak_token_with_trailing_newline(self):
+        self._assert_only_failure_line('000:FAKE\n')
+
+    def test_send_does_not_leak_token_with_trailing_space(self):
+        self._assert_only_failure_line('000:FAKE ')
+
+    def _assert_only_failure_line(self, token: str) -> None:
+        pc_off = load_pc_off()
+        buf = io.StringIO()
+        with patch.dict(
+            os.environ,
+            {'TELEGRAM_BOT_TOKEN': token, 'TELEGRAM_CHAT_ID': '12345'},
+            clear=False,
+        ):
+            with redirect_stdout(buf), redirect_stderr(buf):
+                pc_off.send('Babasms: test alert.')
+        combined = buf.getvalue()
+        self.assertEqual(combined, 'Telegram send failed\n')
+        self.assertNotIn(FAKE_TOKEN, combined)
+        self.assertNotIn(token, combined)
+        self.assertNotIn('api.telegram.org', combined)
+        self.assertNotIn('/bot', combined)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

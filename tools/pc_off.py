@@ -38,11 +38,12 @@ def send(text: str) -> None:
     if not token or not chat:
         print('TELEGRAM secrets are not set')
         return
-    data = urllib.parse.urlencode({'chat_id': chat, 'text': text}).encode()
-    url = f'https://api.telegram.org/bot{token}/sendMessage'
     try:
+        data = urllib.parse.urlencode({'chat_id': chat, 'text': text}).encode()
+        url = f'https://api.telegram.org/bot{token}/sendMessage'
         urllib.request.urlopen(urllib.request.Request(url, data), timeout=20).read()
-    except OSError:
+    except Exception:
+        # InvalidURL is an HTTPException. Its message includes the bot URL.
         print('Telegram send failed')
 
 
