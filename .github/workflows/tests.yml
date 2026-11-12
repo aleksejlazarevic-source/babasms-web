@@ -13,5 +13,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Install Playwright (install-page test only; no outbound calls in tests)
+        run: |
+          npm install --no-save playwright@1.49.1
+          npx playwright install chromium
       # Glob each *.test.js so script-style tests (e.g. deal-start-day) appear by filename in the log.
       - run: node --test 'tests/**/*.test.js'
