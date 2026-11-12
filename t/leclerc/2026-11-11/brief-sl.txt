@@ -1,21 +1,13 @@
 BABASMS1
+
 {IME}, to so E.Leclercovi popusti za kuhanje od 4.11. do 14.11.:
 
-Babi, E.Leclerc popusti (Katalog E.Leclerc Slovenija, 4.–14. 11. 2026).
-
-1) VELJA 4.–14. 11. 2026
-
+MESO
 Pečen piščanec, cca 1,2 kg 5,99/kg (8,89/kg)
 Račja pena Prunier 14,99/kg
-Kuhani sirovi štruklji 14,99/kg
-Šampinjoni, 200 g 0,95
-Mlinci Baškovč, 333 g 1,89 (3,48)
-Ajdovi žganci Zlato polje, 250 g 1,49 (2,18)
-Kruhovi cmoki Zlato polje, 1 kg 5,99 (9,28)
-Celi kostanj Ardèche, 200 g 4,49 (5,99)
-Kranjska klobasa Anton, 230 g 2,89 (4,98)
 Cela račja jetra, 180 g 13,99 (17,95)
 Račje bedro v masti, 225 g 4,99 (6,85)
+Kranjska klobasa Anton, 230 g 2,89 (4,98)
 Piščančja bedra 4,99/kg (8,49/kg)
 Mesni pripravek iz govejega mesa 15,90/kg
 Goveja rebra s kostjo 10,90/kg
@@ -23,18 +15,56 @@ Mariniran goveji zrezek, 240 g 5,90
 Sočni zrezki z gorčico in česnom Perutnina Ptuj Natur Premium, 500 g 5,49 (7,08)
 Piščančji file Pivka, 800 g 7,49 (9,99)
 Piščančja bedra Perutnina Ptuj Natur, 800 g 5,79 (8,59)
-File postrvi/šarenke, gojene v Sloveniji 16,99/kg
-Postrv/šarenka, očiščena, gojena v Sloveniji 9,89/kg
-Pagar, gojen v Grčiji 18,99/kg
-Grebenaste pokrovače, očiščene 19,99/kg
 Kmečka salama Kras 16,99/kg (24,95/kg)
 Španski pršut Reserva Valent 23,99/kg
 Ocvrte piščančje krače 11,99/kg
 Mesne kroglice v omaki 8,99/kg
+Antonova klobasa s sirom, 360 g 4,15 (5,98)
+Kuhan pršut Kras, narezek, 100 g 1,99 (3,18)
+Goveji salamin Bifko Arvaj, 200 g 3,99 (5,49)
+Pena iz račjih jeter, 200 g 1,39 (1,75)
+Mini suha klobasa, 150 g 1,99 (2,99)
+Račja jetra, 100 g 6,89 (9,85)
+Pršut Jamón Serrano, narezek, 100 g 1,85 (2,65)
+Piščančji burger Perutnina Ptuj, 4 × 115 g 3,98 (6,68)
+
+RIBE
+File postrvi/šarenke, gojene v Sloveniji 16,99/kg
+Postrv/šarenka, očiščena, gojena v Sloveniji 9,89/kg
+Pagar, gojen v Grčiji 18,99/kg
+Grebenaste pokrovače, očiščene 19,99/kg
+Oslič file Dobrote Morja, 700 g 5,78 (8,99)
+Mešanica morskih sadežev Pêche Océan, 500 g 3,99 (5,49)
+Kuhane oluščene kozice, 500 g 3,99 (5,49)
+
+MLEČNI IZDELKI
 Sir gauda ali edamec Président 8,49/kg (13,68/kg)
 Sir gauda Holland Master 15,49/kg (20,59/kg)
 Dimljeni ementaler 10,99/kg (16,16/kg)
 Sir gorgonzola dolce DOP Defendi 12,99/kg (16,95/kg)
+Tekoči sadni jogurt Mu, 500 g 1,18 (1,48)
+Jogurt Ego, 150 g 0,55 (0,77)
+Skyr Mu, 280 g 1,38 (1,98)
+Slovenska domača skuta Pomurske mlekarne, 500 g 3,19 (5,28)
+Mlečne rezine Kinder Pingui, čokolada, kokos ali karamela/cheesecake, 120 g 1,79 (2,33)
+Navadni tekoči jogurt Dukat, 1 kg 1,48 (1,98)
+Smetana Crème Fraîche, 500 ml 2,15 (2,69)
+Puding Müller, gres/češnja, 450 g 1,39 (2,28)
+Sir raclette v rezinah XXL, 480 g 4,99 (6,89)
+Kozji sir Chavroux, 180 g 2,99 (3,85)
+Topljeni sir Zdenka 1,79 (2,44)
+Mini burrata Galbani, 180 g 2,69 (3,88)
+Sveži zrnati sir Président, 200 g 1,15 (1,68)
+Maslo Mu Fino, 250 g 2,69 (4,28)
+Sir cheddar burger Président, rezine, 200 g 2,69 (3,96)
+Sir brie, 180 g 1,49
+
+SADJE IN ZELENJAVA
+Šampinjoni, 200 g 0,95
+Narezana čebula Notre Jardin 1,59 (2,19)
+Jagode Douceur du Verger, 650 g 2,79 (3,49)
+
+KRUH IN PECIVO
 Čebulni kruh, 450 g 1,69
 Sirova štručka x 4, 320 g 2,96
 Beli kruh, 450 g 1,45
@@ -46,53 +76,24 @@ Domače masleno makovo pecivo, kos 1,39
 Žepek z jabolčnim nadevom in vanilijevo kremo x 2 1,70
 Mini donny x 10, 200 g 4,50
 Eclair x 2 2,50
-Rumena čebula 1,79 (2,25)
-Beli fižol Odlično 3,89 (4,59)
-Antonova klobasa s sirom, 360 g 4,15 (5,98)
-Kuhan pršut Kras, narezek, 100 g 1,99 (3,18)
-Goveji salamin Bifko Arvaj, 200 g 3,99 (5,49)
-Sveže testenine z lososom Rana, 250 g 2,79 (3,94)
-Pena iz račjih jeter, 200 g 1,39 (1,75)
-Mini suha klobasa, 150 g 1,99 (2,99)
-Račja jetra, 100 g 6,89 (9,85)
-Pršut Jamón Serrano, narezek, 100 g 1,85 (2,65)
-Napitek Stay Strong Pro Kolagen, 500 ml 1,69 (2,47)
-Tekoči sadni jogurt Mu, 500 g 1,18 (1,48)
-Jogurt Ego, 150 g 0,55 (0,77)
-Skyr Mu, 280 g 1,38 (1,98)
-Slovenska domača skuta Pomurske mlekarne, 500 g 3,19 (5,28)
-Mlečne rezine Kinder Pingui, čokolada, kokos ali karamela/cheesecake, 120 g 1,79 (2,33)
-Navadni tekoči jogurt Dukat, 1 kg 1,48 (1,98)
-Jajca Kmetija Ramuta, 10 kosov 2,79 (4,21)
-Smetana Crème Fraîche, 500 ml 2,15 (2,69)
-Puding Müller, gres/češnja, 450 g 1,39 (2,28)
-Sir raclette v rezinah XXL, 480 g 4,99 (6,89)
-Kozji sir Chavroux, 180 g 2,99 (3,85)
-Topljeni sir Zdenka 1,79 (2,44)
-Mini burrata Galbani, 180 g 2,69 (3,88)
-Sveži zrnati sir Président, 200 g 1,15 (1,68)
-Maslo Mu Fino, 250 g 2,69 (4,28)
-Sir cheddar burger Président, rezine, 200 g 2,69 (3,96)
-Sir brie, 180 g 1,49
-Krompirjevi svaljki, 1 kg 2,48 (3,32)
-Piščančji burger Perutnina Ptuj, 4 × 115 g 3,98 (6,68)
-Oslič file Dobrote Morja, 700 g 5,78 (8,99)
-Narezana čebula Notre Jardin 1,59 (2,19)
-Ocvrtki s sirom Pekarna Pečjak, 500 g 3,79 (5,48)
-Mešanica morskih sadežev Pêche Océan, 500 g 3,99 (5,49)
-Kuhane oluščene kozice, 500 g 3,99 (5,49)
-Krompirček Zig Zag Aviko, 1 kg 2,49 (3,39)
-Sladoled Kinder Bueno, kornet, 375 g 6,49 (9,99)
-Domači skutni štruklji Zlato polje, 1 kg 7,38 (10,68)
-Sladoled v lončku Häagen-Dazs, 321 g 5,99 (7,95)
-Jagode Douceur du Verger, 650 g 2,79 (3,49)
 Orehovi štrukeljčki Pekarna Pečjak, 1 kg 9,99 (14,68)
 Mini francoski rogljički Pekarna Pečjak s čokoladno-lešnikovim nadevom, 510 g 3,55 (5,08)
-Čokoladni kolaček Côté Table s čokoladno sredico, 180 g 2,39
 Mini francoski masleni rogljički Pekarna Pečjak, 1 kg 7,39 (11,48)
+
+SLADKO
+Sladoled Kinder Bueno, kornet, 375 g 6,49 (9,99)
+Sladoled v lončku Häagen-Dazs, 321 g 5,99 (7,95)
+Čokoladni kolaček Côté Table s čokoladno sredico, 180 g 2,39
+Kinder Bueno, 3 kosi, 129 g 2,58 (3,38)
+Rogljiček 7 Days, 80 g 0,78 (0,98)
+Čokolada Merci, 100 g 1,98 (2,98)
+Bonboniera Milka, 110 g 3,18 (3,98)
+Palčke Frondi z lešnikovim polnilom, 250 g 1,99 (3,47)
+
+ZA SHRAMBO
 Ekstra deviško oljčno olje Iliada, 0,75 l 9,98 (16,98)
-Goveja jušna osnova Knorr, 224 g 2,98 (3,98)
 Štajersko prekmursko bučno olje Jeruzalem Sat, 0,75 l 15,98 (19,98)
+Goveja jušna osnova Knorr, 224 g 2,98 (3,98)
 Mešana solata v kisu Droga, 620 g 1,79 (2,58)
 Omaka v tubi Zvijezda, 165 g 1,78
 Kamniške kumarice Natureta, 4 × 1 kg 10,98
@@ -109,15 +110,13 @@ Trsni sladkor Sun Sugar, 500 g 1,48 (2,14)
 Mleta kava Zlatna Džezva, 100 g 1,38 (2,38)
 Kosmiči muesli Grainea, 500 g 2,29
 Instant napitek Cedevita, 455 g 3,48
-Kinder Bueno, 3 kosi, 129 g 2,58 (3,38)
 Koruzni čips Doritos original, 160 g 1,88 (2,48)
-Rogljiček 7 Days, 80 g 0,78 (0,98)
-Čokolada Merci, 100 g 1,98 (2,98)
-Slana pokovka Kelly, 90 g 1,48 (1,98)
 Slani čips Lay's, 200 g 1,98 (2,98)
-Palčke Frondi z lešnikovim polnilom, 250 g 1,99 (3,47)
-Bonboniera Milka, 110 g 3,18 (3,98)
+Slana pokovka Kelly, 90 g 1,48 (1,98)
 Smoki Štark party pack, 250 g 1,88
+
+PIJAČE
+Napitek Stay Strong Pro Kolagen, 500 ml 1,69 (2,47)
 Sirup Dana z okusom ledenega čaja, 5 l 10,99 (17,89)
 Pomarančni nektar Dana, 1,5 l 1,49 (2,67)
 Jabolčni nektar Dana, 1,5 l 1,49 (2,58)
@@ -129,8 +128,20 @@ Sadna pijača Fructal, 1 l 1,25
 Svetlo brezalkoholno pivo Heineken, 4 × 0,33 l 2,99 (4,68)
 Svetlo brezalkoholno pivo Laško Zlatorog, 0,5 l 0,82
 
-Z E.LECLERC BONOM
+DRUGO ZA KUHANJE
+Kuhani sirovi štruklji 14,99/kg
+Mlinci Baškovč, 333 g 1,89 (3,48)
+Ajdovi žganci Zlato polje, 250 g 1,49 (2,18)
+Kruhovi cmoki Zlato polje, 1 kg 5,99 (9,28)
+Celi kostanj Ardèche, 200 g 4,49 (5,99)
+Sveže testenine z lososom Rana, 250 g 2,79 (3,94)
+Jajca Kmetija Ramuta, 10 kosov 2,79 (4,21)
+Krompirjevi svaljki, 1 kg 2,48 (3,32)
+Krompirček Zig Zag Aviko, 1 kg 2,49 (3,39)
+Ocvrtki s sirom Pekarna Pečjak, 500 g 3,79 (5,48)
+Domači skutni štruklji Zlato polje, 1 kg 7,38 (10,68)
 
+Z E.LECLERC BONOM
 Pečena raca 7,49/kg (12,49/kg)
 Krvavice Arvaj 7,99/kg (9,99/kg)
 Prekajen vrat Oblak 9,49/kg (11,86/kg)
@@ -164,10 +175,6 @@ Ovčji ali kozji sir Campos de Toledo 18,99/kg (23,74/kg)
 Sir raclette s tartufi 21,99/kg (27,49/kg)
 Ovčji sir P'tit Basque 22,99/kg (27,05/kg)
 Nugat torta 21,59 (23,99)
-Kisle zeljne glave 1,59/kg (1,99/kg)
-Krompir za peko, 2 kg 2,39 (2,99)
-Blitva 1,99/kg (2,49/kg)
-Sladki krompir 1,79/kg (2,24/kg)
 Kraški pršut Premium Kras v kosu 24,99/kg (33,32/kg)
 Svinjska mast Mesarstvo Čadež 3,49/kg (4,99/kg)
 Parmski pršut, narezek, 90 g 3,59 (3,99)
