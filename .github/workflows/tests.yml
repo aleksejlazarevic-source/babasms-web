@@ -13,4 +13,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test tests/
+      # Glob each *.test.js so script-style tests (e.g. deal-start-day) appear by filename in the log.
+      - run: node --test 'tests/**/*.test.js'
