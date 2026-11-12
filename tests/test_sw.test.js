@@ -21,16 +21,23 @@ function parseCacheName(source) {
   return m ? m[1] : null;
 }
 
-/** Quoted site paths inside cache.addAll([...]) if present. */
+/** Site paths inside cache.addAll([...]), including names like OFFLINE. */
 function extractInstallPrecachePaths(source) {
+  const constants = Object.create(null);
+  const varRe = /var\s+([A-Z_][A-Z0-9_]*)\s*=\s*['"]([^'"]+)['"]/g;
+  let v;
+  while ((v = varRe.exec(source)) !== null) constants[v[1]] = v[2];
   const paths = [];
   const addAll = /(?:cache\.addAll|addAll)\s*\(\s*\[([\s\S]*?)\]\s*\)/g;
   let block;
   while ((block = addAll.exec(source)) !== null) {
     const inner = block[1];
-    const strRe = /['"]([^'"]+)['"]/g;
+    const tokenRe = /['"]([^'"]+)['"]|\b([A-Z_][A-Z0-9_]*)\b/g;
     let s;
-    while ((s = strRe.exec(inner)) !== null) paths.push(s[1]);
+    while ((s = tokenRe.exec(inner)) !== null) {
+      if (s[1]) paths.push(s[1]);
+      else if (s[2] && constants[s[2]]) paths.push(constants[s[2]]);
+    }
   }
   return paths;
 }
@@ -68,11 +75,11 @@ test('site/sw.js: precached / shell paths exist under site/', () => {
 test('validator fails when sw shell path list is empty (temp)', () => {
   assert.throws(
     () => assertSwShellPaths([]),
-    (err) => err && /at least 5 paths/.test(String(err.message))
+    (err) => err && /at least \d+ paths/.test(String(err.message))
   );
   assert.throws(
     () => assertSwShellPaths(['index.html', 'sw.js', 'look.css', 'setup-lang.js', 'install.js']),
-    (err) => err && /deals\.js/.test(String(err.message))
+    (err) => err && /offline\.html/.test(String(err.message))
   );
 });
 

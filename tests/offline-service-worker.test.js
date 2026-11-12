@@ -46,13 +46,14 @@ test('woff2 font requests prefer cache first (offline font still loads)', async 
   const sw = loadServiceWorker(SW);
   await sw.runLifecycle();
   const fontUrl = 'https://kindeals.example/fonts/lexend-latin-wght-normal.woff2';
-  const fontBody = 'woff2-bytes';
-
-  sw.setFetch(() => Promise.resolve(new Response(fontBody, { status: 200 })));
-  const first = await sw.respondFor({ method: 'GET', url: fontUrl });
-  assert.equal(await first.text(), fontBody);
-
-  sw.setFetch(() => Promise.reject(new Error('offline')));
-  const second = await sw.respondFor({ method: 'GET', url: fontUrl });
-  assert.equal(await second.text(), fontBody);
+  let visits = 0;
+  sw.setFetch(() => {
+    visits += 1;
+    return Promise.reject(new Error('offline'));
+  });
+  const offline = await sw.respondFor({ method: 'GET', url: fontUrl });
+  assert.equal(offline.status, 200);
+  const body = Buffer.from(await offline.arrayBuffer());
+  assert.ok(body.length > 0, 'precached font must not be empty');
+  assert.equal(visits, 0, 'precached font must not hit the network');
 });

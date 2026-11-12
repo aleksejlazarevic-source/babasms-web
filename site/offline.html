@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#FFFFFF">
+<title>KinDeals</title>
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preload" href="fonts/lexend-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/lexend-latin-ext-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="look.css">
+</head>
+<body class="app">
+<div id="text" aria-live="polite">
+<div class="msg">
+<p class="msg-title">Ni povezave z internetom.</p>
+</div>
+<button type="button" class="retry" id="again">Poskusi znova</button>
+</div>
+<script>
+/* Slovenian is the text in the page, as on the other pages. ?lang= forces one language.
+   Otherwise the phone's language is used, the same way setup-lang.js reads it.
+   English replaces these two lines. Those English words are the plain meaning of the
+   Slovenian ones (guess, 12 Nov 2026). */
+(function () {
+  var EN_TITLE = 'No internet connection.';
+  var EN_AGAIN = 'Try again';
+
+  function baseOf(tag) {
+    return String(tag || '').toLowerCase().split('-')[0];
+  }
+
+  function pick() {
+    var forced = new URLSearchParams(location.search).get('lang');
+    var wanted = forced ? [forced] : (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en']);
+    return baseOf(wanted[0]);
+  }
+
+  var lang = pick() === 'en' ? 'en' : 'sl';
+  document.documentElement.lang = lang;
+  if (lang === 'en') {
+    document.querySelector('.msg-title').textContent = EN_TITLE;
+    document.getElementById('again').textContent = EN_AGAIN;
+  }
+  document.getElementById('again').addEventListener('click', function () {
+    location.reload();
+  });
+})();
+</script>
+</body>
+</html>
