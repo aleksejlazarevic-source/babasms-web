@@ -43,6 +43,14 @@
     return m ? [parseInt(m[1], 10), parseInt(m[2], 10)] : null;
   }
 
+  /* Which drawn guide an iPhone gets. iOS 26 and later write "OS 18_6" in the OS part, so only
+     Safari's Version/ token tells the real version. 26 has its own drawings (Share is behind the
+     three dots). 27, and any version with no drawings of its own, gets the iOS 27 set. */
+  function iosGuideSet(ua) {
+    var m = /Version\/(\d+)/.exec(ua);
+    return m && parseInt(m[1], 10) === 26 ? '26' : '27';
+  }
+
   function installChoice(env) {
     env = env || {};
     var ua = String(env.ua || '');
@@ -79,6 +87,8 @@
       out.showGuide = true;
       out.dismissible = false;
       out.guide = { device: device, browser: browser, share: share, canAdd: canAdd };
+      /* The drawings are of iPhone Safari. An iPad and the other browsers keep the iOS 27 list. */
+      out.iosSet = isIPhone && browser === 'safari' ? iosGuideSet(ua) : '27';
       return out;
     }
 
@@ -112,11 +122,21 @@
     else fn();
   }
 
-  function findDom() {
+  function findDom(iosSet) {
     var byId = document.getElementById('setup');
     var root = byId || document;
     var firstSay = root.querySelector('.say');
     var list = firstSay && firstSay.closest ? firstSay.closest('ol, ul') : null;
+    /* The page holds one section per drawn iOS version; all but the iOS 27 one start hidden.
+       Show the one for this phone and hide the other. */
+    var own = iosSet && iosSet !== '27' && byId ? document.getElementById('setup-ios' + iosSet) : null;
+    var ownSay = own ? own.querySelector('.say') : null;
+    if (ownSay && ownSay.closest) {
+      hide(byId);
+      show(own);
+      byId = own;
+      list = ownSay.closest('ol, ul');
+    }
     var setup = byId || (list && list.closest('section')) ||
       document.querySelector('.setup:not(#kd-go)') || (list && list.parentNode) || null;
     var where = (setup && setup.querySelector('.where')) || (byId ? null : document.querySelector('.where'));
@@ -228,7 +248,7 @@
 
     if (choice.kind === 'ios') {
       whenReady(function () {
-        var dom = findDom();
+        var dom = findDom(choice.iosSet);
         if (!choice.showGuide) { hide(dom.setup); return; }
         applyIos(dom, choice.guide);
       });

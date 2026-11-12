@@ -31,6 +31,20 @@ const KD_TEXT = {
     s3: "Pomakni se navzdol. Tapni Dodaj na domači zaslon.",
     a3: "Je zadnja vrstica v sivem okvirju, pod Poišči na strani.",
     s4: "Na koncu tapni gumb zgoraj desno.",
+    // iOS 26 guide (index.html, #setup-ios26). Slovenian and English only; other languages show the Slovenian.
+    i26s1: "Tapni tri pike spodaj desno.",
+    i26a1: "Če je v spodnji vrstici puščica iz kvadratka, tapni njo in preskoči korak 2.",
+    i26s2: "Tapni vrstico s puščico iz kvadratka.",
+    i26a2: "Je prva vrstica v meniju, ki se odpre.",
+    i26a3: "Je zadnji okrogli gumb v vrstici, s puščico navzdol.",
+    i26s5: "Na koncu tapni Dodaj zgoraj desno.",
+    i26a5: "Je moder gumb.",
+    add: "Dodaj",
+    share: "Deli",
+    // the rest of the three-dots menu; Slovenian not seen on a phone (guess), English from the photo of 20 Aug 2025
+    newTab: "Nov zavihek",
+    bookmarks: "Zaznamki",
+    allTabs: "Vsi zavihki",
     options: "Možnosti",
     messages: "Sporočila",
     showMore: "Prikaži več",
@@ -56,6 +70,21 @@ const KD_TEXT = {
     s3: "Scroll down. Tap Add to Home Screen.",
     a3: "It is the last row in the grey box, under Find on Page.",
     s4: "Last, tap the button at the top right.",
+    i26s1: "Tap the three dots at the bottom right.",
+    i26a1: "If the bottom row has an arrow coming out of a square, tap that and skip step 2.",
+    i26s2: "Tap the row with the arrow coming out of a square.",
+    i26a2: "It is the first row of the menu that opens.",
+    i26a3: "It is the last round button in the row, with a down arrow.",
+    i26s5: "Last, tap Add at the top right.",
+    i26a5: "It is the blue button.",
+    add: "Add",
+    share: "Share",
+    newTab: "New Tab",
+    bookmarks: "Bookmarks",
+    allTabs: "All Tabs",
+    // English iOS 26 says View More (photo, iOS 26.2); used only inside the iOS 26 list.
+    s2_26: "Tap View More.",
+    showMore_26: "View More",
     options: "Options",
     messages: "Messages",
     showMore: "Show More",
@@ -1137,7 +1166,10 @@ const KD_TEXT = {
       changed.push(n);
       continue;
     }
-    const key = index.get(norm(text));
+    let key = index.get(norm(text));
+    // A row iOS 26 names differently from iOS 27 in this language (English: View More, not Show More).
+    const el = n.parentElement;
+    if (key && to[key + "_26"] != null && el && el.closest("#setup-ios26")) key += "_26";
     if (!key || to[key] == null) continue;
     let out = [].concat(to[key])[0];
     const ell = text.match(/\s*…$/);

@@ -373,3 +373,152 @@ button.shop:active::after { border-color: var(--paper); }
   font: inherit; font-size: 22px; line-height: 1.2;
   background: transparent; color: var(--ink); border: 2px solid var(--ink); border-radius: 4px; cursor: pointer;
 }
+
+/* ---------- The iPhone guide for iOS 26 Safari (index.html, #setup-ios26) ----------
+   It stands here, after the icon's rules, so the iOS 27 guide above stays as tests/test_iphone_guide.py
+   pins it. It reuses the iOS 27 parts (.d, .y, .y2, .y3). Drawn from English photos of iOS 26 and
+   26.2 (see index.html); not checked on a phone. Sizes are measured off those photos, 11 Nov 2026:
+   the screen is 19.8em wide here and 393pt on the phone, so 1pt is about 0.05em. Where a size is
+   not from a photo it is a guess by eye. Colours are guesses: the photos are of dark screens. */
+
+/* Liquid Glass: a clear, bright piece floating over the page, with a light rim and a soft shadow. */
+#setup-ios26 .gl {
+  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+  -webkit-backdrop-filter: blur(0.6em) saturate(1.8);
+  backdrop-filter: blur(0.6em) saturate(1.8);
+  border: 0.05em solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0.35em 1.1em rgba(0, 0, 0, 0.14), 0 0.05em 0.2em rgba(0, 0, 0, 0.1), 0 0 0 0.04em rgba(0, 0, 0, 0.06), inset 0 0.1em 0.12em #fff, inset 0 -0.08em 0.12em rgba(0, 0, 0, 0.04);
+}
+.z1 .rnd, .z5 .rnd { border-radius: 50%; display: grid; place-items: center; flex: none; color: #1c1c1e; }
+/* the page behind: two lines of words, then a picture that runs to the edges and the bottom of the
+   screen, as the pages in the photos do. The glass lies over the picture. */
+.y .z1, .y .z2 { padding: 3.3em 0 0.55em; }   /* 3.3em: the lines of the page come out from under the fade */
+.z1 > .ln, .z2 > .ln { margin: 0 1.4em 0.8em; }
+.z1 > .ln.s, .z2 > .ln.s { width: 48%; }
+.z1 .pg, .z2 .pg { position: absolute; left: 0; right: 0; top: 6.8em; bottom: 0; border-radius: 0 0 2.49em 2.49em; background: linear-gradient(#e7e8ed, #cccfd8); }   /* 2.49em: the corner of the frame's screen */
+.y .z1 .hind, .y .z2 .hind { position: relative; margin-top: 1.15em; }
+
+/* 1. the Compact bar: back, the address, three dots, all 46pt high, 28pt in from the sides and
+   36pt up from the bottom (photo of 9 Jun 2025). */
+.z1 .rnd { width: 2.4em; height: 2.4em; }
+.y .z1 .bar { margin-top: 2.3em; padding: 0 1.3em; gap: 0.42em; position: relative; }
+.z1 .pill { height: 2.4em; border-radius: 1.2em; padding: 0 0.65em; gap: 0.2em; }
+.z1 .pill .i { width: 1.15em; height: 1.15em; color: #1c1c1e; }
+.z1 .rnd .i { width: 1.3em; height: 1.3em; }
+.z1 .rnd.tap .i { width: 1.6em; height: 1.6em; }   /* the three dots span a little under half the button */
+
+/* 2. the menu out of the three dots: a glass card where the bar was, its right edge and its bottom
+   on the bar's, 0.63 of the screen wide (photo of 20 Aug 2025). */
+.z2 .menu { position: relative; width: 12.5em; margin: 1.2em 1.3em 0 auto; border-radius: 1.7em; padding: 0.4em 0; }
+.z2 .menu .r { font-size: 0.95em; min-height: 2.25em; padding: 0 1.25em; gap: 0.85em; border-top: 0; }
+.z2 .menu .r .i { width: 1.35em; height: 1.35em; }
+.z2 .menu .sep { position: relative; margin-top: 0.65em; }
+.z2 .menu .sep::before { content: ""; position: absolute; left: 1.2em; right: 1.2em; top: -0.33em; border-top: 0.05em solid rgba(60, 60, 67, 0.22); }
+.z2 .menu .ft { display: flex; margin: 0.45em 0.4em 0; padding: 0.55em 0 0.5em; border-radius: 1.3em; background: rgba(120, 120, 128, 0.1); }   /* 1.3em: the card's corner less the 0.4em gap */
+.z2 .menu .ft > span { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 0.2em; font-size: 0.62em; white-space: nowrap; }
+.z2 .menu .ft .i { width: 2.3em; height: 2.3em; color: #1c1c1e; }
+
+/* 3, 4, 5. a sheet: a rounded card floating over the dimmed page. */
+.y .ph.dim { background: #c9c9cf; }
+.y .dim .sh { background: rgba(249, 249, 252, 0.96); border: 0.05em solid rgba(255, 255, 255, 0.9); box-shadow: 0 0.4em 1.6em rgba(0, 0, 0, 0.2), inset 0 0.08em 0.1em #fff; }
+.y .ph.bot.dim { padding: 3.2em 0.5em 0.5em; }   /* the share sheet stops 10pt short of the sides and the bottom */
+.y .ph.bot .sh { border-radius: 2.1em; }
+
+/* 3. the share sheet (photo, iOS 26.2): the card with its icon at the top left, the apps, then four
+   round buttons. Tiles and buttons are 65pt, in four columns from one inner edge to the other. */
+.z3 .sh { padding: 1.2em 1.18em 1em; }
+.z3 .pv { align-items: flex-start; gap: 0.8em; padding: 0 0 0.85em; }
+.z3 .pv .ic4 { width: 3.2em; height: 3.2em; border-radius: 0.75em; }
+.z3 .pv .n > span { font-size: 0.95em; font-weight: 600; }
+.z3 .pv .n small { font-size: 0.9em; }
+.z3 .opt { margin-top: 0.45em; padding: 0.4em 0.6em 0.4em 0.9em; border-radius: 1.2em; background: rgba(120, 120, 128, 0.14); font-size: 0.88em; }
+.z3 .four { display: grid; grid-template-columns: repeat(4, 3.32em); justify-content: space-between; align-items: start; gap: 0; min-height: 0; padding: 0.8em 0 0.85em; font-size: 1em; }
+.z3 .four .ap { margin: 0; gap: 0.4em; font-size: 0.72em; }
+.z3 .four .ic, .z3 .acts .chev { width: 4.6em; height: 4.6em; }
+.z3 .four .ic { position: relative; border-radius: 1.06em; }
+.z3 .four .ic::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0.07em 0.07em rgba(255, 255, 255, 0.55), inset 0 0 0 0.04em rgba(255, 255, 255, 0.22), inset 0 -0.09em 0.12em rgba(0, 0, 0, 0.14); }   /* the tile's glass edge: light along the top, a shade along the foot (guess by eye) */
+.z3 .four .ap > span { max-width: none; overflow: visible; }   /* a name may be wider than its tile, as Sporočila is */
+.z3 .acts .chev { background: linear-gradient(rgba(120, 120, 128, 0.1), rgba(120, 120, 128, 0.18)); box-shadow: inset 0 0.08em 0.08em rgba(255, 255, 255, 0.95), inset 0 0 0 0.04em rgba(255, 255, 255, 0.55), inset 0 -0.06em 0.1em rgba(0, 0, 0, 0.05), 0 0.06em 0.18em rgba(0, 0, 0, 0.07); }   /* a round piece of glass: lit from above (guess by eye) */
+.z3 .acts .chev .i { width: 3.1em; height: 3.1em; color: #1c1c1e; stroke-width: 1.45; }   /* the paper and the bookmark are 0.46 of the button high, as in the photo; the lines are thin, like the system's */
+.z3 .acts { padding-bottom: 0; }
+.z3 .acts .tap { margin-bottom: 0; }
+#setup-ios26 .z3 .acts .tap::after { top: calc(var(--u) * 1.66); }   /* the fingertip at the middle of the round button, not of its words */
+
+/* 4. the opened sheet, scrolled (photos of 20 Aug 2025 and iOS 26.2): it fills the screen to the
+   sides and the bottom. One line a row, 56pt apart, and the lines between rows start at the words. */
+.y .ph.bot.z4 { padding: 0; }
+.y .ph.bot.z4 .sh { border: 0; border-radius: 0 0 2.49em 2.49em; box-shadow: none; padding: 0 0.8em 1em; }
+.z4 .grp { background: #e9e9ee; border-radius: 1.4em; }
+.z4 .cut { border-radius: 0 0 1.4em 1.4em; margin-bottom: 1em; padding-top: 2em; }   /* 2em: the first row clear of the fade */
+.z4 .grp:last-of-type { margin-bottom: 0; }
+.z4 .r { position: relative; font-size: 1em; min-height: 2.84em; padding: 0.3em 1em 0.3em 1.05em; gap: 0.85em; border-top: 0; }
+.z4 .r .i { width: 1.4em; height: 1.4em; }
+.z4 .r + .r::before { content: ""; position: absolute; left: 3.3em; right: 0.75em; top: 0; border-top: 0.05em solid rgba(60, 60, 67, 0.2); }
+.z4 .tap > span { max-width: none; }
+
+/* 5. the top of the last sheet (photo of 17 Jun 2025): close, title, the blue button; then a band
+   with the icon, its name and its address. Under the band the sheet is empty, and the phone fades
+   into the page there. The sheet starts under the frame's black island. */
+.y .ph.top.dim { padding: 3.2em 0 0; }
+.y .z5 .sh { border-bottom: 0; border-radius: 2.3em 2.3em 0 0; padding: 0.6em 0 3.6em; background: #f2f2f7; box-shadow: 0 -0.2em 1.2em rgba(0, 0, 0, 0.16), inset 0 0.08em 0.1em #fff; }
+.z5 .hd { display: flex; align-items: center; gap: 0.5em; padding: 0 0.87em; }
+.z5 .hd b { flex: 1; min-width: 0; text-align: center; font-size: 0.84em; font-weight: 600; overflow-wrap: break-word; }
+.z5 .rnd { width: 2.05em; height: 2.05em; }
+.z5 .rnd .i { width: 1.15em; height: 1.15em; }
+.z5 .go { flex: none; height: 2.4em; padding: 0 0.95em; display: grid; place-items: center; border-radius: 1.2em; background: linear-gradient(#3d8bfa, #1f74f2); color: #fff; font-size: 0.85em; font-weight: 600; box-shadow: 0 0.2em 0.7em rgba(43, 127, 245, 0.35), inset 0 0.08em 0.12em rgba(255, 255, 255, 0.45); --r: 1.2em; }   /* white on blue: the photos are dark screens with dark words on blue (guess for a light screen) */
+.z5 .nm { display: flex; align-items: center; gap: 0.7em; margin-top: 1.3em; padding: 0.3em 0 0.45em 0.66em; background: #fff; }
+.z5 .nm .ic4 { width: 2.7em; height: 2.7em; border-radius: 0.62em; }
+.z5 .nm .n { flex: 1; min-width: 0; }
+.z5 .nm .n > span { display: flex; align-items: center; justify-content: space-between; font-size: 0.9em; padding: 0.5em 0.65em 0.5em 0; border-bottom: 0.05em solid rgba(60, 60, 67, 0.2); }
+.z5 .nm .clr { width: 1em; height: 1em; border-radius: 50%; background: #c7c7cc; display: grid; place-items: center; flex: none; }
+.z5 .nm .clr .i { width: 0.62em; height: 0.62em; color: #fff; stroke-width: 3; }
+.z5 .nm .n small { display: block; margin-top: 0.55em; padding-right: 0.65em; font-size: 0.9em; color: #8e8e93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* The phone and the hand (Aleksej asked for a real-looking iPhone and a beautiful hand, 11 Nov 2026).
+   The frame is the iPhone 14 Pro of devices.min.css (picturepan2/devices.css, MIT), 428px by 868px
+   with a 390px screen 20px in from its left and top and 18px from its right and bottom. It is scaled so that screen is 19.8em wide, the width
+   the drawings had before the frame, so nothing in them got smaller. Only one end of the phone is
+   shown; the other end is cut off by the picture's edge, under a fade into the page.
+   The numbers below are that frame's sizes times 19.8 / 390; the rest are guesses by eye. */
+#setup-ios26 .cv.fr {
+  --s: tan(atan2(calc(var(--u) * 19.8), 390px));   /* a length over a length, as a plain number */
+  padding: 0 0 2.31em;                             /* the frame's edge (0.91em) and room for its shadow */
+  clip-path: inset(0 -4em);                        /* cuts the phone above and below; the hand and the shadow may pass the sides */
+}
+#setup-ios26 .cv.fr.up { padding: 1.215em 0 0; }
+#setup-ios26 .fone { position: absolute; left: -1.015em; bottom: 1.4em; width: 21.73em; height: 44.07em; pointer-events: none; }   /* -1.015em: the screen's left edge on the picture's, the phone a little into the left margin, so the hand fits in the right one */
+#setup-ios26 .up .fone { bottom: auto; top: 0.2em; }
+#setup-ios26 .fone .inner { width: 428px; height: 868px; transform: scale(var(--s)); transform-origin: 0 0; }
+#setup-ios26 .fone .device { filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.18)); }
+#setup-ios26 .fone .device-screen { background: #c9c9cf; }
+#setup-ios26 .fr .ph { z-index: 1; width: 19.84em; margin-left: -0.02em; border: 0; border-radius: 0 0 2.49em 2.49em; }   /* a hair wider than the screen, so no gap shows at the frame */
+#setup-ios26 .fr .ph.top { border-radius: 2.49em 2.49em 0 0; }
+#setup-ios26 .fr .ph::before { display: none; }
+#setup-ios26 .fr .z5 { background: none; }   /* the frame's own grey screen shows, with its black island */
+#setup-ios26 .cv.fr::after {   /* the fade at the cut end, over the frame too */
+  content: "";
+  position: absolute;
+  left: -1.3em;
+  right: -1.3em;
+  top: -1px;
+  height: calc(3.4em + 1px);
+  background: linear-gradient(var(--paper) 12%, rgba(255, 255, 255, 0));
+  z-index: 8;
+  pointer-events: none;
+}
+#setup-ios26 .cv.fr.up::after { top: auto; bottom: -1px; background: linear-gradient(rgba(255, 255, 255, 0), var(--paper) 80%); }
+/* the hand: hand.png (Microsoft Fluent UI Emoji, MIT), 233 by 214, its fingertip at the left edge,
+   36.7% down. In every step the fingertip lies 0.35em inside the right edge of the thing to tap,
+   at the middle of its height. It comes in over the frame from the right margin.
+   Aleksej, 11 Nov 2026: "too puffy/fatty". So it is drawn smaller, and 0.86 as tall as its own
+   shape for that width (guess by eye): a slimmer finger and a flatter fist. The fingertip stays
+   36.7% down whatever the height. */
+#setup-ios26 .y .tap::after {
+  left: calc(100% - var(--u) * 0.42);
+  width: calc(var(--u) * 4.1);
+  height: calc(var(--u) * 3.24);
+  transform: translateY(-36.7%);
+  background: url("hand.png") no-repeat 0 0 / 100% 100%;
+  filter: drop-shadow(0 calc(var(--u) * 0.2) calc(var(--u) * 0.3) rgba(0, 0, 0, 0.3));
+  z-index: 12;
+}
