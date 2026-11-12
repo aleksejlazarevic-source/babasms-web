@@ -1,6 +1,6 @@
 /* The icon: Lidl's approved lines, one store on the screen, no name (Aleksej, 9 Nov 2026).
    The look is the shelf price tag (Aleksej approved Fable's page, 10 Nov 2026).
-   Lidl stays live. Spar, Hofer and E.Leclerc are live. Tuš says kmalu until a leaflet recheck signs them off (t807u).
+   Lidl stays live. Spar is live. Tuš, Hofer and E.Leclerc say kmalu until a leaflet recheck signs them off (t807u).
    The date cut is babasms/message.py filter_published. The send day follows store.days. */
 (function (root) {
   'use strict';
@@ -30,9 +30,9 @@
   var KNOWN = [
     {id: 'lidl', name: 'Lidl', days: ['mon', 'thu'], live: true, order: 1},
     {id: 'tus', name: 'Tuš', days: ['wed', 'fri'], live: false, soon: true, order: 2},
-    {id: 'hofer', name: 'Hofer', days: ['mon', 'thu'], live: true, order: 3},
+    {id: 'hofer', name: 'Hofer', days: ['mon', 'thu'], live: false, soon: true, order: 3},
     {id: 'spar', name: 'Spar', days: ['wed'], live: true, order: 4},
-    {id: 'leclerc', name: 'E.Leclerc', days: ['wed'], live: true, order: 5},
+    {id: 'leclerc', name: 'E.Leclerc', days: ['wed'], live: false, soon: true, order: 5},
     {id: 'mercator', name: 'Mercator', days: ['wed'], live: false, soon: true, order: 6}
   ];
   /* Coming back to the icon asks the network again after this long. One minute is a guess, 9 Nov 2026. */
