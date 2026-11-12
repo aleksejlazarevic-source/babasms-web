@@ -30,9 +30,9 @@
   var KNOWN = [
     {id: 'lidl', name: 'Lidl', days: ['mon', 'thu'], live: true, order: 1},
     {id: 'tus', name: 'Tuš', days: ['wed', 'fri'], live: true, order: 2},
-    {id: 'hofer', name: 'Hofer', days: ['mon', 'thu'], live: true, order: 3},
-    {id: 'spar', name: 'Spar', days: ['wed'], live: true, order: 4},
-    {id: 'leclerc', name: 'E.Leclerc', days: ['wed'], live: true, order: 5},
+    {id: 'hofer', name: 'Hofer', days: ['mon', 'thu'], live: false, soon: true, order: 3},
+    {id: 'spar', name: 'Spar', days: ['wed'], live: false, soon: true, order: 4},
+    {id: 'leclerc', name: 'E.Leclerc', days: ['wed'], live: false, soon: true, order: 5},
     {id: 'mercator', name: 'Mercator', days: ['wed'], live: false, soon: true, order: 6}
   ];
   /* Coming back to the icon asks the network again after this long. One minute is a guess, 9 Nov 2026. */
