@@ -72,7 +72,10 @@ const KD_TEXT = {
     menuDots: "Tapni ⋮ zgoraj desno.",
     menuInstall: "Nato tapni Namesti aplikacijo.",
     installApp: "Namesti aplikacijo",
-    installNote: "Doda ikono KinDeals na zaslon. Nato tapni ikono."
+    installNote: "Doda ikono KinDeals na zaslon. Nato tapni ikono.",
+    // The pensioner tile on deals.html. The page writes these Slovenian words; this file swaps them.
+    pensionerDays: "Dnevi za upokojence",
+    back: "Nazaj"
   },
   en: {
     pitch: "All your discounts, in one place.",
@@ -128,7 +131,9 @@ const KD_TEXT = {
     menuDots: "Tap ⋮ at the top right.",
     menuInstall: "Then tap Install app.",
     installApp: "Install app",
-    installNote: "Adds the KinDeals icon to your screen. Then tap the icon."
+    installNote: "Adds the KinDeals icon to your screen. Then tap the icon.",
+    pensionerDays: "Pensioner days",
+    back: "Back"
   },
   de: {
     pitch: "Alle deine Rabatte an einem Ort.",
@@ -1273,4 +1278,13 @@ const KD_TEXT = {
     }
   }
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
+
+  window.KinDealsLang = {
+    lang: lang,
+    text: function (slovenian) {
+      var key = index.get(norm(slovenian));
+      if (!key || to[key] == null) return slovenian;
+      return [].concat(to[key])[0];
+    }
+  };
 })();
