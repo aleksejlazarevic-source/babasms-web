@@ -60,6 +60,7 @@ const SHELL_FILES = [
   'price.js', 'picks.js', 'place.js', 'look.css',
   'install.js', 'setup-lang.js', 'sw-register.js', 'manifest.webmanifest',
   'discount-days.js',
+  'mine-list.js',
 ];
 
 function shellCacheName() {

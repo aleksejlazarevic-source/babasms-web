@@ -250,7 +250,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 #back {
   position: sticky;
   top: 6px;
-  z-index: 1; /* above the bar and the stuck section names */
+  z-index: 3; /* above the yellow bar and a stuck section name */
   display: block;
   min-height: 56px;
   margin: 6px 0 -62px auto; /* takes no room of its own: it lies on #bar, which follows it */
@@ -265,6 +265,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   display: block;
   position: sticky;
   top: 0;
+  z-index: 2;
   height: 68px; /* 6 + the button's 56 + 6 */
   margin: 0 calc(-1 * var(--side));
   background: var(--tag);
@@ -324,6 +325,7 @@ button.shop:active::after { border-color: var(--paper); }
 .greeting + .group { margin-top: 0; }
 .section {
   position: sticky; /* she can see which section she is in */
+  z-index: 2;
   top: 10px; /* a one-line name (48px tall) sits in the middle of the 68px bar */
   margin: 0 calc(-1 * var(--side));
   padding: 12px calc(var(--side) + 150px) 12px var(--side); /* the right side is left free for the back button */
