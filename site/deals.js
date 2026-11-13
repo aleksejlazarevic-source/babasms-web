@@ -29,6 +29,8 @@
   var SHUT = 'še ni na voljo';
   /* "od ponedeljka", "od četrtka": Sunday is 0, as in getUTCDay. */
   var WEEKDAY_FROM = ['nedelje', 'ponedeljka', 'torka', 'srede', 'četrtka', 'petka', 'sobote'];
+  /* Nominative, for the closed-day line. Sunday is 0, as in getUTCDay. Not WEEKDAY_FROM. */
+  var WEEKDAY = ['nedelja', 'ponedeljek', 'torek', 'sreda', 'četrtek', 'petek', 'sobota'];
   /* Used only when the file probe cannot run (no network). A published store is one whose file answered. */
   var READABLE = {lidl: true};
   /* Shown when stores.json cannot be read. Same ids, live and days as t2/stores.json. */
@@ -272,49 +274,56 @@
 
   /* The asked day's file, or when it is missing the newest earlier batch, cut to the lines
      still valid on the asked day (T3.4b, 10 Nov 2026). CLAUDE.md: a missed morning does
-     not leave the page empty. fetcher is window.fetch on the page and a fake in the test. */
+     not leave the page empty. fetcher is window.fetch on the page and a fake in the test.
+     A 404 is a missing file and may look back. A 503 is the worker's never-saved answer
+     and may look back; the offline message is only when every looked-up day came back 503.
+     Any other status, a rejected fetch, or a rejected body throws before the legacy URL
+     and before an earlier leaflet. A server error must not be drawn as an older batch. */
   function loadBatch(dayIso, fetcher, store) {
     var missing = {kind: 'missing', lines: [MISSING]};
     /* A 404 is "this day was not published". A 503 is the same question offline:
        the service worker has no saved copy of that file, so it cannot be a 404.
        Friday asks for Friday's file, which was never a send day, then has to
        walk back to Thursday's saved brief. Giving up on the 503 hides that brief.
-       sawDown stays set so a phone with nothing saved still says it is offline,
+       down stays set so a phone with nothing saved still says it is offline,
        not that the week is missing. */
-    var sawDown = false;
     function get(url) {
       return fetcher(fresh(url), {cache: 'no-store'}).then(function (res) {
-        if (res.status === 404) return null;
-        if (!res.ok) {
-          sawDown = true;
-          return null;
-        }
-        return res.text();
+        if (res.status === 404) return {text: null, down: false};
+        if (res.status === 503) return {text: null, down: true};
+        if (!res.ok) throw new Error('fetch');
+        return res.text().then(function (body) {
+          return {text: body, down: false};
+        });
       }, function () {
-        sawDown = true;
-        return null;
+        return {text: null, down: true};
       });
     }
     function getDay(fileDay) {
-      return get(fileUrl(store, fileDay)).then(function (text) {
-        if (text != null || !store || store.id !== 'lidl') return text;
-        return get(PUBLIC + fileDay + '/brief-sl.txt');
+      return get(fileUrl(store, fileDay)).then(function (got) {
+        if (got.text != null || !store || store.id !== 'lidl') return got;
+        return get(PUBLIC + fileDay + '/brief-sl.txt').then(function (alt) {
+          if (alt.text != null) return alt;
+          return {text: null, down: got.down || alt.down};
+        });
       });
     }
-    return getDay(dayIso).then(function (text) {
-      if (text != null) return showText(text, dayIso);
+    return getDay(dayIso).then(function (got) {
+      if (got.text != null) return showText(got.text, dayIso);
       var fileDay = dayIso;
       var tries = 0;
+      var down = got.down;
       function earlier() {
         if (tries >= LOOK_BACK) {
-          if (sawDown) return {kind: 'offline', lines: [OFFLINE]};
+          if (down) return {kind: 'offline', lines: [OFFLINE]};
           return missing;
         }
         tries += 1;
         fileDay = previousSendDay(fileDay, store);
         return getDay(fileDay).then(function (old) {
-          if (old == null) return earlier();
-          var shown = showText(old, dayIso, true);
+          down = down || old.down;
+          if (old.text == null) return earlier();
+          var shown = showText(old.text, dayIso, true);
           return shown.kind === 'deals' ? shown : missing;
         });
       }
@@ -450,6 +459,11 @@
     ? document.body.getAttribute('data-list') === '1' : false;
   var picks = null;
   var batchUntil = null;
+  /* page/closed-days.json once it has arrived. Null until then, and after a failed read. */
+  var closedDoc = null;
+  /* The deals view on the screen. A message view leaves this empty, so a late file
+     does not touch #text while she is reading "missing" or "offline". */
+  var dealsView = null;
   var placeBook = null;
   var placeOn = false;   /* false while a resume must not overwrite her place */
   var placeTimer = 0;
@@ -722,17 +736,112 @@
     host.appendChild(el('p', 'checked', CHECKED + clock(new Date())));
   }
 
+  function dotTime(value) {
+    var m;
+    if (typeof value !== 'string') return '';
+    m = /^(\d{1,2}):(\d{2})$/.exec(value);
+    if (!m) return '';
+    return m[1] + '.' + m[2];
+  }
+
+  function capFirst(word) {
+    if (!word) return '';
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  /* One day. A store row wins. The law adds a holiday only, and never a plain Sunday. */
+  function dayClause(date, row, lawOn, isHoliday) {
+    var when = WEEKDAY[date.getUTCDay()] + ', ' + shortDate(date);
+    var hm;
+    if (row) {
+      if (row.closed === true) return when + ': zaprto';
+      hm = dotTime(row.open_until);
+      if (hm) return when + ': odprto do ' + hm;
+      return '';
+    }
+    if (lawOn && isHoliday) return when + ': zaprto';
+    return '';
+  }
+
+  /* The sentence for this store from the asked day through the batch's last day, or ''. */
+  function closedLine(doc, storeId, fromIso, untilIso) {
+    var from, until, lawOn, holiday, notice, parts, day, iso, list, one, i, clause;
+    try {
+      if (!doc || typeof doc !== 'object' || !storeId || !fromIso || !untilIso) return '';
+      if (!DAY.test(fromIso) || !DAY.test(untilIso)) return '';
+      from = parseIso(fromIso);
+      until = parseIso(untilIso);
+      if (isNaN(from.getTime()) || isNaN(until.getTime()) || until.getTime() < from.getTime()) return '';
+      lawOn = !!(doc.law && doc.law.closed_sundays_and_holidays === true);
+      holiday = {};
+      list = doc.holidays && doc.holidays.days;
+      if (list && typeof list.length === 'number') {
+        for (i = 0; i < list.length; i++) {
+          one = list[i];
+          if (one && one.date) holiday[one.date] = true;
+        }
+      }
+      notice = {};
+      list = doc.stores;
+      if (list && typeof list.length === 'number') {
+        for (i = 0; i < list.length; i++) {
+          one = list[i];
+          if (one && one.store === storeId && one.date) notice[one.date] = one;
+        }
+      }
+      parts = [];
+      for (day = from; day.getTime() <= until.getTime(); day = addDays(day, 1)) {
+        iso = isoOf(day);
+        clause = dayClause(day, notice[iso], lawOn, !!holiday[iso]);
+        if (clause) parts.push(clause);
+      }
+      if (!parts.length) return '';
+      parts[0] = capFirst(parts[0]);
+      return parts.join('; ') + '.';
+    } catch (err) {
+      return '';
+    }
+  }
+
+  function closedLineText(view) {
+    if (!view || view.type !== 'deals' || !current) return '';
+    return closedLine(closedDoc, current.id, askedDay(), view.until || '');
+  }
+
+  /* After the greeting, before the first section. Not a deal line, so it is not in view.lines. */
+  function placeClosedLine(text) {
+    var host, i, greet, node;
+    if (!text) return;
+    host = $('text');
+    if (!host || !host.children) return;
+    greet = null;
+    for (i = 0; i < host.children.length; i++) {
+      if (host.children[i].className === 'greeting') {
+        greet = host.children[i];
+        break;
+      }
+    }
+    if (!greet || !greet.parentNode) return;
+    node = el('p', 'closed-day', text);
+    if (greet.nextSibling) greet.parentNode.insertBefore(node, greet.nextSibling);
+    else greet.parentNode.appendChild(node);
+  }
+
   function draw(view) {
-    var key = JSON.stringify(view);
+    var line = closedLineText(view);
+    var key = JSON.stringify(view) + '\n' + line;
     if (view.type === 'deals' && key === shown) return; /* same lines: leave her place on the page */
     shown = key;
     if (view.type === 'deals') {
+      dealsView = view;
       batchUntil = view.until == null ? null : view.until;
       /* A failed load never reaches here, so a miss drops nothing. */
       if (LIST_ON) tickBook().sync(current.id, shownDeals(view.lines), batchUntil);
       drawDeals(view.lines);
+      placeClosedLine(line);
       if (LIST_ON) paintSum();
     } else {
+      dealsView = null;
       drawMessage(view);
       if (LIST_ON) clearSum();
     }
@@ -760,6 +869,7 @@
   function openStore(store) {
     current = store;
     shown = '';
+    dealsView = null;
     if (LIST_ON) clearSum();
     clearMine();
     $('list').hidden = true;
@@ -855,6 +965,7 @@
   function showList() {
     var list = $('list');
     current = null;
+    dealsView = null;
     resumeHold = false;
     if (LIST_ON) clearSum();
     dropScreen();
@@ -992,12 +1103,34 @@
     else if (current) holdScreen();
   }
 
+  /* Same folder as the HTML. Not the storesUrl folder test: that would ask for ../closed-days.json. */
+  function loadClosedDays() {
+    var pending;
+    try {
+      pending = fetch(fresh('closed-days.json'), {cache: 'no-store'});
+    } catch (err) {
+      return;
+    }
+    if (!pending || typeof pending.then !== 'function') return;
+    pending.then(function (res) {
+      if (!res || !res.ok || typeof res.json !== 'function') return null;
+      return res.json();
+    }).then(function (doc) {
+      if (!doc || typeof doc !== 'object') return;
+      closedDoc = doc;
+      /* A message view has no dealsView, so this does not touch #text. */
+      if (!dealsView || !current) return;
+      draw(dealsView);
+    }).catch(function () {});
+  }
+
   function start() {
     if (LIST_ON) tickBook().expire(askedDay());
     $('back').addEventListener('click', backToList);
     document.addEventListener('visibilitychange', wake);
     document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('pageshow', wake);
+    loadClosedDays();
     listenForPlace();
     /* page/deals.html in this repo sits one folder below t2/. On babasms-web the
        same file is the site root, beside t2/. (Aleksej, 10 Nov 2026.) */
@@ -1047,7 +1180,7 @@
     isoOf: isoOf, liveStores: liveStores, canOpen: canOpen, viewOf: viewOf, kindOf: kindOf,
     isInternal: isInternal,
     KNOWN: KNOWN, LOOK_BACK: LOOK_BACK, previousSendDay: previousSendDay, fileUrl: fileUrl,
-    tileOf: tileOf, storeToOpen: storeToOpen,
+    tileOf: tileOf, storeToOpen: storeToOpen, closedLine: closedLine,
     MISSING: MISSING, OFFLINE: OFFLINE, PUBLIC: PUBLIC
   };
   root.KinDealsPage = api;
