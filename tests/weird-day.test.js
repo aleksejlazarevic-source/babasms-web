@@ -144,7 +144,7 @@ test('Sunday with no new leaflet: carried batch hides expired lines', () => {
 });
 
 test('Sunday loadBatch falls back to Thursday file, not empty', () => {
-  const lidlPath = path.join(__dirname, '../t/2026-11-12/brief-sl.txt');
+  const lidlPath = path.join(__dirname, 'fixtures/lidl/2026-11-12/brief-sl.txt');
   const text = fs.readFileSync(lidlPath, 'utf8');
   const store = { id: 'lidl', days: ['mon', 'thu'] };
   return api

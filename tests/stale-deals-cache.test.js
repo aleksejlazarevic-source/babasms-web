@@ -37,7 +37,7 @@ test('showText on the day file drops priced lines whose do date is already past'
 });
 
 test('loadBatch carrying an older leaflet cuts expired deal lines on the asked day', async () => {
-  const older = fs.readFileSync(path.join(__dirname, '../t/tus/2026-11-12/brief-sl.txt'), 'utf8');
+  const older = fs.readFileSync(path.join(__dirname, 'fixtures/tus-a45/2026-11-12/brief-sl.txt'), 'utf8');
   const day = '2026-11-18';
   const fetcher = (url) => {
     const u = String(url);

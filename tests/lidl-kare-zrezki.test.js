@@ -8,6 +8,8 @@ const test = require('node:test');
 /* kw46 page 2: 3,39 (4,29) is Naša mesnica Sveži svinjski kare zrezki, 550 g.
    "Svinjski kare brez kosti" is the other tile, about 3,2 kg at 3,99/kg. */
 const ROOT = path.join(__dirname, '..');
+/* Price and date snapshots are of this frozen copy. A publish may rewrite t/. */
+const FIX = path.join(__dirname, 'fixtures', 'lidl-kare');
 const OLD = 'Svinjski kare brez kosti 3,39 (4,29)';
 const NEW = 'Svinjski kare zrezki 550 g 3,39 (4,29)';
 const PRICE = /\d+,\d{2}/g;
@@ -42,7 +44,7 @@ test('live Lidl files do not name 3,39 (4,29) as Svinjski kare brez kosti', () =
 
 test('3,39 (4,29) is Svinjski kare zrezki 550 g', () => {
   for (const rel of Object.keys(expected.files)) {
-    const lines = fs.readFileSync(path.join(ROOT, rel), 'utf8').split('\n')
+    const lines = fs.readFileSync(path.join(FIX, rel), 'utf8').split('\n')
       .filter((line) => line.includes('kare') && line.includes('3,39 (4,29)'));
     assert.deepEqual(lines, [NEW], rel);
   }
@@ -50,7 +52,7 @@ test('3,39 (4,29) is Svinjski kare zrezki 550 g', () => {
 
 test('no other Lidl price or date changed', () => {
   for (const [rel, id] of Object.entries(expected.files)) {
-    const text = fs.readFileSync(path.join(ROOT, rel), 'utf8');
+    const text = fs.readFileSync(path.join(FIX, rel), 'utf8');
     const snap = expected.snapshots[id];
     assert.deepEqual(text.match(PRICE), snap.prices, rel + ' prices');
     assert.deepEqual(text.match(DATE) || [], snap.dates, rel + ' dates');

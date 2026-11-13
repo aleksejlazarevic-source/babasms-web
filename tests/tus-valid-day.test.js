@@ -3,9 +3,10 @@
 var fs = require('fs');
 var path = require('path');
 
-/* 18.11. is past the short window. A priced line that says "do 17.11." is not valid that day. */
-var day18 = path.join(__dirname, '../t/tus/2026-11-18/brief-sl.txt');
-var day12 = path.join(__dirname, '../t/tus/2026-11-12/brief-sl.txt');
+/* 18.11. is past the short window. A priced line that says "do 17.11." is not valid that day.
+   Fixture briefs, not t/tus: a publish may rewrite the live day files. */
+var day18 = path.join(__dirname, 'fixtures/tus-a45/2026-11-18/brief-sl.txt');
+var day12 = path.join(__dirname, 'fixtures/tus-a45/2026-11-12/brief-sl.txt');
 
 function priced(text) {
   return text.split('\n').filter(function (line) { return /\d,\d{2}/.test(line); });

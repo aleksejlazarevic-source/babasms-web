@@ -7,7 +7,8 @@ const test = require('node:test');
 
 /* Leaflet: Katalog E.Leclerc Slovenija, 4. 11.–14. 11. 2026.
    These four lines are the ones the 12 Nov recheck marked wrong. */
-const brief = path.join(__dirname, '..', 't', 'leclerc', '2026-11-11', 'brief-sl.txt');
+/* Fixture, not t/leclerc: a publish may rewrite the live brief. */
+const brief = path.join(__dirname, 'fixtures', 'leclerc', '2026-11-11', 'brief-sl.txt');
 
 function only(prefix) {
   const found = fs.readFileSync(brief, 'utf8').split('\n').filter((line) => line.startsWith(prefix));
