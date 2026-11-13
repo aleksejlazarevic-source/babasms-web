@@ -57,7 +57,7 @@ function normalizeSitePath(p) {
 /* Same list and order as babasms/sitepublish.py SHELL_FILES. sw.js is not hashed. */
 const SHELL_FILES = [
   'index.html', 'deals.html', 'preview.html', 'offline.html', 'deals.js',
-  'price.js', 'picks.js', 'place.js', 'look.css',
+  'price.js', 'picks.js', 'place.js', 'look.css', 'motion.css',
   'install.js', 'setup-lang.js', 'sw-register.js', 'manifest.webmanifest',
   'discount-days.js',
   'mine-list.js',
