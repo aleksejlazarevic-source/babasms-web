@@ -59,6 +59,7 @@ const SHELL_FILES = [
   'index.html', 'deals.html', 'preview.html', 'offline.html', 'deals.js',
   'price.js', 'picks.js', 'place.js', 'look.css',
   'install.js', 'setup-lang.js', 'sw-register.js', 'manifest.webmanifest',
+  'discount-days.js',
 ];
 
 function shellCacheName() {
