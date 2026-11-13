@@ -2,19 +2,13 @@
    The look is the shelf price tag (Aleksej approved Fable's page, 10 Nov 2026).
    Lidl stays live. Spar is live. Tuš, Hofer and E.Leclerc say kmalu until a leaflet recheck signs them off (t807u).
    A private preview parameter opens one kmalu store the way it would look live. The page reads it and never writes it into a link.
+   The date reader is babasms/dates.py read_span. readSpan here is the same function.
    The page hides a line that is not valid on the viewer's today. The pipeline has its own cut.
    The send day follows store.days. */
 (function (root) {
   'use strict';
 
   var PRICE = /\d,\d{2}/;
-  /* A brief line's own dates (D8). Same four forms as babasms/message.py. */
-  var SAMO_ON = / samo (\d{1,2})\.(\d{1,2})\./;
-  var RANGE_ON = / od (\d{1,2})\.(\d{1,2})\. do (\d{1,2})\.(\d{1,2})\./;
-  var END_ON = / do (\d{1,2})\.(\d{1,2})\./;
-  var START_ON = / od (\d{1,2})\.(\d{1,2})\./;
-  var HEADER_SL = /od (\d{1,2})\.(\d{1,2})\. do (\d{1,2})\.(\d{1,2})\./;
-  var HEADER_EN = /from (\d{1,2})\.(\d{1,2})\. to (\d{1,2})\.(\d{1,2})\./;
   /* Approved public files (T2.3). Her gist is not on this machine. */
   var PUBLIC = 'https://aleksejlazarevic-source.github.io/babasms-web/t/';
   /* The words on the screen that are not deal lines. Aleksej approved these with the look, 10 Nov 2026. */
@@ -48,6 +42,11 @@
   /* How many earlier send days the page looks back when a day's file is missing (T3.4b).
      Guess, 10 Nov 2026: two weeks of Monday and Thursday files. */
   var LOOK_BACK = 4;
+  /* Aleksej, 12 Nov 2026: hide a brief once it is more than 7 days past the
+     leaflet's own printed end. The seventh day is still shown. */
+  var BRIEF_KEEP_DAYS = 7;
+  /* Same slack as babasms/dates.py. A day further than this from the anchor is the other year. */
+  var SLACK_DAYS = 200;
 
   function pad(n) { return (n < 10 ? '0' : '') + n; }
 
@@ -92,14 +91,70 @@
     return today;
   }
 
-  function leafletDate(day, month, year, anchor) {
-    var found = new Date(Date.UTC(year, +month - 1, +day));
-    if (found.getTime() < addDays(anchor, -200).getTime()) { /* crossed into January; message.py */
-      found = new Date(Date.UTC(year + 1, +month - 1, +day));
-    } else if (found.getTime() > addDays(anchor, 200).getTime()) { /* December, read after New Year */
-      found = new Date(Date.UTC(year - 1, +month - 1, +day));
+  /* Printed day.month. The twin of babasms/dates.py read_span.
+     tests/fixtures/date-spans.json is the list both must pass.
+     'samo D.M.' is that one day. The end of a range is read from the range's start. */
+  function placed(day, month, anchor) {
+    var year = anchor.getUTCFullYear();
+    function at(y) {
+      var found = new Date(Date.UTC(y, month - 1, day));
+      if (found.getUTCFullYear() !== y || found.getUTCMonth() !== month - 1 || found.getUTCDate() !== day) {
+        throw new Error('bad date');
+      }
+      return found;
     }
+    var found = at(year);
+    var slack = SLACK_DAYS * 86400000;
+    if (found.getTime() < anchor.getTime() - slack) found = at(year + 1);
+    else if (found.getTime() > anchor.getTime() + slack) found = at(year - 1);
     return found;
+  }
+
+  function readSpan(text, anchor, windowStart, windowEnd) {
+    var samo = /(?:^|\s)samo (\d{1,2})\.(\d{1,2})\./.exec(text);
+    var rangeSl, rangeEn, range, od, done, start, end;
+    if (samo) {
+      start = placed(+samo[1], +samo[2], anchor);
+      return {from: start, to: start, token: 'samo'};
+    }
+    rangeSl = /(?:^|\s)od (\d{1,2})\.(\d{1,2})\. do (\d{1,2})\.(\d{1,2})\./.exec(text);
+    rangeEn = rangeSl ? null : /(?:^|\s)from (\d{1,2})\.(\d{1,2})\. to (\d{1,2})\.(\d{1,2})\./.exec(text);
+    range = rangeSl || rangeEn;
+    if (range) {
+      start = placed(+range[1], +range[2], anchor);
+      end = placed(+range[3], +range[4], start);
+      return {from: start, to: end, token: 'range'};
+    }
+    od = /(?:^|\s)od (\d{1,2})\.(\d{1,2})\./.exec(text);
+    if (od) {
+      start = placed(+od[1], +od[2], anchor);
+      end = windowStart && windowEnd ? windowEnd : null;
+      return {from: start, to: end, token: 'od'};
+    }
+    done = /(?:^|\s)do (\d{1,2})\.(\d{1,2})\./.exec(text);
+    if (done) {
+      end = placed(+done[1], +done[2], anchor);
+      start = windowStart && windowEnd ? windowStart : null;
+      return {from: start, to: end, token: 'do'};
+    }
+    if (windowStart && windowEnd) return {from: windowStart, to: windowEnd, token: ''};
+    return null;
+  }
+
+  /* True once today is more than BRIEF_KEEP_DAYS past the printed end.
+     A file with no header is not hidden here. */
+  function pastBriefCap(text, todayIso) {
+    var today = parseIso(todayIso);
+    var lines, body, header;
+    if (!text) return false;
+    lines = String(text).replace(/\n$/, '').split('\n');
+    if (!lines.length || lines[0].trim() !== 'BABASMS1') return false;
+    body = lines.slice(1);
+    while (body.length && body[0] === '') body.shift();
+    if (!body.length) return false;
+    header = readSpan(body[0], today, null, null);
+    if (!header || header.token !== 'range' || !header.to) return false;
+    return today.getTime() > addDays(header.to, BRIEF_KEEP_DAYS).getTime();
   }
 
   function liveStores(list) {
@@ -121,12 +176,11 @@
     while (body.length && body[0] === '') body.shift();
     if (!body.length) throw new Error('no greeting');
     var greeting = body[0];
-    var sl = HEADER_SL.exec(greeting);
-    var en = HEADER_EN.exec(greeting);
-    var found = sl || en;
-    if (!found) throw new Error('no window');
-    var windowStart = leafletDate(found[1], found[2], today.getUTCFullYear(), today);
-    var windowEnd = leafletDate(found[3], found[4], today.getUTCFullYear(), windowStart);
+    var header = readSpan(greeting, today, null, null);
+    if (!header || header.token !== 'range') throw new Error('no window');
+    var windowStart = header.from;
+    var windowEnd = header.to;
+    var sl = !/(?:^|\s)from \d{1,2}\.\d{1,2}\. to /.test(greeting);
     var carry = !!carried && today > windowEnd;
     if (today < windowStart || (today > windowEnd && !carry)) {
       return {kind: 'outside', lines: [
@@ -135,55 +189,16 @@
     }
     var lastEnd = windowStart;
 
-    /* Leftmost token wins. A range starts where "od" does, so the longer form wins that tie. */
-    function spanOf(line) {
-      var year = today.getUTCFullYear();
-      var found = [
-        {m: SAMO_ON.exec(line), kind: 'samo', rank: 0},
-        {m: RANGE_ON.exec(line), kind: 'range', rank: 1},
-        {m: START_ON.exec(line), kind: 'od', rank: 2},
-        {m: END_ON.exec(line), kind: 'do', rank: 3}
-      ];
-      var best = null;
-      for (var i = 0; i < found.length; i++) {
-        var item = found[i];
-        if (!item.m) continue;
-        if (!best || item.m.index < best.m.index ||
-            (item.m.index === best.m.index && item.rank < best.rank)) best = item;
-      }
-      if (!best) return {from: windowStart, to: windowEnd, ownEnd: false};
-      if (best.kind === 'samo') {
-        var one = leafletDate(best.m[1], best.m[2], year, windowStart);
-        return {from: one, to: one, ownEnd: true};
-      }
-      if (best.kind === 'range') {
-        return {
-          from: leafletDate(best.m[1], best.m[2], year, windowStart),
-          to: leafletDate(best.m[3], best.m[4], year, windowStart),
-          ownEnd: true
-        };
-      }
-      if (best.kind === 'od') {
-        return {
-          from: leafletDate(best.m[1], best.m[2], year, windowStart),
-          to: windowEnd,
-          ownEnd: false
-        };
-      }
-      return {
-        from: windowStart,
-        to: leafletDate(best.m[1], best.m[2], year, windowStart),
-        ownEnd: true
-      };
-    }
-
     function keep(line) {
       if (!PRICE.test(line)) return true;
-      var span = spanOf(line);
-      /* Past the leaflet, a carried line with no end day ended with the leaflet. */
-      if (carry && !span.ownEnd) return false;
-      var ok = span.to >= today && span.from <= today;
-      if (ok && span.to > lastEnd) lastEnd = span.to;
+      var span = readSpan(line, windowStart, windowStart, windowEnd);
+      /* Past the leaflet, a carried line with no end day ended with the leaflet.
+         samo, a printed range, and do each name their own last day. */
+      if (carry && span.token !== 'samo' && span.token !== 'range' && span.token !== 'do') return false;
+      var validFrom = span.from;
+      var validTo = span.to;
+      var ok = validTo >= today && validFrom <= today;
+      if (ok && validTo > lastEnd) lastEnd = validTo;
       return ok;
     }
 
@@ -233,11 +248,7 @@
     }
     flush();
     if (!kept && carry) return {kind: 'none', lines: [MISSING]};
-    var startS = shortDate(today);
-    /* A carried batch runs to its last kept line's end day, not past it. */
-    var endS = shortDate(carry ? lastEnd : windowEnd);
-    if (sl) out[0] = out[0].replace(HEADER_SL, 'od ' + startS + ' do ' + endS);
-    else out[0] = out[0].replace(HEADER_EN, 'from ' + startS + ' to ' + endS);
+    /* The header stays the leaflet's own printed dates. (Aleksej, 12 Nov 2026.) */
     out[0] = out[0].replace('{IME}, ', '').replace('Babi, ', '');
     if (!kept) {
       var nxt = addDays(windowEnd, 1);
@@ -309,7 +320,7 @@
       });
     }
     return getDay(dayIso).then(function (got) {
-      if (got.text != null) return showText(got.text, dayIso);
+      if (got.text != null && !pastBriefCap(got.text, dayIso)) return showText(got.text, dayIso);
       var fileDay = dayIso;
       var tries = 0;
       var down = got.down;
@@ -322,7 +333,7 @@
         fileDay = previousSendDay(fileDay, store);
         return getDay(fileDay).then(function (old) {
           down = down || old.down;
-          if (old.text == null) return earlier();
+          if (old.text == null || pastBriefCap(old.text, dayIso)) return earlier();
           var shown = showText(old.text, dayIso, true);
           return shown.kind === 'deals' ? shown : missing;
         });
@@ -1177,6 +1188,7 @@
 
   var api = {
     showText: showText, loadBatch: loadBatch, validSendDay: validSendDay, ljubljanaToday: ljubljanaToday,
+    readSpan: readSpan, pastBriefCap: pastBriefCap,
     isoOf: isoOf, liveStores: liveStores, canOpen: canOpen, viewOf: viewOf, kindOf: kindOf,
     isInternal: isInternal,
     KNOWN: KNOWN, LOOK_BACK: LOOK_BACK, previousSendDay: previousSendDay, fileUrl: fileUrl,
