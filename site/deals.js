@@ -1,12 +1,16 @@
 /* The icon: Lidl's approved lines, one store on the screen, no name (Aleksej, 9 Nov 2026).
    The look is the shelf price tag (Aleksej approved Fable's page, 10 Nov 2026).
-   Lidl, Tuš and Spar stay live. Hofer, E.Leclerc and Mercator say kmalu.
+   Lidl stays live. Spar is live. Tuš, Hofer and E.Leclerc say kmalu until a leaflet recheck signs them off (t807u).
    A private preview parameter opens one kmalu store the way it would look live. The page reads it and never writes it into a link.
-   The date cut is babasms/message.py filter_published. The send day follows store.days. */
+   The page hides a line that is not valid on the viewer's today. The pipeline has its own cut.
+   The send day follows store.days. */
 (function (root) {
   'use strict';
 
   var PRICE = /\d,\d{2}/;
+  /* A brief line's own dates (D8). Same four forms as babasms/message.py. */
+  var SAMO_ON = / samo (\d{1,2})\.(\d{1,2})\./;
+  var RANGE_ON = / od (\d{1,2})\.(\d{1,2})\. do (\d{1,2})\.(\d{1,2})\./;
   var END_ON = / do (\d{1,2})\.(\d{1,2})\./;
   var START_ON = / od (\d{1,2})\.(\d{1,2})\./;
   var HEADER_SL = /od (\d{1,2})\.(\d{1,2})\. do (\d{1,2})\.(\d{1,2})\./;
@@ -30,7 +34,7 @@
   /* Shown when stores.json cannot be read. Same ids, live and days as t2/stores.json. */
   var KNOWN = [
     {id: 'lidl', name: 'Lidl', days: ['mon', 'thu'], live: true, order: 1},
-    {id: 'tus', name: 'Tuš', days: ['wed', 'fri'], live: true, order: 2},
+    {id: 'tus', name: 'Tuš', days: ['wed', 'fri'], live: true, order: 2, card: true},
     {id: 'hofer', name: 'Hofer', days: ['mon', 'thu'], live: false, soon: true, order: 3},
     {id: 'spar', name: 'Spar', days: ['wed'], live: true, order: 4},
     {id: 'leclerc', name: 'E.Leclerc', days: ['wed'], live: false, soon: true, order: 5},
@@ -90,6 +94,8 @@
     var found = new Date(Date.UTC(year, +month - 1, +day));
     if (found.getTime() < addDays(anchor, -200).getTime()) { /* crossed into January; message.py */
       found = new Date(Date.UTC(year + 1, +month - 1, +day));
+    } else if (found.getTime() > addDays(anchor, 200).getTime()) { /* December, read after New Year */
+      found = new Date(Date.UTC(year - 1, +month - 1, +day));
     }
     return found;
   }
@@ -100,8 +106,10 @@
   }
 
   /* carried: the asked day's own file is missing and this is an earlier batch (T3.4b).
-     A line is shown from the morning it starts through the day it ends.
-     No start day means the leaflet's first morning. No end day means its last day.
+     A line is shown on the viewer's today when that day is inside its own dates.
+     No token means the leaflet's first morning through its last day.
+     "od D.M." starts that morning. "do D.M." ends that day.
+     "od D.M. do D.M." ends on the do date. "samo D.M." is that one day.
      Once that last day is past, a carried file keeps only a line with its own later end. */
   function showText(approved, dayIso, carried) {
     var today = parseIso(dayIso);
@@ -125,16 +133,55 @@
     }
     var lastEnd = windowStart;
 
+    /* Leftmost token wins. A range starts where "od" does, so the longer form wins that tie. */
+    function spanOf(line) {
+      var year = today.getUTCFullYear();
+      var found = [
+        {m: SAMO_ON.exec(line), kind: 'samo', rank: 0},
+        {m: RANGE_ON.exec(line), kind: 'range', rank: 1},
+        {m: START_ON.exec(line), kind: 'od', rank: 2},
+        {m: END_ON.exec(line), kind: 'do', rank: 3}
+      ];
+      var best = null;
+      for (var i = 0; i < found.length; i++) {
+        var item = found[i];
+        if (!item.m) continue;
+        if (!best || item.m.index < best.m.index ||
+            (item.m.index === best.m.index && item.rank < best.rank)) best = item;
+      }
+      if (!best) return {from: windowStart, to: windowEnd, ownEnd: false};
+      if (best.kind === 'samo') {
+        var one = leafletDate(best.m[1], best.m[2], year, windowStart);
+        return {from: one, to: one, ownEnd: true};
+      }
+      if (best.kind === 'range') {
+        return {
+          from: leafletDate(best.m[1], best.m[2], year, windowStart),
+          to: leafletDate(best.m[3], best.m[4], year, windowStart),
+          ownEnd: true
+        };
+      }
+      if (best.kind === 'od') {
+        return {
+          from: leafletDate(best.m[1], best.m[2], year, windowStart),
+          to: windowEnd,
+          ownEnd: false
+        };
+      }
+      return {
+        from: windowStart,
+        to: leafletDate(best.m[1], best.m[2], year, windowStart),
+        ownEnd: true
+      };
+    }
+
     function keep(line) {
       if (!PRICE.test(line)) return true;
-      var begun = START_ON.exec(line);
-      var ended = END_ON.exec(line);
+      var span = spanOf(line);
       /* Past the leaflet, a carried line with no end day ended with the leaflet. */
-      if (carry && !ended) return false;
-      var validFrom = begun ? leafletDate(begun[1], begun[2], today.getUTCFullYear(), windowStart) : windowStart;
-      var validTo = ended ? leafletDate(ended[1], ended[2], today.getUTCFullYear(), windowStart) : windowEnd;
-      var ok = validTo >= today && validFrom <= today;
-      if (ok && validTo > lastEnd) lastEnd = validTo;
+      if (carry && !span.ownEnd) return false;
+      var ok = span.to >= today && span.from <= today;
+      if (ok && span.to > lastEnd) lastEnd = span.to;
       return ok;
     }
 
@@ -280,13 +327,21 @@
     return found.length === 1 ? found[0] : null;
   }
 
-  function askedDay() {
+  function queryDay() {
     var q = new URLSearchParams(pageSearch()).get('day');
-    if (q && DAY.test(q)) return q;
+    return (q && DAY.test(q)) ? q : '';
+  }
+
+  function askedDay() {
     /* The morning in Ljubljana, not the send day. A line that starts Friday is
        hidden on Thursday and shown on Friday. Sunday drops a line that ended
-       Saturday. The file is still the send day's: loadBatch looks back. */
-    return isoOf(ljubljanaToday(new Date()));
+       Saturday. The file is still the send day's: loadBatch looks back.
+       A future ?day= would open Monday's list before Monday. Only today or a
+       past morning is accepted. Anything later is the same as no query. */
+    var today = isoOf(ljubljanaToday(new Date()));
+    var q = queryDay();
+    if (q && q <= today) return q;
+    return today;
   }
 
   function byOrder(list) {
@@ -822,16 +877,19 @@
     return open;
   }
 
-  /* allowResume is false after the day has rolled: a fresh open, not yesterday's store. */
+  /* allowResume is false after the day has rolled: a fresh open, not yesterday's store.
+     A future ?day= still shows today's deals, and it starts on the stores screen. */
   function chooseStart(allowResume) {
     var saved = null;
     var savedStore = null;
     var open;
+    var named;
     drawnDay = askedDay();
     placeOn = true;
     resumeHold = false;
     resumeName = '';
-    if (LIST_ON && allowResume) {
+    named = queryDay();
+    if (LIST_ON && allowResume && !(named && named > drawnDay)) {
       saved = placeApi().read(drawnDay);
       if (saved) savedStore = storeById(saved.storeId);
       if (saved && savedStore && fileReady(savedStore) && !savedStore.soon) {
