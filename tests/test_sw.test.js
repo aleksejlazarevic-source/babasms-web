@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
@@ -53,10 +54,34 @@ function normalizeSitePath(p) {
   return p.replace(/^\//, '').split('?')[0];
 }
 
+/* Same list and order as babasms/sitepublish.py SHELL_FILES. sw.js is not hashed. */
+const SHELL_FILES = [
+  'index.html', 'deals.html', 'preview.html', 'offline.html', 'deals.js',
+  'price.js', 'picks.js', 'place.js', 'look.css',
+  'install.js', 'setup-lang.js', 'sw-register.js', 'manifest.webmanifest',
+];
+
+function shellCacheName() {
+  const hash = crypto.createHash('sha256');
+  for (const name of SHELL_FILES) {
+    hash.update(name);
+    hash.update(fs.readFileSync(path.join(SITE, name)));
+  }
+  return 'kindeals-' + hash.digest('hex').slice(0, 12);
+}
+
 test('site/sw.js: CACHE name is present', () => {
   const name = parseCacheName(readSw());
   assert.ok(name && name.length > 0, 'sw.js must define var CACHE');
   assert.match(name, /^kindeals-/, 'CACHE name should use the kindeals- prefix');
+});
+
+test('site/sw.js: CACHE is the published shell hash, not the placeholder', () => {
+  const source = readSw();
+  assert.equal(source.includes('kindeals-SHELL'), false);
+  const name = parseCacheName(source);
+  assert.equal(name, shellCacheName());
+  assert.match(name, /^kindeals-[0-9a-f]{12}$/);
 });
 
 test('site/sw.js: precached / shell paths exist under site/', () => {

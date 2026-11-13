@@ -1,9 +1,11 @@
 /* Network first, so a saved copy does not hide a correction (Aleksej, 9 Nov 2026).
    GitHub Pages also caches a file for 600 seconds (seen 9 Nov 2026). The fresh
-   query asks for a new copy. CACHE is the shell hash from tests/test_page_shell.py.
-   A changed page file changes this name, so the installed icon drops the old shell.
+   query asks for a new copy. Publish writes kindeals- plus the shell hash into
+   the placeholder below on the copy that goes to the site (tests/test_page_shell.py).
+   A changed shell file changes that name, so
+   the installed icon drops the old shell.
    Install saves offline.html and the look it uses. A navigation with no network and no saved copy gets that page. */
-var CACHE = 'kindeals-b423cb4b9139';
+var CACHE = 'kindeals-7723b3de15b4';
 var OFFLINE = 'offline.html';
 
 self.addEventListener('install', function (event) {
