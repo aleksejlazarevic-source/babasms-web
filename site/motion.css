@@ -1,0 +1,51 @@
+/* motion: start */
+/* (guess) tap 2800, sheet rise 1200, swipe 2400, Add card 2800, Home Screen 2000 */
+.m-rise, .m-grow, .m-scroll, .m-card, .m-pop { position: relative; height: 140px; overflow: hidden; }
+.m-sheet, .m-panel { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; }
+.m-rise .m-sheet { height: 100px; }
+.m-grow .m-sheet { height: 220px; }
+.m-card .m-panel { left: 16px; right: 16px; bottom: 10px; height: 70px; }
+.m-pop .m-icon { width: 60px; height: 60px; margin: 24px auto 0; background: #ffd500; border-radius: 14px; }
+.m-scroll .m-row { height: 36px; background: #eee; }
+.m-hand { position: absolute; left: 50%; top: 72px; width: 28px; height: 28px; margin-left: -14px; border-radius: 50%; background: #222; }
+.m-from, .m-to { position: absolute; left: 0; right: 0; top: 0; height: 140px; overflow: hidden; background: #fff; opacity: 0; pointer-events: none; }
+.guide-loop .m-rise .m-sheet,
+.guide-loop .m-grow .m-sheet,
+.guide-loop .m-scroll .m-list,
+.guide-loop .m-scroll .m-hand,
+.guide-loop .m-card .m-panel,
+.guide-loop .m-pop .m-icon {
+  animation-name: var(--m-name);
+  animation-duration: var(--guide-cycle);
+  animation-delay: var(--guide-delay, 0ms);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+@keyframes m-rise-up { 0% { transform: translateY(110px); } 100% { transform: translateY(0); } }
+@keyframes m-grow-up { 0% { transform: translateY(80px); } 100% { transform: translateY(0); } }
+@keyframes m-list-up { 0% { transform: translateY(0); } 100% { transform: translateY(-72px); } }
+@keyframes m-hand-up { 0% { transform: translateY(0); } 100% { transform: translateY(-72px); } }
+@keyframes m-card-up { 0% { transform: translateY(90px); } 100% { transform: translateY(0); } }
+@keyframes m-pop-in { 0% { transform: scale(0.4); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes m-fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes m-fade-out { 0% { opacity: 1; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .guide-loop .m-rise .m-sheet,
+  .guide-loop .m-grow .m-sheet,
+  .guide-loop .m-card .m-panel,
+  .guide-loop .m-pop .m-icon { animation-name: var(--m-fade, m-fade-in); transform: none; }
+  .guide-loop .m-scroll .m-list,
+  .guide-loop .m-scroll .m-hand { animation-name: none; transform: none; }
+  .guide-loop .m-from,
+  .guide-loop .m-to {
+    animation-duration: var(--guide-cycle);
+    animation-delay: var(--guide-delay, 0ms);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+  }
+  .guide-loop .m-from { animation-name: var(--m-out, m-fade-out); }
+  .guide-loop .m-to { animation-name: var(--m-in, m-fade-in); }
+}
+/* motion: end */
