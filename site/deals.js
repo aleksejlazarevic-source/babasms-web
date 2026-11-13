@@ -655,60 +655,7 @@
   }
 
   function pickRow(line, store, keep) {
-    var parsed = root.KinDealsPrice.parse(line);
-    var cents = parsed ? root.KinDealsPrice.summable(parsed) : null;
-    var row = document.createElement('button');
-    var cost;
-    var was;
-    var whenText;
-    var nowNum;
-    var nowUnit;
-    if (!store) store = current;
-    row.type = 'button';
-    row.className = 'deal pick';
-    row.setAttribute('data-line', line);
-    row.setAttribute('aria-pressed', tickBook().has(store.id, line) ? 'true' : 'false');
-    row.appendChild(el('span', 'tick'));
-    if (!parsed) {
-      row.appendChild(el('span', 'what', line));
-      if (store && store.card === true) row.appendChild(el('span', 'who', 's kartico'));
-    } else {
-      row.appendChild(el('span', 'what', parsed.name));
-      cost = el('span', 'cost');
-      nowNum = parsed.who === 'voucher' ? parsed.till : parsed.now;
-      nowUnit = parsed.who === 'voucher' ? '' : parsed.nowUnit;
-      cost.appendChild(el('span', 'now', euroUnit(nowNum, nowUnit)));
-      if (parsed.was && parsed.who !== 'voucher') {
-        was = el('s', 'was');
-        was.appendChild(el('span', null, 'prej '));
-        was.appendChild(document.createTextNode(euroUnit(parsed.was, parsed.wasUnit)));
-        cost.appendChild(was);
-      }
-      if (parsed.who === 'plus') cost.appendChild(el('span', 'who', 'z Lidl Plus'));
-      if (parsed.who === 'voucher') {
-        cost.appendChild(el('span', 'who', 'z bonom ' + root.KinDealsPrice.euro(parsed.now)));
-      }
-      if (store && store.card === true) cost.appendChild(el('span', 'who', 's kartico'));
-      whenText = parsed.when || '';
-      if (parsed.cond) whenText = whenText ? whenText + ', ' + parsed.cond : parsed.cond;
-      if (whenText) cost.appendChild(el('span', 'when', whenText));
-      row.appendChild(cost);
-    }
-    /* The leaflet end, read while the store still has it. A retick after the
-       last line was removed must not store until null. */
-    var keptUntil = keep ? untilOf(store.id) : null;
-    row.addEventListener('click', function () {
-      var until = keep ? keptUntil : batchUntil;
-      var on = tickBook().toggle(store.id, line, cents, until);
-      if (keep) {
-        /* Untick now. The row stays until this screen is drawn again. */
-        row.setAttribute('aria-pressed', on ? 'true' : 'false');
-        return;
-      }
-      markLine(line, on);
-      paintSum();
-    });
-    return row;
+    return root.KinDealsMine.row(line, store, keep);
   }
 
   function drawDeals(lines) {
@@ -839,6 +786,12 @@
   }
 
   function draw(view) {
+    /* The tick rows live in mine-list.js, fetched after this file, so they are
+       not on the wire while the stylesheet is still arriving. */
+    if (LIST_ON && !(root.KinDealsMine && root.KinDealsMine.row)) {
+      ensureMine(function () { draw(view); });
+      return;
+    }
     var line = closedLineText(view);
     var key = JSON.stringify(view) + '\n' + line;
     if (view.type === 'deals' && key === shown) return; /* same lines: leave her place on the page */
@@ -883,6 +836,7 @@
     dealsView = null;
     if (LIST_ON) clearSum();
     clearMine();
+    if (root.KinDealsMine) root.KinDealsMine.leave();
     $('list').hidden = true;
     $('store').textContent = store.name;
     $('store').hidden = false;
@@ -916,43 +870,56 @@
     if (mine && mine.parentNode) mine.parentNode.removeChild(mine);
   }
 
-  function paintMine() {
-    var groups;
-    var mine;
-    var i;
-    var j;
-    var group;
-    var store;
-    var block;
-    var tot;
-    clearMine();
-    if (!LIST_ON || current) return;
-    groups = tickBook().list();
-    if (!groups.length) return;
-    mine = el('div');
-    mine.id = 'mine';
-    mine.appendChild(el('h2', 'mine-title', 'Moj seznam'));
-    for (i = 0; i < groups.length; i++) {
-      group = groups[i];
-      store = storeById(group.storeId);
-      if (!store) store = {id: group.storeId, name: group.storeId};
-      block = el('section', 'mine-store');
-      block.appendChild(el('h3', 'mine-name', store.name));
-      for (j = 0; j < group.lines.length; j++) {
-        block.appendChild(pickRow(group.lines[j].line, store, true));
-      }
-      tot = tickBook().total(group.storeId);
-      block.appendChild(el('p', 'mine-sum', 'Skupaj ' + root.KinDealsPrice.euroCents(tot.cents)));
-      if (tot.unsummed > 0) {
-        block.appendChild(el('p', 'mine-rest', tot.unsummed + ' brez seštevka'));
-      }
-      mine.appendChild(block);
-    }
-    $('list').parentNode.insertBefore(mine, $('list'));
+  function mineHost() {
+    return {
+      el: el, $: $, tick: tickBook, byId: storeById, listOn: LIST_ON,
+      cur: function () { return current; },
+      setCur: function (v) { current = v; },
+      setDealsView: function (v) { dealsView = v; },
+      setResumeHold: function (v) { resumeHold = v; },
+      setShown: function (v) { shown = v; },
+      clearSum: clearSum, clearMine: clearMine, dropScreen: dropScreen,
+      tileOf: tileOf, openStore: openStore,
+      stores: function () { return stores; },
+      STORES: STORES, euroUnit: euroUnit, untilOf: untilOf,
+      markLine: markLine, paintSum: paintSum,
+      batch: function () { return batchUntil; },
+      showList: showList
+    };
   }
 
-  /* Nazaj only. The stores screen start shows must not clear a place. */
+  /* mine-list.js is not a script tag: it must not share the stylesheet's download. */
+  function ensureMine(done) {
+    var mine = root.KinDealsMine;
+    var s;
+    if (mine && mine.row && mine.ready) {
+      if (done) done();
+      return;
+    }
+    if (done) {
+      if (!ensureMine.wait) ensureMine.wait = [];
+      ensureMine.wait.push(done);
+    }
+    if (ensureMine.begun) return;
+    ensureMine.begun = true;
+    s = document.createElement('script');
+    s.src = 'mine-list.js';
+    s.onload = function () {
+      var q = ensureMine.wait || [];
+      var i;
+      root.KinDealsMine.use(mineHost());
+      ensureMine.wait = null;
+      for (i = 0; i < q.length; i++) q[i]();
+    };
+    document.head.appendChild(s);
+  }
+
+  /* Nazaj only. The ticked list keeps the saved place. A store clears it. */
   function backToList() {
+    if (root.KinDealsMine && root.KinDealsMine.isOn()) {
+      showList();
+      return;
+    }
     if (LIST_ON) {
       placeOn = true;
       resumeHold = false;
@@ -973,12 +940,17 @@
     return null;
   }
 
+  /* The store tiles are drawn here. mine-list.js is only the tick button and the
+     tick rows, and it is not on the wire while the stylesheet is still arriving.
+     A page that never opens the list does not fetch that file. */
   function showList() {
     var list = $('list');
     current = null;
     dealsView = null;
     resumeHold = false;
     if (LIST_ON) clearSum();
+    clearMine();
+    if (root.KinDealsMine) root.KinDealsMine.leave();
     dropScreen();
     shown = '';
     list.textContent = '';
@@ -1022,8 +994,19 @@
     $('back').hidden = true;
     $('text').hidden = true;
     $('text').textContent = '';
-    if (LIST_ON) paintMine();
+    if (LIST_ON) paintMineWhenReady();
     window.scrollTo(0, 0);
+  }
+
+  /* The button waits for mine-list.js. The tiles above are already on the screen. */
+  function paintMineWhenReady() {
+    if (root.KinDealsMine && root.KinDealsMine.ready && root.KinDealsMine.paint) {
+      root.KinDealsMine.paint();
+      return;
+    }
+    ensureMine(function () {
+      if (!current && root.KinDealsMine && root.KinDealsMine.paint) root.KinDealsMine.paint();
+    });
   }
 
   function openCount() {
@@ -1156,7 +1139,10 @@
   }
 
   function start() {
-    if (LIST_ON) tickBook().expire(askedDay());
+    if (LIST_ON) {
+      tickBook().expire(askedDay());
+      ensureMine(null);
+    }
     $('back').addEventListener('click', backToList);
     document.addEventListener('visibilitychange', wake);
     document.addEventListener('visibilitychange', onVisibility);
