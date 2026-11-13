@@ -336,6 +336,15 @@ button.shop:active::after { border-color: var(--paper); }
 .deal { padding: 14px 0; border-bottom: 1px solid var(--rule); overflow-wrap: break-word; }
 .deal:last-child { border-bottom: 0; }
 .note { margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--ink); line-height: 1.35; }
+/* A closed or early day. Same size as a deal line (the body size), not a section heading. */
+.closed-day {
+  margin: 0;
+  padding: 14px 0;
+  font-size: var(--line);
+  font-weight: 400;
+  line-height: 1.35;
+  overflow-wrap: break-word;
+}
 
 /* Tick rows on preview.html. Sizes are the Design guesses, 12 Nov 2026, until seen on a phone.
    12px beside the tick, the check's place, and the 140px under the list are guesses too. */
