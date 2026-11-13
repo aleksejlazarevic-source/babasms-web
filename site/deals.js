@@ -275,11 +275,24 @@
      not leave the page empty. fetcher is window.fetch on the page and a fake in the test. */
   function loadBatch(dayIso, fetcher, store) {
     var missing = {kind: 'missing', lines: [MISSING]};
+    /* A 404 is "this day was not published". A 503 is the same question offline:
+       the service worker has no saved copy of that file, so it cannot be a 404.
+       Friday asks for Friday's file, which was never a send day, then has to
+       walk back to Thursday's saved brief. Giving up on the 503 hides that brief.
+       sawDown stays set so a phone with nothing saved still says it is offline,
+       not that the week is missing. */
+    var sawDown = false;
     function get(url) {
       return fetcher(fresh(url), {cache: 'no-store'}).then(function (res) {
         if (res.status === 404) return null;
-        if (!res.ok) throw new Error('fetch');
+        if (!res.ok) {
+          sawDown = true;
+          return null;
+        }
         return res.text();
+      }, function () {
+        sawDown = true;
+        return null;
       });
     }
     function getDay(fileDay) {
@@ -293,7 +306,10 @@
       var fileDay = dayIso;
       var tries = 0;
       function earlier() {
-        if (tries >= LOOK_BACK) return missing;
+        if (tries >= LOOK_BACK) {
+          if (sawDown) return {kind: 'offline', lines: [OFFLINE]};
+          return missing;
+        }
         tries += 1;
         fileDay = previousSendDay(fileDay, store);
         return getDay(fileDay).then(function (old) {
