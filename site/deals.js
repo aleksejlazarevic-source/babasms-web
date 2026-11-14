@@ -600,9 +600,8 @@
   var screenLock = null;
   var screenGen = 0;
   var screenAsked = false;
-  /* preview.html sets data-list="1". deals.html does not, and then nothing is stored. */
-  var LIST_ON = typeof document !== 'undefined' && document.body
-    ? document.body.getAttribute('data-list') === '1' : false;
+  /* On for every open of deals.html. Aleksej, 14 Nov 2026. */
+  var LIST_ON = true;
   var picks = null;
   var batchUntil = null;
   /* page/closed-days.json once it has arrived. Null until then, and after a failed read. */
