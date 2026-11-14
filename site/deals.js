@@ -3,7 +3,7 @@
    Lidl stays live. Spar is live. Tuš, Hofer and E.Leclerc say kmalu until a leaflet recheck signs them off (t807u).
    A private preview parameter opens one kmalu store the way it would look live. The page reads it and never writes it into a link.
    The date reader is babasms/dates.py read_span. readSpan here is the same function.
-   The page hides a line that is not valid on the viewer's today. The pipeline has its own cut.
+   The page hides a line that has ended. A line that starts later, inside the leaflet window, is drawn under a start-day heading. The pipeline has its own cut.
    The send day follows store.days. */
 (function (root) {
   'use strict';
@@ -141,6 +141,59 @@
     return null;
   }
 
+  /* "N) VELJA 13.–14. 11. 2026" and "VELJA 11.–17. 11. 2026".
+     A "samo za pregled" mark on the same line does not change the dates.
+     A missing year is placed from the anchor, the same way readSpan places a day. */
+  function blockSpan(line, anchor) {
+    var same, two, month, year, start, end;
+    if (PRICE.test(line)) return null;
+    if (!/velja(?![a-z])/i.test(line)) return null;
+    try {
+      /* Two full dates first. "4. 11.–14. 11." contains "11.–14. 11.", which is not the window. */
+      two = /(\d{1,2})\.\s*(\d{1,2})\.(?:\s*(\d{4}))?\s*[–—-]\s*(\d{1,2})\.\s*(\d{1,2})\.(?:\s*(\d{4}))?/.exec(line);
+      same = two ? null : /(\d{1,2})\.\s*[–—-]\s*(\d{1,2})\.\s*(\d{1,2})\.(?:\s*(\d{4}))?/.exec(line);
+      if (same && +same[2] >= +same[1]) {
+        month = +same[3];
+        if (same[4]) {
+          year = +same[4];
+          start = new Date(Date.UTC(year, month - 1, +same[1]));
+          end = new Date(Date.UTC(year, month - 1, +same[2]));
+          if (start.getUTCFullYear() !== year || start.getUTCMonth() !== month - 1 || start.getUTCDate() !== +same[1]) return null;
+          if (end.getUTCFullYear() !== year || end.getUTCMonth() !== month - 1 || end.getUTCDate() !== +same[2]) return null;
+        } else {
+          start = placed(+same[1], month, anchor);
+          end = placed(+same[2], month, start);
+        }
+        if (end < start) return null;
+        return {from: start, to: end};
+      }
+      if (!two) return null;
+      if (two[3]) {
+        year = +two[3];
+        start = new Date(Date.UTC(year, +two[2] - 1, +two[1]));
+        if (start.getUTCFullYear() !== year || start.getUTCMonth() !== +two[2] - 1 || start.getUTCDate() !== +two[1]) return null;
+      } else start = placed(+two[1], +two[2], anchor);
+      if (two[6]) {
+        year = +two[6];
+        end = new Date(Date.UTC(year, +two[5] - 1, +two[4]));
+        if (end.getUTCFullYear() !== year || end.getUTCMonth() !== +two[5] - 1 || end.getUTCDate() !== +two[4]) return null;
+      } else end = placed(+two[4], +two[5], start);
+      if (end < start) {
+        if (two[3] || two[6]) return null;
+        end = new Date(Date.UTC(end.getUTCFullYear() + 1, end.getUTCMonth(), end.getUTCDate()));
+      }
+      return {from: start, to: end};
+    } catch (err) {
+      return null;
+    }
+  }
+
+  /* The day before the start is "OD JUTRI". Any earlier morning names the weekday. */
+  function laterHeading(start, today) {
+    if (start.getTime() === addDays(today, 1).getTime()) return 'OD JUTRI';
+    return 'OD ' + WEEKDAY_FROM[start.getUTCDay()].toUpperCase() + ' ' + shortDate(start);
+  }
+
   /* True once today is more than BRIEF_KEEP_DAYS past the printed end.
      A file with no header is not hidden here. */
   function pastBriefCap(text, todayIso) {
@@ -167,6 +220,8 @@
      No token means the leaflet's first morning through its last day.
      "od D.M." starts that morning. "do D.M." ends that day.
      "od D.M. do D.M." ends on the do date. "samo D.M." is that one day.
+     No token uses the block heading's dates when the heading has them, otherwise the window.
+     A line that starts later, and whose start is inside the window, is not mixed into today's sections.
      Once that last day is past, a carried file keeps only a line with its own later end. */
   function showText(approved, dayIso, carried) {
     var today = parseIso(dayIso);
@@ -188,18 +243,83 @@
       ]};
     }
     var lastEnd = windowStart;
+    var blockFrom = null;
+    var blockTo = null;
+    var currentSection = '';
+    var laterLines = [];
+    var endedLines = [];
+    var laterByStart = {};
+    var laterOrder = [];
 
-    function keep(line) {
-      if (!PRICE.test(line)) return true;
+    function lineSpan(line) {
       var span = readSpan(line, windowStart, windowStart, windowEnd);
-      /* Past the leaflet, a carried line with no end day ended with the leaflet.
-         samo, a printed range, and do each name their own last day. */
-      if (carry && span.token !== 'samo' && span.token !== 'range' && span.token !== 'do') return false;
-      var validFrom = span.from;
-      var validTo = span.to;
-      var ok = validTo >= today && validFrom <= today;
-      if (ok && validTo > lastEnd) lastEnd = validTo;
-      return ok;
+      if (span.token) return span;
+      if (blockFrom && blockTo) return {from: blockFrom, to: blockTo, token: 'block'};
+      return span;
+    }
+
+    function addLater(line, start) {
+      var key = isoOf(start);
+      var block = laterByStart[key];
+      var sections, last;
+      if (!block) {
+        block = {heading: laterHeading(start, today), start: key, sections: []};
+        laterByStart[key] = block;
+        laterOrder.push(block);
+      }
+      sections = block.sections;
+      last = sections.length ? sections[sections.length - 1] : null;
+      if (!last || last.name !== currentSection) {
+        last = {name: currentSection, lines: []};
+        sections.push(last);
+      }
+      last.lines.push(line);
+      laterLines.push(line);
+    }
+
+    /* Past the leaflet, a carried line with no end day ended with the leaflet.
+       samo, a printed range, do, and a dated block each name their own last day. */
+    function take(line) {
+      var span = lineSpan(line);
+      var own = span.token === 'samo' || span.token === 'range' || span.token === 'do' || span.token === 'block';
+      var validFrom, validTo;
+      if (carry && !own) return;
+      validFrom = span.from;
+      validTo = span.to;
+      if (validTo >= today && validFrom <= today) {
+        if (validTo > lastEnd) lastEnd = validTo;
+        section.push(line);
+        return;
+      }
+      if (validFrom > today && validTo >= today && validFrom >= windowStart && validFrom <= windowEnd) {
+        addLater(line, validFrom);
+        return;
+      }
+      if (validTo < today) endedLines.push(line);
+    }
+
+    function setBlock(line) {
+      var span = blockSpan(line, windowStart);
+      if (!span) {
+        /* An unreadable VELJA must not keep the previous block's dates. */
+        if (isValidity(line)) {
+          blockFrom = null;
+          blockTo = null;
+        }
+        return false;
+      }
+      blockFrom = span.from;
+      blockTo = span.to;
+      return true;
+    }
+
+    function sortedLater() {
+      laterOrder.sort(function (a, b) {
+        if (a.start < b.start) return -1;
+        if (a.start > b.start) return 1;
+        return 0;
+      });
+      return laterOrder;
     }
 
     var kept = false;
@@ -221,9 +341,13 @@
     for (var i = 1; i < body.length; i++) {
       var line = body[i];
       if (line === '') continue;
-      /* A preview batch header hides its own deals until the next batch header.
-         A loose internal line is dropped on its own. */
+      /* A block heading that still says "samo za pregled" is read by its dates.
+         A loose internal line, or a marked heading with no dates, stays hidden. */
       if (isInternal(line)) {
+        if (setBlock(line)) {
+          hideBatch = false;
+          continue;
+        }
         if (isValidity(line) || /^\s*\d+\)/.test(line)) hideBatch = true;
         continue;
       }
@@ -232,14 +356,18 @@
         continue;
       }
       if (PRICE.test(line)) {
-        if (keep(line)) section.push(line);
+        take(line);
         continue;
       }
-      if (isValidity(line)) continue;
+      if (isValidity(line)) {
+        setBlock(line);
+        continue;
+      }
       /* "Babi, …" is the preamble. The greeting already names the store. */
       if (line.indexOf('Babi,') === 0) continue;
       if (isHeading(line)) {
         flush();
+        currentSection = line;
         section.push(line);
         continue;
       }
@@ -247,9 +375,12 @@
       footer = line;
     }
     flush();
-    if (!kept && carry) return {kind: 'none', lines: [MISSING]};
+    if (!kept && carry) {
+      return {kind: 'none', lines: [MISSING], later: [], laterLines: laterLines, ended: endedLines};
+    }
     /* The header stays the leaflet's own printed dates. (Aleksej, 12 Nov 2026.) */
     out[0] = out[0].replace('{IME}, ', '').replace('Babi, ', '');
+    if (!kept && laterOrder.length) kept = true;
     if (!kept) {
       var nxt = addDays(windowEnd, 1);
       var sentence;
@@ -262,12 +393,15 @@
       } else {
         throw new Error('the next day is not a send day');
       }
-      return {kind: 'empty', lines: [sentence]};
+      return {kind: 'empty', lines: [sentence], later: [], laterLines: laterLines, ended: endedLines};
     }
     if (footer) out = out.concat(['', footer]);
     /* until is the last day this draw already worked out: the leaflet end, or the
-       carried batch's last kept day. lines and kind stay as they were. */
-    return {kind: 'deals', lines: out, until: isoOf(carry ? lastEnd : windowEnd)};
+       carried batch's last kept day. lines stay today's deals. later is the start-day blocks. */
+    return {
+      kind: 'deals', lines: out, until: isoOf(carry ? lastEnd : windowEnd),
+      later: sortedLater(), laterLines: laterLines, ended: endedLines
+    };
   }
 
   function fresh(url) {
@@ -397,7 +531,7 @@
 
   /* What to draw for one answer from the network. The deal lines are showText's, unchanged. */
   function viewOf(got, dayIso) {
-    if (got.kind === 'deals') return {type: 'deals', lines: got.lines, until: got.until};
+    if (got.kind === 'deals') return {type: 'deals', lines: got.lines, until: got.until, later: got.later || []};
     if (got.kind === 'missing') {
       var d = parseIso(dayIso);
       return {type: 'message', title: MISSING, body:
@@ -439,6 +573,7 @@
   function kindOf(line, index) {
     if (index === 0) return 'greeting';
     if (PRICE.test(line)) return 'deal';
+    if (line === 'OD JUTRI' || /^OD [A-ZČŠŽ]+ \d{1,2}\.\d{1,2}\.$/.test(line)) return 'later';
     return isHeading(line) ? 'section' : 'note';
   }
 
@@ -658,22 +793,50 @@
     return root.KinDealsMine.row(line, store, keep);
   }
 
-  function drawDeals(lines) {
+  /* Later rows are plain text. A tick would put a price that has not started into the sum. */
+  function drawLater(host, blocks) {
+    var b, s, n, group, sec;
+    if (!blocks || !blocks.length) return;
+    for (b = 0; b < blocks.length; b++) {
+      host.appendChild(el('h2', 'later', blocks[b].heading));
+      for (s = 0; s < blocks[b].sections.length; s++) {
+        sec = blocks[b].sections[s];
+        group = el('section', 'group');
+        if (sec.name) group.appendChild(el('h2', 'section', sec.name));
+        for (n = 0; n < sec.lines.length; n++) group.appendChild(el('p', 'deal', sec.lines[n]));
+        host.appendChild(group);
+      }
+    }
+  }
+
+  function drawDeals(lines, blocks) {
     var host = $('text');
     var group = null;
+    var body = lines || [];
+    var note = '';
+    var last;
     host.textContent = '';
-    lines.forEach(function (line, i) {
+    if (body.length) {
+      last = body.length - 1;
+      if (body[last] !== '' && kindOf(body[last], last) === 'note') {
+        note = body[last];
+        body = body.slice(0, last);
+      }
+    }
+    body.forEach(function (line, i) {
       if (line === '') return;
       if (i > 0 && isInternal(line)) return;
       var kind = kindOf(line, i);
-      var row = kind === 'deal' && LIST_ON ? pickRow(line) : el(kind === 'section' ? 'h2' : 'p', kind, line);
-      if (kind === 'section') {
+      var row = kind === 'deal' && LIST_ON ? pickRow(line) : el(kind === 'section' || kind === 'later' ? 'h2' : 'p', kind, line);
+      if (kind === 'section' || kind === 'later') {
         group = el('section', 'group');
         host.appendChild(group);
       }
       if (group && (kind === 'section' || kind === 'deal')) group.appendChild(row);
       else host.appendChild(row);
     });
+    drawLater(host, blocks);
+    if (note) host.appendChild(el('p', 'note', note));
   }
 
   function drawMessage(view) {
@@ -801,7 +964,7 @@
       batchUntil = view.until == null ? null : view.until;
       /* A failed load never reaches here, so a miss drops nothing. */
       if (LIST_ON) tickBook().sync(current.id, shownDeals(view.lines), batchUntil);
-      drawDeals(view.lines);
+      drawDeals(view.lines, view.later);
       placeClosedLine(line);
       if (LIST_ON) paintSum();
     } else {
@@ -969,25 +1132,20 @@
       list.appendChild(item);
     });
     /* Pensioner offers valid today. One more tile; the script owns the dates.
-       The file loads here, so a page that opens one store does not fetch it.
-       A throw here must not reject start(): the store list is already drawn,
-       including when stores.json fell back to KNOWN. */
-    try {
-      if (root.KinDealsDiscountDays && root.KinDealsDiscountDays.attachTile) {
-        root.KinDealsDiscountDays.attachTile(list);
-      } else if (typeof document.querySelector === 'function' && document.head
-          && !document.querySelector('script[data-discount-days]')) {
-        var days = document.createElement('script');
-        days.src = 'discount-days.js';
-        days.setAttribute('data-discount-days', '1');
-        days.onload = function () {
-          if (root.KinDealsDiscountDays && root.KinDealsDiscountDays.attachTile) {
-            root.KinDealsDiscountDays.attachTile(list);
-          }
-        };
-        document.head.appendChild(days);
-      }
-    } catch (err) {}
+       The file loads here, so a page that opens one store does not fetch it. */
+    if (root.KinDealsDiscountDays && root.KinDealsDiscountDays.attachTile) {
+      root.KinDealsDiscountDays.attachTile(list);
+    } else if (!document.querySelector('script[data-discount-days]')) {
+      var days = document.createElement('script');
+      days.src = 'discount-days.js';
+      days.setAttribute('data-discount-days', '1');
+      days.onload = function () {
+        if (root.KinDealsDiscountDays && root.KinDealsDiscountDays.attachTile) {
+          root.KinDealsDiscountDays.attachTile(list);
+        }
+      };
+      document.head.appendChild(days);
+    }
     list.hidden = false;
     $('store').textContent = STORES;
     $('store').hidden = false;

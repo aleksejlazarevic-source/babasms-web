@@ -142,7 +142,7 @@ window.addEventListener('beforeinstallprompt', function (e) {
 <ol>
 
 <!-- 1. Compact bar, docs/ios-refs/ios27/step1-bar.png. No share button. -->
-<li>
+<li class="src">
 <p class="say">Tapni tri črte ob naslovu.</p>
 <p class="aside">V meniju tapni Deljenje.</p>
 <div class="pic d y" aria-hidden="true"><div class="cv"><div class="ph bot y1">
@@ -157,6 +157,52 @@ window.addEventListener('beforeinstallprompt', function (e) {
   </div>
   <div class="hind"></div>
 </div></div></div>
+<div class="i27">
+<div class="step m-tap" data-hold="2800">
+<p class="line">Tapni puščico iz kvadratka na sredini spodnje vrstice.</p>
+<p class="note">Tri črte ob naslovu odprejo drug meni.</p>
+<div class="pic d y"><div class="cv"><div class="ph bot tray">
+<div class="ln"></div><div class="ln s"></div>
+<div class="pill"><svg class="i"><use href="#i-lines"/></svg><span class="dom">kindeals.vercel.app</span><svg class="i"><use href="#i-reload"/></svg></div>
+<div class="tools"><svg class="i"><use href="#i-back"/></svg><svg class="i"><use href="#i-fwd"/></svg><span class="share tap"><svg class="i"><use href="#i-share"/></svg></span><svg class="i"><use href="#i-book"/></svg><svg class="i"><use href="#i-tabs"/></svg></div>
+<div class="hind"></div>
+</div></div></div>
+</div>
+<div class="step m-tap" data-hold="2800">
+<p class="line">Tapni gumb Prikaži več.</p>
+<div class="pic d y"><div class="cv"><div class="ph bot y2 sheet m-rise"><div class="m-sheet">
+<div class="people"></div>
+<div class="pv"><i class="ic4"><svg><use href="#a-kin"/></svg></i><div class="n"><span>KinDeals</span><small>kindeals.vercel.app</small></div></div>
+<div class="apps"><span class="ap"><i class="ic"><svg><use href="#a27-air"/></svg></i><span>AirDrop</span></span><span class="ap"><i class="ic"><svg><use href="#a27-msg"/></svg></i><span>Sporočila</span></span><span class="ap"><i class="ic"><svg><use href="#a27-mail"/></svg></i><span>Pošta</span></span></div>
+<div class="acts"><span class="ap tap"><i class="chev"><svg class="i"><use href="#i26-down"/></svg></i><span>Prikaži več</span></span></div>
+</div></div></div></div>
+</div>
+<div class="step" data-hold="2400">
+<p class="line">Povleci s prstom navzgor.</p>
+<div class="pic d y"><div class="cv"><div class="ph bot sheet m-grow"><div class="m-sheet m-scroll y3">
+<div class="m-list"><div class="sp"></div><div class="grp"><div class="r addrow"><svg class="i"><use href="#i27-plus"/></svg><span>Dodaj na domači zaslon</span></div></div></div>
+<div class="m-hand"></div><div class="m-from"></div><div class="m-to"></div>
+</div></div></div></div>
+</div>
+<div class="step m-tap" data-hold="2800">
+<p class="line">Tapni Dodaj na domači zaslon.</p>
+<div class="pic d y"><div class="cv"><div class="ph bot sheet y3">
+<div class="grp"><div class="r tap addrow"><svg class="i"><use href="#i27-plus"/></svg><span>Dodaj na domači zaslon</span></div></div>
+</div></div></div>
+</div>
+<div class="step m-tap" data-hold="2800">
+<p class="line">Na koncu tapni gumb zgoraj desno.</p>
+<div class="pic d y"><div class="cv"><div class="ph top card m-card"><div class="m-panel">
+<div class="hd"><span class="x"><svg class="i"><use href="#i-x"/></svg></span><b>Dodaj na domači zaslon</b><span class="go tap"></span></div>
+<div class="band"><i class="ic4"><svg><use href="#a-kin"/></svg></i><span class="nm">KinDeals</span></div>
+</div></div></div></div>
+</div>
+<div class="step" data-hold="2000">
+<p class="line">Tapni ikono KinDeals.</p>
+<div class="pic d y"><div class="cv"><div class="ph home m-pop"><div class="m-icon"></div><span class="kd">KinDeals</span></div></div></div>
+</div>
+</div>
+<script>(function(){function go(){var r=document.getElementById("setup"),n=r&&r.querySelector(".i27"),o=r&&r.querySelector("ol"),s,m,i,li,h,e;if(!n||!o||r.getAttribute("data-i27"))return;var sym=document.getElementById("a27-air");if(sym&&sym.ownerSVGElement)r.insertBefore(sym.ownerSVGElement,o);s=n.querySelectorAll(".step");m=[];for(i=0;i<s.length;i++){li=document.createElement("li");li.className=s[i].className.replace("step","").replace(/^\s+|\s+$/g,"");h=s[i].getAttribute("data-hold");if(h)li.setAttribute("data-hold",h);e=s[i].querySelector(".line");if(e)e.className="say";e=s[i].querySelector(".note");if(e)e.className="aside";while(s[i].firstChild)li.appendChild(s[i].firstChild);m.push(li)}while(o.firstChild)o.removeChild(o.firstChild);for(i=0;i<m.length;i++)o.appendChild(m[i]);if(r.className.indexOf("i27-go")<0)r.className+=(r.className?" ":"")+"i27-go";r.setAttribute("data-i27","1")}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",go);else go()})();</script>
 </li>
 
 <!-- 2. Open sheet, docs/ios-refs/ios27/step2-sheet.png. Prikaži manj. -->

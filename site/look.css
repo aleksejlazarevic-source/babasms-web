@@ -242,11 +242,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 0 var(--side) calc(56px + env(safe-area-inset-bottom));
 }
 
-/* The top bar of an open store: a yellow strip that stays at the top of the screen, with the
-   back button at its right end. A stuck section name lies in the same strip, left of the button,
-   so there is one bar, not two (Aleksej asked for a back button that is always there, 11 Nov 2026).
-   6, 62, 68, 10 and 150 below are guesses from the button's 56px height and its 130px width, measured
-   in Chromium at 390 wide, 11 Nov 2026; not tried on her phone. */
+/* Open-store top bar: yellow strip, back button at the right, stuck section name on the left, one bar (Aleksej asked for a back button that is always there, 11 Nov 2026). 6, 62, 68, 10 and 150 are guesses from the 56px button and its 130px width, measured in Chromium at 390 wide, 11 Nov 2026; not tried on her phone. */
 #back {
   position: sticky;
   top: 6px;
@@ -335,6 +331,7 @@ button.shop:active::after { border-color: var(--paper); }
   font-weight: 700;
   letter-spacing: 0.06em;
 }
+.later{margin:0 calc(-1 * var(--side));padding:12px calc(var(--side) + 150px) 12px var(--side);background:var(--tag);font-size:20px;line-height:1.2;font-weight:700;letter-spacing:0.06em}
 .deal { padding: 14px 0; border-bottom: 1px solid var(--rule); overflow-wrap: break-word; }
 .deal:last-child { border-bottom: 0; }
 .note { margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--ink); line-height: 1.35; }
@@ -799,23 +796,16 @@ body.pitch:has(.guide-loop) .pitch-scroll {
 #setup .fr .y1 { padding-top: 3.3em; }
 #setup .fr .y2 { padding-top: 3em; }
 #setup .fr .y3 .cut { padding-top: 2em; }
-/* Step 3's sheet, measured off docs/ios-refs/ios27/step2-sheet.png (12 Nov 2026).
-   The screen in that file is x 22–466, 445px wide. This drawing's screen is 19.84em,
-   so 1em is 22.43px of the photo. Sampled, not guessed:
-   sheet #fff; groups #ebebeb, inset 18px (0.80em), corner meeting the top at 26px (1.16em);
-   row pitch 57px (2.54em); gap between the groups 22px (0.98em);
-   divider 1px #d4d4d5, from the words (x 103, 2.85em into the group) to 18px short of the right;
-   row cap 13px and x-height 10px, so the size is 0.827em, weight 400, #000,
-   tracking -0.008em. The face is Inter here, listed before -apple-system,
-   because -apple-system on this machine is Noto Sans; a phone has no Inter,
-   so -apple-system there is SF Pro;
-   the baseline is 36px down the 57px row, so the words are shifted 0.089em;
-   the words start 65px (2.90em) into the group;
-   the small icons are centered 36.5px in, in a 26px box, stroke 1.6px;
-   round actions 75px (3.34em), fill #e9e9e9, 33px (1.47em) in from the screen,
-   label cap 10px (0.63em), 10px under the circle, 32px from the two-line labels to the group.
-   The four glyphs are drawn in the photo's pixels: copy 30×38, bookmark 23×36,
-   glasses 50×19, chevron 29×16, each stroke 2px. */
+/* Step 3, measured off docs/ios-refs/ios27/step2-sheet.png (12 Nov 2026).
+   Screen is 19.84em; 1em = 22.43px of the 445px photo.
+   Sampled: #fff; groups #ebebeb, inset 18px (0.80em), corner 26px (1.16em);
+   row 57px (2.54em); gap 22px (0.98em); divider 1px #d4d4d5 from x 103 (2.85em)
+   to 18px short of the right; cap 13px, x-height 10px = 0.827em, weight 400,
+   #000, tracking -0.008em. Inter precedes -apple-system (Noto Sans here, SF Pro
+   on a phone). Baseline 36/57px, words +0.089em, start 65px (2.90em) in.
+   Icons at 36.5px, 26px box, stroke 1.6px. Rounds 75px (3.34em) #e9e9e9,
+   33px (1.47em) in; label cap 10px (0.63em), 10px under, 32px to the group.
+   Glyph px: copy 30x38, bookmark 23x36, glasses 50x19, chevron 29x16, stroke 2. */
 #setup .fr .y3 {
   padding: 0 0.8em 0;
   background: #fff;
@@ -1069,3 +1059,41 @@ body.pitch:has(.guide-loop) .pitch-scroll {
 #setup .fr .y2 .acts .ap > span{position:absolute;left:50%;top:calc(3.58 * var(--u));transform:translateX(-50%);width:max-content;max-width:calc(4.35 * var(--u));font-size:calc(0.63 * var(--u));font-weight:400;line-height:1.28;letter-spacing:-0.012em;color:#000;text-align:center;white-space:normal;overflow:visible;text-overflow:clip;}
 #setup .fr .y2 .acts .tap{margin:0;}
 #setup .fr .y2 .hind{margin-top:0.85em;}
+#setup:not(.i27-go)>ol>li.src{list-style:none}
+#setup:not(.i27-go)>ol>li.src>.say,#setup:not(.i27-go)>ol>li.src>.aside,#setup:not(.i27-go)>ol>li.src>.pic{display:none}
+#setup:not(.i27-go)>ol>li.src~li{display:none}
+#setup .i27 .step{display:list-item;margin:.85em 0 .2em 1.3em}
+#setup .tray{background:#fff;border-radius:0 0 2.2em 2.2em;padding:2.2em .7em .35em}
+#setup .tray .pill{display:flex;align-items:center;gap:.4em;height:2.3em;margin:0 .15em;padding:0 .65em;background:#ececf1;border-radius:.7em}
+#setup .tray .pill .i{width:1.15em;height:1.15em;color:#1c1c1e}
+#setup .tray .dom{flex:1;min-width:0;text-align:center;font-size:.82em;font-weight:650;color:#111}
+#setup .tray .tools{display:flex;justify-content:space-between;align-items:center;margin:.5em .7em .1em;color:#8e8e93}
+#setup .tray .tools .i{width:1.35em;height:1.35em}
+#setup .tray .share{width:1.9em;height:1.9em;display:grid;place-items:center;color:#1c1c1e}
+#setup .tray .hind{margin-top:.4em}
+#setup .sheet.m-rise,#setup .sheet.m-grow{height:18em;overflow:hidden;background:#fff}
+#setup .sheet .m-sheet{height:auto;background:#fff}
+#setup .sheet .m-scroll{position:absolute;left:0;right:0;bottom:0;height:15em;overflow:hidden}
+#setup .sheet .sp{height:11em}
+#setup .sheet .m-hand{width:2.6em;height:2.1em;margin:0;border-radius:0;background:url("hand.png") no-repeat 0 0/100% 100%;top:auto;bottom:1.4em;left:64%}
+#setup .sheet .m-from,#setup .sheet .m-to{height:100%;background:transparent}
+#setup .sheet.y2 .acts .tap{grid-column:4}
+#setup .sheet.y2 .tap::after{content:"";left:calc(100% - var(--u)*2.9);top:50%;transform:translateY(-36.7%)}
+#setup .sheet.y2 .tap>span::after{content:none}
+/* (guess, D6) rise ends by 1200ms of the 2800ms hold */
+#setup.guide-loop .m-rise .m-sheet{animation-timing-function:cubic-bezier(0, 1.15, 0.15, 1)}
+#setup .ph.sheet.y3{padding:0 .8em 1.7em}
+#setup .ph.sheet.y3 .addrow.tap::after{left:calc(100% - var(--u) * 4.35)}
+#setup .card.m-card{height:auto;overflow:visible;min-height:11em;background:#f2f2f7;padding:2.4em .7em 1.1em}
+#setup .card .m-panel{position:relative;left:auto;right:auto;bottom:auto;height:auto;display:flex;flex-direction:column;align-items:stretch;gap:.85em;background:#fff;border-radius:1.1em;padding:.7em .75em .85em}
+#setup .card .hd{display:flex;align-items:center;gap:.45em;width:100%}
+#setup .card .x{width:1.8em;height:1.8em;border-radius:50%;background:#e8e8ed;display:grid;place-items:center;flex:none}
+#setup .card .x .i{width:.85em;height:.85em}
+#setup .card .hd b{flex:1;min-width:0;text-align:center;font-size:.78em;font-weight:600;line-height:1.15}
+#setup .card .go{flex:none;width:3.6em;height:2em;border-radius:1em;background:#0a84ff}
+#setup .card .band{display:flex;align-items:center;gap:.65em;min-height:2.6em}
+#setup .card .ic4{width:2.5em;height:2.5em}
+#setup .card .nm{font-size:.95em;font-weight:600}
+#setup .home.m-pop{height:auto;overflow:visible;min-height:13em;background:#f2f2f7;text-align:center;padding-top:3em}
+#setup .home .m-icon{background:#ffd500 url("icon-180.png") center/cover no-repeat}
+#setup .home .kd{display:block;margin-top:.35em;font-size:13px;color:#000}

@@ -2,8 +2,9 @@
 (function (root) {
   'use strict';
 
-  /* A later start and an earlier end are one tail: "od 13.11. do 13.11.". */
-  var DATE = / ((?:od \d{1,2}\.\d{1,2}\. do \d{1,2}\.\d{1,2}\.|od \d{1,2}\.\d{1,2}\.|do \d{1,2}\.\d{1,2}\.))$/;
+  /* A later start, one day, and an earlier end, at the line end.
+     "od 13.11. do 13.11." and "samo 12.11." are stripped before PAIR. */
+  var DATE = / ((?:od \d{1,2}\.\d{1,2}\. do \d{1,2}\.\d{1,2}\.|samo \d{1,2}\.\d{1,2}\.|od \d{1,2}\.\d{1,2}\.|do \d{1,2}\.\d{1,2}\.))$/;
   var COND = ', ob nakupu';
   var VOUCHER = /^(.*) (\d+,\d{2}) po odštetem bonu \(cena, ki jo plačate (\d+,\d{2})\)$/;
   var PER_KILO_PAIR = /^(.*) (\d+,\d{2})\/kg \((\d+,\d{2})\/kg\)$/;
