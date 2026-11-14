@@ -1097,3 +1097,24 @@ body.pitch:has(.guide-loop) .pitch-scroll {
 #setup .home.m-pop{height:auto;overflow:visible;min-height:13em;background:#f2f2f7;text-align:center;padding-top:3em}
 #setup .home .m-icon{background:#ffd500 url("icon-180.png") center/cover no-repeat}
 #setup .home .kd{display:block;margin-top:.35em;font-size:13px;color:#000}
+/* iOS 26 motion. Sheet rise and swipe use the shared keyframes (guess, D6). */
+#setup-ios26 .z2 .menu .r.tap,#setup-ios26 .z5 .go{position:relative}
+#setup-ios26 .ph.m-grow{height:auto;overflow:hidden}
+#setup-ios26 .m-grow .m-sheet{position:relative;top:auto;bottom:auto;height:auto;background:transparent}
+/* The sheet starts 80px down, so a hand on the scroll's bottom sits below the screen.
+   11.5em with a -4.5em top margin keeps the sheet's foot where it was and gives the hand
+   room to start on the screen and still travel (guess, 14 Nov 2026). */
+#setup-ios26 .m-scroll{position:relative;height:11.5em;margin-top:-4.5em;overflow:hidden}
+#setup-ios26 .m-list .sp{height:11.5em}
+#setup-ios26 .m-list .addrow{min-height:36px;display:flex;align-items:center;gap:.45em;margin:.35em .5em;padding:0 .65em;background:#e9e9ee;border-radius:.7em;font-size:.85em;white-space:nowrap}
+#setup-ios26 .m-list .addrow .i{width:1.15em;height:1.15em;flex:none}
+#setup-ios26 .m-hand{width:2.2em;height:1.7em;margin:0;border-radius:0;background:url("hand.png") 0 0/100% 100%;top:auto;bottom:4.4em;left:58%}
+#setup-ios26 .m-from,#setup-ios26 .m-to{height:100%;background:transparent}
+#setup-ios26 .ph.m-card{height:auto;overflow:visible}
+#setup-ios26 .m-card .m-panel{position:relative;left:auto;right:auto;bottom:auto;height:auto;background:transparent}
+#setup-ios26 .web{display:flex;align-items:center;justify-content:space-between;gap:.6em;margin:.65em .7em 0;font-size:.75em}
+#setup-ios26 .web i{flex:none;width:2.5em;height:1.45em;border-radius:1em;background:#34c759;position:relative}
+#setup-ios26 .web i:after{content:"";position:absolute;top:.12em;right:.12em;width:1.2em;height:1.2em;border-radius:50%;background:#fff}
+#setup-ios26 .home.m-pop{height:auto;overflow:visible;min-height:12em;border:0;border-radius:1.2em;background:#f2f2f7;text-align:center;padding:3.2em 0 1.4em}
+#setup-ios26 .home .m-icon{width:3.6em;height:3.6em;margin:0 auto;border-radius:.8em;background:#ffd500 url("icon-180.png") center/cover}
+#setup-ios26 .home .kd{display:block;margin-top:.4em;font-size:13px;color:#000}

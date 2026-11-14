@@ -1132,20 +1132,25 @@
       list.appendChild(item);
     });
     /* Pensioner offers valid today. One more tile; the script owns the dates.
-       The file loads here, so a page that opens one store does not fetch it. */
-    if (root.KinDealsDiscountDays && root.KinDealsDiscountDays.attachTile) {
-      root.KinDealsDiscountDays.attachTile(list);
-    } else if (!document.querySelector('script[data-discount-days]')) {
-      var days = document.createElement('script');
-      days.src = 'discount-days.js';
-      days.setAttribute('data-discount-days', '1');
-      days.onload = function () {
-        if (root.KinDealsDiscountDays && root.KinDealsDiscountDays.attachTile) {
-          root.KinDealsDiscountDays.attachTile(list);
-        }
-      };
-      document.head.appendChild(days);
-    }
+       The file loads here, so a page that opens one store does not fetch it.
+       A throw here must not reject start(): the store list is already drawn,
+       including when stores.json fell back to KNOWN. */
+    try {
+      if (root.KinDealsDiscountDays && root.KinDealsDiscountDays.attachTile) {
+        root.KinDealsDiscountDays.attachTile(list);
+      } else if (typeof document.querySelector === 'function' && document.head
+          && !document.querySelector('script[data-discount-days]')) {
+        var days = document.createElement('script');
+        days.src = 'discount-days.js';
+        days.setAttribute('data-discount-days', '1');
+        days.onload = function () {
+          if (root.KinDealsDiscountDays && root.KinDealsDiscountDays.attachTile) {
+            root.KinDealsDiscountDays.attachTile(list);
+          }
+        };
+        document.head.appendChild(days);
+      }
+    } catch (err) {}
     list.hidden = false;
     $('store').textContent = STORES;
     $('store').hidden = false;
