@@ -1333,13 +1333,6 @@
   }
 
   function probeStore(store) {
-    /* A store hidden in t2/stores.json (live is not true) has no public brief.
-       Asking for one 404s on every load. A private preview of that store still asks. */
-    if (liveStores([store]).length !== 1 && !previewTarget([store])) {
-      store.readable = false;
-      store.probeError = false;
-      return Promise.resolve(false);
-    }
     var day = isoOf(validSendDay(ljubljanaToday(new Date()), store));
     var urls = [fileUrl(store, day)];
     if (store.id === 'lidl') urls.push(PUBLIC + day + '/brief-sl.txt');
