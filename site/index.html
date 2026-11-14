@@ -455,15 +455,23 @@ window.addEventListener('beforeinstallprompt', function (e) {
 </ol>
 </section>
 
-<!-- iOS 17 Safari. install.js shows this when an iPhone's Safari says Version/17.
-     Apple's guide (iph42ab2f3a7): on the Bottom or Top tab layout, tap Share, scroll the list,
-     tap the home-screen row, tap Add. iOS 17's default is that Tab Bar, so Share is the middle
-     sign of the bottom row. There is no three-dots step and no Prikaži več step; those are iOS 26.
-     The sign left of the address is AA, the control iOS 18 replaced. The rows beside
-     Dodaj na domači zaslon are the iOS 27 photo order (guess: no iOS 17 photo is in the repo).
-     Prekliči is the usual Slovenian for Cancel (guess: this sheet was not seen on a phone).
-     Not checked on an iOS 17 phone. The frame and the hand are the iOS 26 ones. -->
+<!-- iOS 17 Safari, steps 1–2 from docs/ios-refs/ios17. The frame and hand are the iOS 26 ones. -->
 <section class="setup framed" id="setup-ios17" hidden>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <!-- iOS 17/18 signs only. Shared symbols stay, so iOS 26 and 27 do not change. -->
+  <symbol id="i17-back" viewBox="0 0 24 24"><path d="M15.4 5.9 8.6 12l6.8 6.1"/></symbol>
+  <symbol id="i17-fwd" viewBox="0 0 24 24"><path d="M8.6 5.9 15.4 12l-6.8 6.1"/></symbol>
+  <symbol id="i17-share" viewBox="0 0 24 24"><path d="M11.82 3.48v11.59M9.02 6.89 11.82 3.48l2.81 3.41M14.63 8.59H16.74a1.75 1.7 0 0 1 1.75 1.7v8.53a1.75 1.7 0 0 1-1.75 1.7H7.26a1.75 1.7 0 0 1-1.75-1.7v-8.53a1.75 1.7 0 0 1 1.75-1.7H9.37"/></symbol>
+  <symbol id="i17-book" viewBox="0 0 24 24"><path d="M12 6.55C10.4 5.4 8.8 5.17 7.4 5.17H4.7C4.15 5.17 3.82 5.55 3.82 6.2V16.9c.4.15 2.2.7 4.4.9 1.6.15 2.8-.05 3.78-.2"/><path d="M12 6.55c1.6-1.15 3.2-1.38 4.6-1.38h2.7c.55 0 .88.38.88 1.03V16.9c-.4.15-2.2.7-4.4.9-1.6.15-2.8-.05-3.78-.2"/><path d="M12 6.3v11.85"/></symbol>
+  <symbol id="i17-tabs" viewBox="0 0 24 24"><rect x="3.9" y="4.4" width="11.2" height="11.2" rx="2.2"/><rect x="8.6" y="8.6" width="11.2" height="11.2" rx="2.2" fill="#fbfaf6"/></symbol>
+  <symbol id="i17-star" viewBox="0 0 24 24"><path d="M12 4.8 14.1 9.6l5.2.5-3.9 3.5 1.2 5.1L12 16.1 7.4 18.7l1.2-5.1L4.7 10l5.2-.5z"/></symbol>
+  <symbol id="i17-note" viewBox="0 0 24 24"><rect x="5.3" y="5.9" width="13.4" height="12.2" rx="2.2"/><path d="M7.4 6.05h9.2a2.1 2.1 0 0 1 2.1 2.1V9H5.3V8.15a2.1 2.1 0 0 1 2.1-2.1z" fill="currentColor" stroke="none"/><path d="M8.2 13c1.1-.8 1.8-.8 2.4.3.6 1.1 1.3 1.1 2.4.3 1-.8 1.7-.8 2.5.2"/></symbol>
+  <symbol id="i17-print" viewBox="0 0 24 24"><path d="M7.7 7.35V5.7a.9.85 0 0 1 .9-.86h6.8a.9.85 0 0 1 .9.86v1.65"/><path d="M4.77 7.1h14.46a.55.55 0 0 1 .55.55v8.4a.55.55 0 0 1-.55.55H4.77a.55.55 0 0 1-.55-.55v-8.4a.55.55 0 0 1 .55-.55z"/><path d="M7.75 11.35h8.5a.45.45 0 0 1 .45.45v6.97a.45.45 0 0 1-.45.45h-8.5a.45.45 0 0 1-.45-.45v-6.97a.45.45 0 0 1 .45-.45z"/><path d="M9.5 13.45h5M9.5 15.25h5"/><rect x="16.85" y="8.15" width="1.2" height="1.15" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i17-starbox" viewBox="0 0 24 24"><rect x="4.94" y="5.25" width="10.19" height="10.05" rx="1.35"/><rect x="8.69" y="8.4" width="10.37" height="10.35" rx="1.35" fill="#fff"/><path fill="currentColor" stroke="none" d="M13.87 9.67 14.92 12.12l2.66.24-1.99 1.76.58 2.61-2.29-1.37-2.29 1.37.58-2.61-2-1.76 2.66-.24z"/></symbol>
+  <symbol id="i18-star" viewBox="0 0 24 24"><path d="M12 4.94 14.52 9.27l4.9 1.06-3.34 3.74.5 4.99L12 17.03 7.42 19.06l.5-4.99-3.34-3.74 4.9-1.06z"/></symbol>
+  <symbol id="i18-mark" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.55"/><path d="M9.7 17.75V12.4L12 8.15 14.3 12.4V17.75"/></symbol>
+</svg>
 <h2>Na domači zaslon</h2>
 <p class="where">Odpri to stran v Safariju. Če je stran odprta v sporočilu, tapni ikono Safari.</p>
 <ol>
@@ -475,14 +483,14 @@ window.addEventListener('beforeinstallprompt', function (e) {
   <div class="ln"></div><div class="ln s"></div>
   <div class="dock">
     <div class="bar">
-      <span class="pill"><span class="aa"><big>A</big>A</span><span class="dom">kindeals.vercel.app</span><svg class="i"><use href="#i-reload"/></svg></span>
+      <span class="pill"><span class="aa"><big>A</big>A</span><svg class="i lock"><use href="#i-lock"/></svg><span class="dom">kindeals.vercel.app</span><svg class="i"><use href="#i-reload"/></svg></span>
     </div>
     <div class="tools">
-      <svg class="i"><use href="#i-back"/></svg>
-      <svg class="i"><use href="#i-fwd"/></svg>
-      <span class="tap"><svg class="i"><use href="#i-share"/></svg></span>
-      <svg class="i"><use href="#i-book"/></svg>
-      <svg class="i"><use href="#i-tabs"/></svg>
+      <svg class="i"><use href="#i17-back"/></svg>
+      <svg class="i"><use href="#i17-fwd"/></svg>
+      <span class="tap"><svg class="i"><use href="#i17-share"/></svg></span>
+      <svg class="i"><use href="#i17-book"/></svg>
+      <svg class="i"><use href="#i17-tabs"/></svg>
     </div>
   </div>
   <div class="hind"></div>
@@ -493,11 +501,14 @@ window.addEventListener('beforeinstallprompt', function (e) {
 <div class="pic d y" aria-hidden="true"><div class="cv fr"><div class="fone"><div class="inner"><div class="device device-iphone-14-pro"><div class="device-frame"><div class="device-screen"></div></div><div class="device-stripe"></div><div class="device-header"></div><div class="device-sensors"></div><div class="device-btns"></div><div class="device-power"></div></div></div></div>
 <div class="ph bot y3">
   <div class="grp cut">
+    <div class="r"><svg class="i slim"><use href="#i17-star"/></svg><span>Dodaj med priljubljene</span></div>
+    <div class="r"><svg class="i slim"><use href="#i17-note"/></svg><span>Dodaj v hitri zapisek</span></div>
     <div class="r"><svg class="i"><use href="#i-find"/></svg><span>Poišči na strani</span></div>
     <div class="r tap"><svg class="i"><use href="#i-plus"/></svg><span>Dodaj na domači zaslon</span></div>
   </div>
   <div class="grp">
     <div class="r"><svg class="i"><use href="#i-mark"/></svg><span>Označevanje</span></div>
+    <div class="r"><svg class="i slim"><use href="#i17-print"/></svg><span>Natisni</span></div>
   </div>
   <div class="hind"></div>
 </div></div></div>
@@ -523,15 +534,10 @@ window.addEventListener('beforeinstallprompt', function (e) {
 </ol>
 </section>
 
-<!-- iOS 18 Safari. install.js shows this when an iPhone's Safari says Version/18.
-     The same three taps as iOS 17 (Apple's guide, iph42ab2f3a7): Share in the bottom row,
-     then the list, then Add. iOS 18 replaced AA with a page-menu sign, a box with two lines
-     (MacRumors, "iOS 18: What's New With Safari"). The drawn sign is that description (guess by eye).
-     The rows beside Dodaj na domači zaslon are the iOS 27 photo order (guess: no iOS 18 photo).
-     Not checked on an iOS 18 phone. -->
+<!-- iOS 18 Safari, steps 1–2 from docs/ios-refs/ios18. The frame and hand are the iOS 26 ones. -->
 <section class="setup framed" id="setup-ios18" hidden>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <symbol id="i-pmenu" viewBox="0 0 24 24"><rect x="5" y="4.5" width="14" height="15" rx="2.2"/><path d="M8 9.5h8M8 13.5h8"/></symbol>
+  <symbol id="i-pmenu" viewBox="0 0 24 24"><rect x="3.5" y="3" width="17" height="11.2" rx="2.2"/><path d="M3.5 17.6h17M3.5 21.2h11.2"/></symbol>
 </svg>
 <h2>Na domači zaslon</h2>
 <p class="where">Odpri to stran v Safariju. Če je stran odprta v sporočilu, tapni ikono Safari.</p>
@@ -547,11 +553,11 @@ window.addEventListener('beforeinstallprompt', function (e) {
       <span class="pill"><svg class="i pmenu"><use href="#i-pmenu"/></svg><span class="dom">kindeals.vercel.app</span><svg class="i"><use href="#i-reload"/></svg></span>
     </div>
     <div class="tools">
-      <svg class="i"><use href="#i-back"/></svg>
-      <svg class="i"><use href="#i-fwd"/></svg>
-      <span class="tap"><svg class="i"><use href="#i-share"/></svg></span>
-      <svg class="i"><use href="#i-book"/></svg>
-      <svg class="i"><use href="#i-tabs"/></svg>
+      <svg class="i"><use href="#i17-back"/></svg>
+      <svg class="i"><use href="#i17-fwd"/></svg>
+      <span class="tap"><svg class="i"><use href="#i17-share"/></svg></span>
+      <svg class="i"><use href="#i17-book"/></svg>
+      <svg class="i"><use href="#i17-tabs"/></svg>
     </div>
   </div>
   <div class="hind"></div>
@@ -562,11 +568,15 @@ window.addEventListener('beforeinstallprompt', function (e) {
 <div class="pic d y" aria-hidden="true"><div class="cv fr"><div class="fone"><div class="inner"><div class="device device-iphone-14-pro"><div class="device-frame"><div class="device-screen"></div></div><div class="device-stripe"></div><div class="device-header"></div><div class="device-sensors"></div><div class="device-btns"></div><div class="device-power"></div></div></div></div>
 <div class="ph bot y3">
   <div class="grp cut">
+    <div class="r"><svg class="i slim"><use href="#i17-starbox"/></svg><span>Dodaj med priljubljene »Domača naloga«</span></div>
+    <div class="r"><svg class="i slim"><use href="#i18-star"/></svg><span>Dodaj med priljubljene</span></div>
+    <div class="r"><svg class="i slim"><use href="#i17-note"/></svg><span>Dodaj v hitri zapisek</span></div>
     <div class="r"><svg class="i"><use href="#i-find"/></svg><span>Poišči na strani</span></div>
     <div class="r tap"><svg class="i"><use href="#i-plus"/></svg><span>Dodaj na domači zaslon</span></div>
   </div>
   <div class="grp">
-    <div class="r"><svg class="i"><use href="#i-mark"/></svg><span>Označevanje</span></div>
+    <div class="r"><svg class="i slim"><use href="#i18-mark"/></svg><span>Označevanje</span></div>
+    <div class="r"><svg class="i slim"><use href="#i17-print"/></svg><span>Natisni</span></div>
   </div>
   <div class="hind"></div>
 </div></div></div>
@@ -592,11 +602,7 @@ window.addEventListener('beforeinstallprompt', function (e) {
 </ol>
 </section>
 
-<!-- Fallback. install.js shows this when an iPhone's Safari has no Version/ token, or the token
-     is not 17, 18, 26 or 27. The arrow in the bottom row is the iOS 17 and 18 path, and the
-     Bottom and Top layouts later. The first aside covers a three-dots bar (iOS 26 Compact).
-     The second aside covers Prikaži več, which iOS 26 and 27 show and iOS 17 and 18 do not.
-     The sign left of the address is left out: it changes by version. Not one phone's screen. -->
+<!-- Fallback when Safari has no Version token, or it is not 17, 18, 26 or 27. -->
 <section class="setup framed" id="setup-iosfallback" hidden>
 <h2>Na domači zaslon</h2>
 <p class="where">Odpri to stran v Safariju. Če je stran odprta v sporočilu, tapni ikono Safari.</p>

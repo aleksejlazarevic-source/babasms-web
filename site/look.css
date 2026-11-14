@@ -489,13 +489,7 @@ button.shop:active::after { border-color: var(--paper); }
   background: transparent; color: var(--ink); border: 2px solid var(--ink); border-radius: 4px; cursor: pointer;
 }
 
-/* ---------- The iPhone guide for iOS 26 Safari (index.html, #setup-ios26) ----------
-   It stands here, after the icon's rules, so the iOS 27 guide above stays as tests/test_iphone_guide.py
-   pins it. It reuses the iOS 27 parts (.d, .y, .y2, .y3). Drawn from English photos of iOS 26 and
-   26.2 (see index.html); not checked on a phone. Sizes are measured off those photos, 11 Nov 2026:
-   the screen is 19.8em wide here and 393pt on the phone, so 1pt is about 0.05em. Where a size is
-   not from a photo it is a guess by eye. Colours are guesses: the photos are of dark screens.
-   .framed is this guide's frame and hand. iOS 17, iOS 18 and the fallback use the same class. */
+/* ---------- The iPhone guide for iOS 26 Safari. It reuses the iOS 27 parts and sits after the pinned rules. */
 
 /* Liquid Glass: a clear, bright piece floating over the page, with a light rim and a soft shadow. */
 .framed .gl {
@@ -590,12 +584,7 @@ button.shop:active::after { border-color: var(--paper); }
 .z5 .nm .clr .i { width: 0.62em; height: 0.62em; color: #fff; stroke-width: 3; }
 .z5 .nm .n small { display: block; margin-top: 0.55em; padding-right: 0.65em; font-size: 0.9em; color: #8e8e93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* The phone and the hand (Aleksej asked for a real-looking iPhone and a beautiful hand, 11 Nov 2026).
-   The frame is the iPhone 14 Pro of devices.min.css (picturepan2/devices.css, MIT), 428px by 868px
-   with a 390px screen 20px in from its left and top and 18px from its right and bottom. It is scaled so that screen is 19.8em wide, the width
-   the drawings had before the frame, so nothing in them got smaller. Only one end of the phone is
-   shown; the other end is cut off by the picture's edge, under a fade into the page.
-   The numbers below are that frame's sizes times 19.8 / 390; the rest are guesses by eye. */
+/* iPhone 14 Pro frame from devices.min.css, scaled so the screen is 19.8em. One end is cut off. */
 .framed .cv.fr {
   --s: tan(atan2(calc(var(--u) * 19.8), 390px));   /* a length over a length, as a plain number */
   padding: 0 0 2.31em;                             /* the frame's edge (0.91em) and room for its shadow */
@@ -623,19 +612,7 @@ button.shop:active::after { border-color: var(--paper); }
   pointer-events: none;
 }
 .framed .cv.fr.up::after { top: auto; bottom: -1px; background: linear-gradient(rgba(255, 255, 255, 0), var(--paper) 80%); }
-/* the hand: hand.png (Microsoft Fluent UI Emoji, MIT), 233 by 214, its fingertip at the left edge,
-   36.7% down. In every step the fingertip lies 0.35em inside the right edge of the thing to tap,
-   at the middle of its height. It comes in over the frame from the right margin.
-   Aleksej, 11 Nov 2026: "too puffy/fatty". So it is drawn smaller, and 0.86 as tall as its own
-   shape for that width (guess by eye): a slimmer finger and a flatter fist. The fingertip stays
-   36.7% down whatever the height.
-   Aleksej, 12 Nov 2026: "still a little too puffed up especially fingers", and keep this hand. So
-   the picture itself was reshaped: the pointing finger 0.76 as thick about its own middle line,
-   the curled fingers 8px further in and the fist 11px shorter underneath (all three guesses by
-   eye). Same 233 by 214, and the fingertip did not move.
-   Aleksej, 12 Nov 2026: "the thumb doesn't look like it was changed". So the thumb was drawn in
-   too: 0.72 as thick about its own middle line, fading out where it meets the palm, about as
-   thick as the pointing finger (guess by eye). The fingers and the fingertip are unchanged. */
+/* hand.png. Fingertip at the left edge, 36.7% down, inside the right edge of the tap. */
 .framed .y .tap::after {
   left: calc(100% - var(--u) * 0.42);
   width: calc(var(--u) * 4.1);
@@ -760,15 +737,7 @@ body.pitch:has(.guide-loop) .pitch-scroll {
   }
 }
 
-/* ---------- The iOS 27 guide (#setup): the same phone and hand as the iOS 26 guide ----------
-   It stands here, and the frame is put in by a small script at the end of index.html, because
-   tests/test_iphone_guide.py pins the iOS 27 markup and its rules above to 45b131e. The script
-   copies the iOS 26 guide's frame into each drawing and adds .fr; every rule here needs .fr, so
-   without the script the drawings stay as they were (thin line, black hand).
-   These are the iOS 26 frame and hand rules above (the numbers are explained there), for #setup.
-   The screen is 19.8em wide: the width the drawings had inside the thin line, so nothing in them
-   got smaller. All three drawings are the bottom of the phone, so the last one ends with the
-   phone's own bottom edge; the top is cut off under a fade into the page. */
+/* iOS 27 frame and hand. The script at the end of index.html adds .fr. */
 #setup .cv.fr {
   --s: tan(atan2(calc(var(--u) * 19.8), 390px));   /* a length over a length, as a plain number */
   padding: 0 0 2.31em;                             /* the frame's edge (0.91em) and room for its shadow */
@@ -796,16 +765,7 @@ body.pitch:has(.guide-loop) .pitch-scroll {
 #setup .fr .y1 { padding-top: 3.3em; }
 #setup .fr .y2 { padding-top: 3em; }
 #setup .fr .y3 .cut { padding-top: 2em; }
-/* Step 3, measured off docs/ios-refs/ios27/step2-sheet.png (12 Nov 2026).
-   Screen is 19.84em; 1em = 22.43px of the 445px photo.
-   Sampled: #fff; groups #ebebeb, inset 18px (0.80em), corner 26px (1.16em);
-   row 57px (2.54em); gap 22px (0.98em); divider 1px #d4d4d5 from x 103 (2.85em)
-   to 18px short of the right; cap 13px, x-height 10px = 0.827em, weight 400,
-   #000, tracking -0.008em. Inter precedes -apple-system (Noto Sans here, SF Pro
-   on a phone). Baseline 36/57px, words +0.089em, start 65px (2.90em) in.
-   Icons at 36.5px, 26px box, stroke 1.6px. Rounds 75px (3.34em) #e9e9e9,
-   33px (1.47em) in; label cap 10px (0.63em), 10px under, 32px to the group.
-   Glyph px: copy 30x38, bookmark 23x36, glasses 50x19, chevron 29x16, stroke 2. */
+/* iOS 27 step 3, measured off docs/ios-refs/ios27/step2-sheet.png. */
 #setup .fr .y3 {
   padding: 0 0.8em 0;
   background: #fff;
@@ -904,13 +864,7 @@ body.pitch:has(.guide-loop) .pitch-scroll {
   border-top: calc(0.045 * var(--u)) solid #d4d4d5;
 }
 #setup .fr .y3 .tap > span { max-width: none; }
-/* the hand: hand.png, its fingertip 0.42em inside the right edge of the thing to tap, at the middle
-   of its height, coming in from the right over the frame. The same in all three steps, and the same
-   as the iOS 26 guide. In step 1 the thing to tap is the arrow in the middle of the row, so the
-   hand lies over the next sign.
-   Step 2's .tap is the whole row, and that row runs to the phone's edge, so the same right-edge
-   rule put the fingertip on the bezel. The button is the circle plus its words. The words already
-   sit on the left; they keep that place. The fingertip sits just past the last letter, not on it. */
+/* Fingertip 0.42em inside the right edge, at mid-height. Step 2 sits just past the last letter. */
 #setup .fr .tap::after,
 #setup .fr .y2 .tap > span::after {
   left: calc(100% - var(--u) * 0.42);
@@ -972,6 +926,39 @@ body.pitch:has(.guide-loop) .pitch-scroll {
 /* Room under the frame for that hand, without moving the frame off the drawing. */
 .framed .cv.fr:has(.y1) { padding-bottom: 6.3em; }
 .framed .cv.fr:has(.y1) .fone { bottom: 5.4em; }
+
+/* iOS 17 and 18 steps 1-2, from docs/ios-refs. The fallback keeps the dock above. */
+:is(#setup-ios17,#setup-ios18) .dock {
+  margin: 0;
+  padding: 0.40em 0.20em 0.05em;
+  background: #fbfaf6;
+  border-radius: 0 0 2.15em 2.15em; /* square bottom paints across the bezel */
+}
+:is(#setup-ios17,#setup-ios18) .dock .bar { padding: 0 1.23em; }
+:is(#setup-ios17,#setup-ios18) .dock .pill { height: 2.19em; border-radius: 0.45em; padding: 0 0.55em; }
+:is(#setup-ios17,#setup-ios18) .dock .dom { font-size: 0.88em; }
+:is(#setup-ios17,#setup-ios18) .dock .tools { height: auto; margin: 0.72em 0.45em 0.18em; }
+:is(#setup-ios17,#setup-ios18) .dock .tools .i { color: #007aff; stroke-width: 1.25px; }
+:is(#setup-ios17,#setup-ios18) .dock .pill .i { width: 1.05em; height: 1.05em; color: #1c1c1e; }
+:is(#setup-ios17,#setup-ios18) .dock .tools > .i:nth-child(2) { color: #bebdbb; }
+#setup-ios18 .dock .pill .pmenu { width: 1.24em; height: 1.24em; }
+:is(#setup-ios17,#setup-ios18) .ph.y3 { background: #f4f4f2; }
+:is(#setup-ios17,#setup-ios18) .y3 .grp { background: #fff; border-radius: 0.36em; }
+:is(#setup-ios17,#setup-ios18) .y3 .cut { border-radius: 0 0 0.36em 0.36em; margin-bottom: 0.72em; }
+:is(#setup-ios17,#setup-ios18) .y3 .r {
+  flex-direction: row-reverse;
+  box-sizing: border-box;
+  font-size: 0.89em;
+  line-height: 1.59;
+  min-height: 2.82em;
+  padding: 0.28em 0.5em 0.28em 1.31em;
+  border-top-width: 0.1em;
+  border-top-color: #f2f2f2;
+}
+:is(#setup-ios17,#setup-ios18) .y3 .r .i { width: 1.96em; height: 1.96em; }
+:is(#setup-ios17,#setup-ios18) .y3 .slim { stroke-width: 1.25px; }
+:is(#setup-ios17,#setup-ios18) .y3 .tap > span { max-width: none; white-space: nowrap; }
+#setup-ios18 ol > li:nth-child(2) .y3 .grp.cut { padding-top: 3.55em; }
 
 /* The last sheet on iOS 17 and 18: Cancel and Add are blue words, not iOS 26's filled pill. */
 .framed .oldadd .stop,
