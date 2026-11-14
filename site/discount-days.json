@@ -65,8 +65,8 @@
       "store": "mercator",
       "from": "2026-11-16",
       "to": "2026-11-18",
-      "sentence": "Ob nakupu nad 30 evrov v petek, 13.11., ali v soboto, 14.11., dobite kupon, ki ga enkrat med ponedeljkom, 16.11., in sredo, 18.11., porabite s Pika kartico, na kateri je bil kupon izpisan, za 25 % na en izdelek, če je ostalo brez tega izdelka nad 5 evrov.",
-      "sentence_en": "When you spend over 30 euros on Friday, 13.11., or Saturday, 14.11., you get a coupon you use once between Monday, 16.11., and Wednesday, 18.11., with the Pika card the coupon was printed on, for 25% off one item if the rest without that item is over 5 euros.",
+      "sentence": "Med ponedeljkom, 16.11., in sredo, 18.11., enkrat porabite bonus kupon, ki ga dobite ob nakupu nad 30 evrov v petek, 13.11., ali v soboto, 14.11., s Pika kartico, na kateri je bil kupon izpisan, za 25 % na en izdelek, če je ostalo brez tega izdelka nad 5 evrov.",
+      "sentence_en": "Between Monday, 16.11., and Wednesday, 18.11., you use the bonus coupon once, the one you get when you spend over 30 euros on Friday, 13.11., or Saturday, 14.11., with the Pika card it was printed on, for 25% off one item if the rest without that item is over 5 euros.",
       "conditions": [
         "Kupon dobite ob nakupu nad 30 € v petek, 13. 11., ali v soboto, 14. 11. 2026.",
         "Unovčite ga enkrat med 16. 11. in 18. 11. 2026, s Pika kartico, na kateri je bil izpisan.",
@@ -79,7 +79,11 @@
       "source_quote": "Ta konec tedna, v petek, 13. 11. ali soboto, 14. 11. 2026, lahko izberete svoj popust: 25 % popusta na izbrani izdelek ob nakupu preostalega dela košarice v vrednosti nad 5 € (brez izdelka, na katerega unovčujete kupon) ali 10 % popusta na celoten nakup v vrednosti nad 30 €, ki vključuje tudi izdelke v akciji. Ta vikend pa boste prejeli še več! Ob nakupu nad 30 € vam podarimo DODATNI 25 % BONUS KUPON za 25 % popusta na izdelek po izbiri ob nakupu preostalega dela košarice v vrednosti nad 5 € (brez izdelka, na katerega unovčujete kupon), ki ga boste lahko unovčili enkrat med 16. 11. in 18. 11. 2026 s Pika kartico, na kateri je bil kupon izpisan.",
       "snippet": "research/discount-days/mercator-pika-vikend.html",
       "weekdays": [],
-      "dates": [],
+      "dates": [
+        "2026-11-16",
+        "2026-11-17",
+        "2026-11-18"
+      ],
       "when": null,
       "read_on": "2026-11-12"
     },
@@ -113,8 +117,8 @@
       "store": "spar",
       "from": "2026-11-11",
       "to": "2026-11-18",
-      "sentence": "Kupon za 20 % na jedi Spar to go so upokojenci dobili v sredo, 11.11., in ga v izbranih trgovinah porabijo od srede, 11.11., do prodaje zalog ali najkasneje do srede, 18.11., kar je prej, s Spar plus kartico z urejenim statusom upokojenca.",
-      "sentence_en": "Pensioners received a coupon for 20% off Spar to go meals on Wednesday, 11.11., and in selected shops they use it from Wednesday, 11.11., until the meals are sold out or until Wednesday, 18.11., whichever comes first, with a Spar plus card that has pensioner status.",
+      "sentence": "Na oddelku Spar to go v izbranih trgovinah kupon za 20 % na jedi, ki so ga upokojenci dobili v sredo, 11.11., porabite od srede, 11.11., do prodaje zalog ali najkasneje do srede, 18.11., kar je prej, s Spar plus kartico z urejenim statusom upokojenca.",
+      "sentence_en": "On the Spar to go counter in selected shops, the coupon for 20% off meals that pensioners received on Wednesday, 11.11., is used from Wednesday, 11.11., until the meals are sold out or until Wednesday, 18.11., whichever comes first, with a Spar plus card that has pensioner status.",
       "conditions": [
         "Kupon so upokojenci prejeli v sredo, 11. 11. 2026, ob nakupu s Spar plus kartico z urejenim statusom.",
         "Velja najkasneje do srede, 18. 11. 2026, ali do porabe zalog, kar je prej.",
@@ -126,7 +130,10 @@
       "source_quote": "V SREDO, 11. 11. 2026, ste upokojenci ob nakupu s SPAR plus kartico z urejenim statusom upokojenca v izbranih trgovinah* Spar in Interspar prejeli kupon za 20 % POPUST NA VSE JEDI na oddelku SPAR TO GO. SPAR plus kupon je možno unovčiti OD SREDE, 11. 11. 2026, do prodaje zalog oz. najkasneje DO SREDE, 18. 11. 2026, ob predložitvi SPAR plus kartice z urejenim statusom upokojenca.",
       "snippet": "research/discount-days/spar-aktualne-promocije.txt",
       "weekdays": [],
-      "dates": [],
+      "dates": [
+        "2026-11-11",
+        "2026-11-18"
+      ],
       "when": null,
       "read_on": "2026-11-12"
     },
@@ -136,8 +143,8 @@
       "store": "spar",
       "from": "2026-11-12",
       "to": "2026-11-18",
-      "sentence": "Kupon za 20 % na jedi so upokojenci dobili v sredo, 11.11., in ga od četrtka, 12.11., do srede, 18.11., porabijo v vseh restavracijah Interspar s Spar plus kartico z urejenim statusom upokojenca.",
-      "sentence_en": "Pensioners received a coupon for 20% off meals on Wednesday, 11.11., and from Thursday, 12.11., until Wednesday, 18.11., they use it in every Interspar restaurant with a Spar plus card that has pensioner status.",
+      "sentence": "Od četrtka, 12.11., do srede, 18.11., v vseh restavracijah Interspar porabite kupon za 20 % na jedi, ki so ga upokojenci dobili v sredo, 11.11., s Spar plus kartico z urejenim statusom upokojenca.",
+      "sentence_en": "From Thursday, 12.11., until Wednesday, 18.11., you use the coupon for 20% off meals in every Interspar restaurant, the coupon pensioners received on Wednesday, 11.11., with a Spar plus card that has pensioner status.",
       "conditions": [
         "Kupon so prejeli v sredo, 11. 11., v izbranih Intersparih.",
         "Uporaba od četrtka, 12. 11. 2026, do srede, 18. 11. 2026, v restavracijah Interspar, s Spar plus kartico z urejenim statusom.",
@@ -149,7 +156,10 @@
       "source_quote": "V SREDO, 11. 11., ste upokojenci ob nakupu s SPAR plus kartico z urejenim statusom upokojenca v izbranih trgovinah** Interspar prejeli kupon* za 20 % POPUST NA VSE JEDI v Restavracijah Interspar. SPAR plus kupon je možno unovčiti OD ČETRTKA, 12. 11. 2026, DO SREDE, 18. 11. 2026, ob predložitvi SPAR plus kartice z urejenim statusom upokojenca v vseh Restavracijah Interspar. Kupon se ne sešteva z ostalimi kuponi in akcijami ter z njim ni možno uveljavljati popusta na ponudbo party box, študentska kosila in naročila Wolt. Pri enem nakupu lahko unovčite en kupon. Kupon velja za nakup več različnih jedi.",
       "snippet": "research/discount-days/spar-aktualne-promocije.txt",
       "weekdays": [],
-      "dates": [],
+      "dates": [
+        "2026-11-12",
+        "2026-11-18"
+      ],
       "when": null,
       "read_on": "2026-11-12"
     }
