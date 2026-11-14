@@ -284,15 +284,7 @@ window.addEventListener('beforeinstallprompt', function (e) {
 </ol>
 </section>
 
-<!-- The same guide for iOS 26 Safari. install.js shows this section, and hides the one above, when
-     Safari on an iPhone says Version/26. Drawn from English photos of iOS 26 and 26.2 (MacRumors
-     20 Aug 2025, iDownloadBlog 17 Jun 2025, a Google developer forum post 19 Feb 2026). Nobody has
-     checked it on an iOS 26 phone. No Slovenian iOS 26 screen was seen: a Slovenian word is drawn
-     where her iOS 27 phone shows the same row; Deli and Dodaj are guesses. The photos are of dark
-     screens; the drawings are light, like the iOS 27 ones (guess). English lives in setup-lang.js.
-     Each drawing lies in the screen of a drawn iPhone (devices.min.css, the iPhone 14 Pro of
-     picturepan2/devices.css, MIT), cropped to the end of the phone the step happens at. The hand is
-     hand.png (Microsoft Fluent UI Emoji, MIT). Aleksej asked for both, 11 Nov 2026. -->
+<!-- iOS 26 (D2). Half-open fourth button is More, three dots, not a down chevron (COVERAGE half-open). No step taps it. The swipe grows the sheet and scrolls the list. Add card: X, the Add pill, and the web-app switch on. "Odpri kot spletno aplikacijo" is a guess. -->
 <section class="setup framed" id="setup-ios26" hidden>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <symbol id="i-dots" viewBox="0 0 24 24"><path stroke-width="3" d="M5 12h.01M12 12h.01M19 12h.01"/></symbol>
@@ -322,13 +314,7 @@ window.addEventListener('beforeinstallprompt', function (e) {
 <p class="where">Odpri to stran v Safariju. Če je stran odprta v sporočilu, tapni ikono Safari.</p>
 <ol>
 
-<!-- 1. the bottom of Safari in the Compact layout, which iOS 26 starts with: three pieces of glass
-     floating over the page: a round back button, the address, a round button with three dots.
-     The page runs under them to the bottom of the screen. The sign at the left of the address is
-     the photos' page sign, not the three lines of iOS 27.
-     The share arrow is not in this bar; the hand points at the three dots. In the Bottom layout
-     the share arrow is in the bar, as on iOS 27; the small line says so. -->
-<li>
+<li class="m-tap" data-hold="2800">
 <p class="say">Tapni tri pike spodaj desno.</p>
 <p class="aside">Če je v spodnji vrstici puščica iz kvadratka, tapni njo in preskoči korak 2.</p>
 <div class="pic d y" aria-hidden="true"><div class="cv fr dn"><div class="fone"><div class="inner"><div class="device device-iphone-14-pro"><div class="device-frame"><div class="device-screen"></div></div><div class="device-stripe"></div><div class="device-header"></div><div class="device-sensors"></div><div class="device-btns"></div><div class="device-power"></div></div></div></div>
@@ -344,13 +330,7 @@ window.addEventListener('beforeinstallprompt', function (e) {
 </div></div></div>
 </li>
 
-<!-- 2. the menu that grows out of the three dots (photo of 20 Aug 2025): a glass card where the bar
-     was. Its first row has the share arrow; the hand points at it. Drawn: that row, the new-tab row
-     under the thin line, and the two signs at the foot. Left out: the two bookmark rows (one is the
-     name of the owner's own folder, the other's Slovenian is not known) and the private-tab row.
-     No Slovenian photo was seen, so every word here is a guess: Deli, Nov zavihek, Zaznamki,
-     Vsi zavihki. -->
-<li>
+<li class="m-tap" data-hold="2800">
 <p class="say">Tapni vrstico s puščico iz kvadratka.</p>
 <p class="aside">Je prva vrstica v meniju, ki se odpre.</p>
 <div class="pic d y" aria-hidden="true"><div class="cv fr dn"><div class="fone"><div class="inner"><div class="device device-iphone-14-pro"><div class="device-frame"><div class="device-screen"></div></div><div class="device-stripe"></div><div class="device-header"></div><div class="device-sensors"></div><div class="device-btns"></div><div class="device-power"></div></div></div></div>
@@ -369,18 +349,12 @@ window.addEventListener('beforeinstallprompt', function (e) {
 </div></div></div>
 </li>
 
-<!-- 3. the share sheet (photo, iOS 26.2): a rounded sheet floating over the dimmed page, with the
-     page's card, the apps, then a row of four round buttons. The hand points at the last one, the
-     down arrow. The first three (copy, bookmark, reading list) are drawn without their words:
-     their Slovenian was not seen. The row of people and the other apps are left out, as in the
-     iOS 27 drawing. The photos show no line at the bottom of the screen over a sheet, so steps 3
-     and 4 draw none. -->
-<li>
-<p class="say">Tapni Prikaži več.</p>
-<p class="aside">Je zadnji okrogli gumb v vrstici, s puščico navzdol.</p>
+<li data-hold="2400">
+<p class="say">Povleci s prstom navzgor.</p>
 <div class="pic d y" aria-hidden="true"><div class="cv fr dn"><div class="fone"><div class="inner"><div class="device device-iphone-14-pro"><div class="device-frame"><div class="device-screen"></div></div><div class="device-stripe"></div><div class="device-header"></div><div class="device-sensors"></div><div class="device-btns"></div><div class="device-power"></div></div></div></div>
-<div class="ph bot dim z3">
-  <div class="sh y2">
+<div class="ph bot dim z3 m-grow">
+  <div class="sh y2 m-sheet">
+    <div class="people"></div>
     <div class="pv">
       <i class="ic4"><svg><use href="#a-kin"/></svg></i>
       <div class="n"><span>KinDeals</span><small>kindeals.vercel.app</small><b class="opt"><span>Možnosti</span><svg class="i"><use href="#i-fwd"/></svg></b></div>
@@ -388,23 +362,22 @@ window.addEventListener('beforeinstallprompt', function (e) {
     <div class="r four">
       <span class="ap"><i class="ic"><svg><use href="#a26-air"/></svg></i><span>AirDrop</span></span>
       <span class="ap"><i class="ic"><svg><use href="#a26-msg"/></svg></i><span>Sporočila</span></span>
+      <span class="ap"><i class="ic"><svg><use href="#a27-mail"/></svg></i><span>Pošta</span></span>
+      <span class="ap"><i class="ic"><svg><use href="#a27-notes"/></svg></i><span>Zapiski</span></span>
     </div>
-    <div class="r four acts">
+    <div class="r four acts half">
       <span class="ap"><i class="chev"><svg class="i"><use href="#i-copy"/></svg></i></span>
       <span class="ap"><i class="chev"><svg class="i"><use href="#i-ribbon"/></svg></i></span>
       <span class="ap"><i class="chev"><svg class="i"><use href="#i-glasses"/></svg></i></span>
-      <span class="ap tap"><i class="chev"><svg class="i"><use href="#i26-down"/></svg></i><span>Prikaži več</span></span>
+      <span class="ap"><i class="chev"><svg class="i"><use href="#i-dots"/></svg></i></span>
     </div>
+    <div class="m-scroll"><div class="m-list"><div class="sp"></div><div class="grp"><div class="r addrow"><svg class="i"><use href="#i-plus"/></svg><span>Dodaj na domači zaslon</span></div></div></div><div class="m-hand"></div><div class="m-from"></div><div class="m-to"></div></div>
   </div>
 </div></div></div>
 </li>
 
-<!-- 4. the same sheet, opened and scrolled: it fills the screen, with grey boxes of rows inside it.
-     The photos show the same rows in the same order as her iOS 27 list (favourites, quick note,
-     find on page, the home screen row, then markup and print), so the words are the iOS 27 ones.
-     Each row is one line, as in the photos. -->
-<li>
-<p class="say">Pomakni se navzdol. Tapni Dodaj na domači zaslon.</p>
+<li class="m-tap" data-hold="2800">
+<p class="say">Tapni Dodaj na domači zaslon.</p>
 <p class="aside">Je zadnja vrstica v sivem okvirju, pod Poišči na strani.</p>
 <div class="pic d y" aria-hidden="true"><div class="cv fr dn"><div class="fone"><div class="inner"><div class="device device-iphone-14-pro"><div class="device-frame"><div class="device-screen"></div></div><div class="device-stripe"></div><div class="device-header"></div><div class="device-sensors"></div><div class="device-btns"></div><div class="device-power"></div></div></div></div>
 <div class="ph bot dim z4">
@@ -423,18 +396,12 @@ window.addEventListener('beforeinstallprompt', function (e) {
 </div></div></div>
 </li>
 
-<!-- 5. the top of the last sheet (photos of 17 Jun and 20 Aug 2025): a round glass close button, the
-     title, and the blue button at the top right; under them a band with the icon, its name and
-     its address. The hand points at the blue button. The title is written as the row she just
-     tapped, and the button as Dodaj (guess: not seen in Slovenian). The web-app switch under the
-     band is on in both photos; its Slovenian name was not seen, so the drawing ends above it:
-     the phone fades into the page under the band. The status bar is left out. -->
-<li>
+<li class="m-tap" data-hold="2800">
 <p class="say">Na koncu tapni Dodaj zgoraj desno.</p>
 <p class="aside">Je moder gumb.</p>
 <div class="pic d y" aria-hidden="true"><div class="cv fr up"><div class="fone"><div class="inner"><div class="device device-iphone-14-pro"><div class="device-frame"><div class="device-screen"></div></div><div class="device-stripe"></div><div class="device-header"></div><div class="device-sensors"></div><div class="device-btns"></div><div class="device-power"></div></div></div></div>
-<div class="ph top dim z5">
-  <div class="sh">
+<div class="ph top dim z5 m-card">
+  <div class="sh m-panel">
     <div class="hd">
       <span class="gl rnd"><svg class="i"><use href="#i-x"/></svg></span>
       <b>Dodaj na domači zaslon</b>
@@ -444,8 +411,13 @@ window.addEventListener('beforeinstallprompt', function (e) {
       <i class="ic4"><svg><use href="#a-kin"/></svg></i>
       <div class="n"><span>KinDeals<i class="clr"><svg class="i"><use href="#i-x"/></svg></i></span><small>https://kindeals.vercel.app/</small></div>
     </div>
+    <div class="web"><span>Odpri kot spletno aplikacijo</span><i></i></div>
   </div>
 </div></div></div>
+</li>
+<li data-hold="2000">
+<p class="say">Tapni ikono KinDeals.</p>
+<div class="pic d y" aria-hidden="true"><div class="cv"><div class="ph home m-pop"><div class="m-icon"></div><span class="kd">KinDeals</span></div></div></div>
 </li>
 
 </ol>

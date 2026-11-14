@@ -46,9 +46,11 @@ const KD_TEXT = {
     i26a1: "Če je v spodnji vrstici puščica iz kvadratka, tapni njo in preskoči korak 2.",
     i26s2: "Tapni vrstico s puščico iz kvadratka.",
     i26a2: "Je prva vrstica v meniju, ki se odpre.",
-    i26a3: "Je zadnji okrogli gumb v vrstici, s puščico navzdol.",
     i26s5: "Na koncu tapni Dodaj zgoraj desno.",
     i26a5: "Je moder gumb.",
+    // iOS 26 swipe, the home-screen tap and the icon reuse i27n3, i27n4 and i27n6 (the same words).
+    // Open as Web App was not seen in Slovenian (guess).
+    i26web: "Odpri kot spletno aplikacijo",
     // iOS 17, iOS 18 and the fallback (index.html). Slovenian and English only; other languages keep the Slovenian.
     a1row: "Je na sredini spodnje vrstice. Znak ob naslovu odpre drug meni.",
     fbA1: "Če je ni v spodnji vrstici, tapni tri pike spodaj desno in nato vrstico s puščico iz kvadratka.",
@@ -110,9 +112,9 @@ const KD_TEXT = {
     i26a1: "If the bottom row has an arrow coming out of a square, tap that and skip step 2.",
     i26s2: "Tap the row with the arrow coming out of a square.",
     i26a2: "It is the first row of the menu that opens.",
-    i26a3: "It is the last round button in the row, with a down arrow.",
     i26s5: "Last, tap Add at the top right.",
     i26a5: "It is the blue button.",
+    i26web: "Open as Web App",
     a1row: "It is in the middle of the bottom row. The sign by the address opens a different menu.",
     fbA1: "If it is not in the bottom row, tap the three dots at the bottom right and then the row with the arrow coming out of a square.",
     fbA2: "If you see Show More, tap that first.",
