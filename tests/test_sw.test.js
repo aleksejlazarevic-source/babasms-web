@@ -9,6 +9,7 @@ const test = require('node:test');
 
 const { SITE, localAssetRefs, siteFileExists } = require('./helpers/site-paths');
 const { assertSwShellPaths } = require('./helpers/site-shell-assert');
+const { SHELL_FILES } = require('./helpers/published-shell');
 
 const SW_PATH = path.join(SITE, 'sw.js');
 const INDEX_PATH = path.join(SITE, 'index.html');
@@ -53,15 +54,6 @@ function shellPathsFromIndex() {
 function normalizeSitePath(p) {
   return p.replace(/^\//, '').split('?')[0];
 }
-
-/* Same list and order as babasms/sitepublish.py SHELL_FILES. sw.js is not hashed. */
-const SHELL_FILES = [
-  'index.html', 'deals.html', 'preview.html', 'offline.html', 'deals.js',
-  'price.js', 'picks.js', 'place.js', 'look.css', 'motion.css',
-  'install.js', 'setup-lang.js', 'sw-register.js', 'manifest.webmanifest',
-  'discount-days.js',
-  'mine-list.js',
-];
 
 function shellCacheName() {
   const hash = crypto.createHash('sha256');

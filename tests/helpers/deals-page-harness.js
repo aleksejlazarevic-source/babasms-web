@@ -4,7 +4,10 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 
-const DEALS = path.join(__dirname, '../../site/deals.js');
+const SITE = path.join(__dirname, '../../site');
+const DEALS = path.join(SITE, 'deals.js');
+/* deals.html loads these, in this order, before deals.js. */
+const BEFORE_DEALS = ['price.js', 'picks.js', 'place.js'];
 
 function makeNode(tag) {
   const node = {
@@ -38,7 +41,9 @@ async function runDealsStart(options) {
     elements.set(id, el);
   }
 
+  const head = makeNode('head');
   const document = {
+    head,
     getElementById(id) {
       return elements.get(id) || null;
     },
@@ -84,7 +89,10 @@ async function runDealsStart(options) {
   context.globalThis = context;
 
   vm.createContext(context);
-  vm.runInContext(fs.readFileSync(DEALS, 'utf8'), context);
+  for (const name of BEFORE_DEALS) {
+    vm.runInContext(fs.readFileSync(path.join(SITE, name), 'utf8'), context, { filename: name });
+  }
+  vm.runInContext(fs.readFileSync(DEALS, 'utf8'), context, { filename: 'deals.js' });
 
   for (let i = 0; i < 30; i += 1) {
     await new Promise((resolve) => setImmediate(resolve));
