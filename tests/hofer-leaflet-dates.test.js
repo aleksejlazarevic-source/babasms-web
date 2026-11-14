@@ -4,8 +4,9 @@ var fs = require('fs');
 var path = require('path');
 var api = require(path.join(__dirname, '../site/deals.js'));
 
-/* Hofer KT46, checked 12 Nov 2026. The page must use each line's own dates. */
-var BRIEF = path.join(__dirname, '../t/hofer/2026-11-12/brief-sl.txt');
+/* Hofer KT46, checked 12 Nov 2026. The page must use each line's own dates.
+   Fixture, not t/hofer: a publish may rewrite the live brief. */
+var BRIEF = path.join(__dirname, 'fixtures/hofer/2026-11-12/brief-sl.txt');
 
 var FROM_4 = [
   'VANILJEVI ROGLJIČKI, 400 g',

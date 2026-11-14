@@ -28,6 +28,16 @@ const KD_TEXT = {
     a1: "Je na sredini spodnje vrstice. Tri črte ob naslovu odprejo drug meni.",
     s2: "Tapni Prikaži več.",
     a2: "Je spodnja vrstica, s puščico navzdol.",
+    i27s1: "Tapni tri črte ob naslovu.",
+    i27a1: "V meniju tapni Deljenje.",
+    i27s2: "Vidiš Prikaži manj.",
+    i27a2: "Je desni okrogli gumb, s puščico navzgor.",
+    i27n1: "Tapni puščico iz kvadratka na sredini spodnje vrstice.",
+    i27n1a: "Tri črte ob naslovu odprejo drug meni.",
+    i27n2: "Tapni gumb Prikaži več.",
+    i27n3: "Povleci s prstom navzgor.",
+    i27n4: "Tapni Dodaj na domači zaslon.",
+    i27n6: "Tapni ikono KinDeals.",
     s3: "Pomakni se navzdol. Tapni Dodaj na domači zaslon.",
     a3: "Je zadnja vrstica v sivem okvirju, pod Poišči na strani.",
     s4: "Na koncu tapni gumb zgoraj desno.",
@@ -36,9 +46,16 @@ const KD_TEXT = {
     i26a1: "Če je v spodnji vrstici puščica iz kvadratka, tapni njo in preskoči korak 2.",
     i26s2: "Tapni vrstico s puščico iz kvadratka.",
     i26a2: "Je prva vrstica v meniju, ki se odpre.",
-    i26a3: "Je zadnji okrogli gumb v vrstici, s puščico navzdol.",
     i26s5: "Na koncu tapni Dodaj zgoraj desno.",
     i26a5: "Je moder gumb.",
+    // iOS 26 swipe, the home-screen tap and the icon reuse i27n3, i27n4 and i27n6 (the same words).
+    // Open as Web App was not seen in Slovenian (guess).
+    i26web: "Odpri kot spletno aplikacijo",
+    // iOS 17, iOS 18 and the fallback (index.html). Slovenian and English only; other languages keep the Slovenian.
+    a1row: "Je na sredini spodnje vrstice. Znak ob naslovu odpre drug meni.",
+    fbA1: "Če je ni v spodnji vrstici, tapni tri pike spodaj desno in nato vrstico s puščico iz kvadratka.",
+    fbA2: "Če vidiš Prikaži več, tapni to najprej.",
+    cancel: "Prekliči",
     add: "Dodaj",
     share: "Deli",
     // the rest of the three-dots menu; Slovenian not seen on a phone (guess), English from the photo of 20 Aug 2025
@@ -48,6 +65,11 @@ const KD_TEXT = {
     options: "Možnosti",
     messages: "Sporočila",
     showMore: "Prikaži več",
+    copy: "Kopiraj",
+    addToBookmarks: "Dodaj med zaznamke",
+    readingList: "Dodaj na bralni seznam",
+    viewLess: "Prikaži manj",
+    addBookmarkTo: "Dodaj zaznamek v",
     addFavorites: "Dodaj med priljubljene",
     quickNote: "Dodaj v hitri zapisek",
     find: ["Poišči na strani", "Najdi na strani"],
@@ -55,7 +77,13 @@ const KD_TEXT = {
     markup: "Označevanje",
     print: "Natisni",
     menuHint: "Tapni ⋮ zgoraj desno. Nato tapni Namesti aplikacijo.",
-    installNote: "Doda ikono KinDeals na zaslon. Nato tapni ikono."
+    menuDots: "Tapni ⋮ zgoraj desno.",
+    menuInstall: "Nato tapni Namesti aplikacijo.",
+    installApp: "Namesti aplikacijo",
+    installNote: "Doda ikono KinDeals na zaslon. Nato tapni ikono.",
+    // The pensioner tile on deals.html. The page writes these Slovenian words; this file swaps them.
+    pensionerDays: "Dnevi za upokojence",
+    back: "Nazaj"
   },
   en: {
     pitch: "All your discounts, in one place.",
@@ -67,6 +95,16 @@ const KD_TEXT = {
     a1: "It is in the middle of the bottom row. The three lines by the address open a different menu.",
     s2: "Tap Show More.",
     a2: "It is the bottom row, with a down arrow.",
+    i27s1: "Tap the three lines by the address.",
+    i27a1: "In the menu, tap Share.",
+    i27s2: "You see View Less.",
+    i27a2: "It is the round button on the right, with an up arrow.",
+    i27n1: "Tap the arrow coming out of a square in the middle of the bottom row.",
+    i27n1a: "The three lines by the address open a different menu.",
+    i27n2: "Tap the Show More button.",
+    i27n3: "Swipe up with your finger.",
+    i27n4: "Tap Add to Home Screen.",
+    i27n6: "Tap the KinDeals icon.",
     s3: "Scroll down. Tap Add to Home Screen.",
     a3: "It is the last row in the grey box, under Find on Page.",
     s4: "Last, tap the button at the top right.",
@@ -74,9 +112,13 @@ const KD_TEXT = {
     i26a1: "If the bottom row has an arrow coming out of a square, tap that and skip step 2.",
     i26s2: "Tap the row with the arrow coming out of a square.",
     i26a2: "It is the first row of the menu that opens.",
-    i26a3: "It is the last round button in the row, with a down arrow.",
     i26s5: "Last, tap Add at the top right.",
     i26a5: "It is the blue button.",
+    i26web: "Open as Web App",
+    a1row: "It is in the middle of the bottom row. The sign by the address opens a different menu.",
+    fbA1: "If it is not in the bottom row, tap the three dots at the bottom right and then the row with the arrow coming out of a square.",
+    fbA2: "If you see Show More, tap that first.",
+    cancel: "Cancel",
     add: "Add",
     share: "Share",
     newTab: "New Tab",
@@ -88,6 +130,11 @@ const KD_TEXT = {
     options: "Options",
     messages: "Messages",
     showMore: "Show More",
+    copy: "Copy",
+    addToBookmarks: "Add to Bookmarks",
+    readingList: "Add to Reading List",
+    viewLess: "View Less",
+    addBookmarkTo: "Add Bookmark to",
     addFavorites: "Add to Favourites",
     quickNote: "Add to Quick Note",
     find: "Find on Page",
@@ -95,7 +142,12 @@ const KD_TEXT = {
     markup: "Markup",
     print: "Print",
     menuHint: "Tap ⋮ at the top right. Then tap Install app.",
-    installNote: "Adds the KinDeals icon to your screen. Then tap the icon."
+    menuDots: "Tap ⋮ at the top right.",
+    menuInstall: "Then tap Install app.",
+    installApp: "Install app",
+    installNote: "Adds the KinDeals icon to your screen. Then tap the icon.",
+    pensionerDays: "Pensioner days",
+    back: "Back"
   },
   de: {
     pitch: "Alle deine Rabatte an einem Ort.",
@@ -1240,4 +1292,13 @@ const KD_TEXT = {
     }
   }
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
+
+  window.KinDealsLang = {
+    lang: lang,
+    text: function (slovenian) {
+      var key = index.get(norm(slovenian));
+      if (!key || to[key] == null) return slovenian;
+      return [].concat(to[key])[0];
+    }
+  };
 })();

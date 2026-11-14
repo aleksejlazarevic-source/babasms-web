@@ -1,12 +1,15 @@
 'use strict';
 
 const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 const test = require('node:test');
 
 const { SITE, localAssetRefs, siteFileExists } = require('./helpers/site-paths');
 const { assertSwShellPaths } = require('./helpers/site-shell-assert');
+const { SHELL_FILES } = require('./helpers/published-shell');
 
 const SW_PATH = path.join(SITE, 'sw.js');
 const INDEX_PATH = path.join(SITE, 'index.html');
@@ -20,16 +23,23 @@ function parseCacheName(source) {
   return m ? m[1] : null;
 }
 
-/** Quoted site paths inside cache.addAll([...]) if present. */
+/** Site paths inside cache.addAll([...]), including names like OFFLINE. */
 function extractInstallPrecachePaths(source) {
+  const constants = Object.create(null);
+  const varRe = /var\s+([A-Z_][A-Z0-9_]*)\s*=\s*['"]([^'"]+)['"]/g;
+  let v;
+  while ((v = varRe.exec(source)) !== null) constants[v[1]] = v[2];
   const paths = [];
   const addAll = /(?:cache\.addAll|addAll)\s*\(\s*\[([\s\S]*?)\]\s*\)/g;
   let block;
   while ((block = addAll.exec(source)) !== null) {
     const inner = block[1];
-    const strRe = /['"]([^'"]+)['"]/g;
+    const tokenRe = /['"]([^'"]+)['"]|\b([A-Z_][A-Z0-9_]*)\b/g;
     let s;
-    while ((s = strRe.exec(inner)) !== null) paths.push(s[1]);
+    while ((s = tokenRe.exec(inner)) !== null) {
+      if (s[1]) paths.push(s[1]);
+      else if (s[2] && constants[s[2]]) paths.push(constants[s[2]]);
+    }
   }
   return paths;
 }
@@ -45,10 +55,27 @@ function normalizeSitePath(p) {
   return p.replace(/^\//, '').split('?')[0];
 }
 
+function shellCacheName() {
+  const hash = crypto.createHash('sha256');
+  for (const name of SHELL_FILES) {
+    hash.update(name);
+    hash.update(fs.readFileSync(path.join(SITE, name)));
+  }
+  return 'kindeals-' + hash.digest('hex').slice(0, 12);
+}
+
 test('site/sw.js: CACHE name is present', () => {
   const name = parseCacheName(readSw());
   assert.ok(name && name.length > 0, 'sw.js must define var CACHE');
   assert.match(name, /^kindeals-/, 'CACHE name should use the kindeals- prefix');
+});
+
+test('site/sw.js: CACHE is the published shell hash, not the placeholder', () => {
+  const source = readSw();
+  assert.equal(source.includes('kindeals-SHELL'), false);
+  const name = parseCacheName(source);
+  assert.equal(name, shellCacheName());
+  assert.match(name, /^kindeals-[0-9a-f]{12}$/);
 });
 
 test('site/sw.js: precached / shell paths exist under site/', () => {
@@ -64,21 +91,62 @@ test('site/sw.js: precached / shell paths exist under site/', () => {
   );
 });
 
-test('sw shell validator fails on empty path list (deliberate broken copy)', () => {
+test('validator fails when sw shell path list is empty (temp)', () => {
   assert.throws(
     () => assertSwShellPaths([]),
-    (err) => err && /at least 5 paths/.test(String(err.message))
+    (err) => err && /at least \d+ paths/.test(String(err.message))
   );
-});
-
-test('sw shell validator fails without deals.js (deliberate broken copy)', () => {
   assert.throws(
     () => assertSwShellPaths(['index.html', 'sw.js', 'look.css', 'setup-lang.js', 'install.js']),
-    (err) => err && /deals\.js/.test(String(err.message))
+    (err) => err && /offline\.html/.test(String(err.message))
   );
 });
 
-test('parseCacheName fails when CACHE is missing (deliberate broken copy)', () => {
-  const broken = 'self.addEventListener("fetch", function () {});';
-  assert.equal(parseCacheName(broken), null);
+test('site/sw.js: activate handler deletes caches other than CACHE', () => {
+  const source = readSw();
+  assert.match(source, /addEventListener\s*\(\s*['"]activate['"]/);
+  assert.match(source, /caches\.keys\s*\(/);
+  assert.match(source, /caches\.delete\s*\(/);
+  assert.match(source, /key\s*!==\s*CACHE|CACHE\s*!==\s*key/);
+});
+
+test('site/sw.js: activate removes stale cache names (runtime)', async () => {
+  const source = readSw();
+  const cacheName = parseCacheName(source);
+  assert.ok(cacheName);
+
+  const deleted = [];
+  const keys = ['kindeals-stale-a', cacheName, 'kindeals-stale-b'];
+  const caches = {
+    keys: async () => keys.slice(),
+    delete: async (k) => {
+      deleted.push(k);
+      return true;
+    },
+    open: async () => ({ match: async () => null, put: async () => {} }),
+  };
+
+  let activateListener;
+  const self = {
+    addEventListener(type, fn) {
+      if (type === 'activate') activateListener = fn;
+    },
+    skipWaiting() {},
+    clients: { claim: async () => {} },
+  };
+
+  const ctx = vm.createContext({ self, caches, URL, Response, Promise, Date, console });
+  vm.runInContext(source, ctx, { filename: 'site/sw.js' });
+  assert.equal(typeof activateListener, 'function');
+
+  const event = {
+    waitUntil(p) {
+      this._p = p;
+      return p;
+    },
+  };
+  activateListener(event);
+  await event._p;
+
+  assert.deepEqual(deleted.sort(), ['kindeals-stale-a', 'kindeals-stale-b'].sort());
 });

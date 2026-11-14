@@ -1,0 +1,247 @@
+{
+  "read_on": "2026-11-13",
+  "covers_from": "2026-11-12",
+  "covers_to": "2027-12-31",
+  "law": {
+    "closed_sundays_and_holidays": true,
+    "source_url": "https://pisrs.si/pregledPredpisa?id=ZAKO5327",
+    "source_quote": "Trgovec ne sme določiti obratovalnega časa prodajaln ob nedeljah in z zakonom določenih dela prostih dnevih.",
+    "snippet": "research/closed-days/zt-1-npb3-2026-11-13.txt",
+    "read_on": "2026-11-13",
+    "exceptions": "8. člen ZT-1, četrti, peti in šesti odstavek.",
+    "exceptions_quote": "Ne glede na prejšnji odstavek se lahko obratovalni čas prodajalne s površino prodajnega prostora do 200 kvadratnih metrov na bencinskih servisih, mejnih prehodih, pristaniščih, namenjenih za javni promet, železniških in avtobusnih postajah in v bolnišnicah, določi brez omejitev. (5) Ne glede na tretji odstavek tega člena se lahko obratovalni čas prodajalne na mednarodnih letališčih, turistično informacijskih centrih in muzejih določi brez omejitev. (6) Ne glede na tretji odstavek tega člena se lahko obratovalni čas prodajalne s površino prodajnega prostora do 200 kvadratnih metrov določi brez omejitev, če delo ob nedeljah in z zakonom določenih dela prostih dnevih v svojih prodajalnah opravlja izključno oseba, ki je kot samostojni podjetnik posameznik nosilec trgovinske dejavnosti oziroma njegov prokurist ali zakoniti zastopnik oziroma prokurist pravne osebe, ki opravlja trgovinsko dejavnost."
+  },
+  "holidays": {
+    "source_url": "https://pisrs.si/pregledPredpisa?id=ZAKO865",
+    "source_quote": "Prazniki Republike Slovenije iz prejšnjega odstavka so dela prosti dnevi, razen praznikov dan Primoža Trubarja, dan Triglava, združitev prekmurskih Slovencev z matičnim narodom, vrnitev Primorske k matični domovini, dan slovenskega športa, dan suverenosti, dan znanosti in dan Rudolfa Maistra, ki niso dela prosti dnevi. 2. člen Dela prosti dnevi v Republiki Sloveniji so tudi: - velikonočna nedelja in ponedeljek, velika noč - binkoštna nedelja, binkošti - 15. avgust, Marijino vnebovzetje - 31. oktober, dan reformacije - 25. december, božič.",
+    "snippet": "research/closed-days/zpdpd-npb11-2026-11-13.txt",
+    "read_on": "2026-11-13",
+    "days": [
+      {
+        "date": "2026-01-01",
+        "name": "novo leto",
+        "computed": false
+      },
+      {
+        "date": "2026-01-02",
+        "name": "novo leto",
+        "computed": false
+      },
+      {
+        "date": "2026-02-08",
+        "name": "Prešernov dan, slovenski kulturni praznik",
+        "computed": false
+      },
+      {
+        "date": "2026-04-05",
+        "name": "velikonočna nedelja",
+        "computed": true
+      },
+      {
+        "date": "2026-04-06",
+        "name": "velikonočni ponedeljek",
+        "computed": true
+      },
+      {
+        "date": "2026-04-27",
+        "name": "dan upora proti okupatorju",
+        "computed": false
+      },
+      {
+        "date": "2026-05-01",
+        "name": "praznik dela",
+        "computed": false
+      },
+      {
+        "date": "2026-05-02",
+        "name": "praznik dela",
+        "computed": false
+      },
+      {
+        "date": "2026-05-24",
+        "name": "binkoštna nedelja",
+        "computed": true
+      },
+      {
+        "date": "2026-06-25",
+        "name": "dan državnosti",
+        "computed": false
+      },
+      {
+        "date": "2026-08-15",
+        "name": "Marijino vnebovzetje",
+        "computed": false
+      },
+      {
+        "date": "2026-10-31",
+        "name": "dan reformacije",
+        "computed": false
+      },
+      {
+        "date": "2026-11-01",
+        "name": "dan spomina na mrtve",
+        "computed": false
+      },
+      {
+        "date": "2026-12-25",
+        "name": "božič",
+        "computed": false
+      },
+      {
+        "date": "2026-12-26",
+        "name": "dan samostojnosti in enotnosti",
+        "computed": false
+      },
+      {
+        "date": "2027-01-01",
+        "name": "novo leto",
+        "computed": false
+      },
+      {
+        "date": "2027-01-02",
+        "name": "novo leto",
+        "computed": false
+      },
+      {
+        "date": "2027-02-08",
+        "name": "Prešernov dan, slovenski kulturni praznik",
+        "computed": false
+      },
+      {
+        "date": "2027-03-28",
+        "name": "velikonočna nedelja",
+        "computed": true
+      },
+      {
+        "date": "2027-03-29",
+        "name": "velikonočni ponedeljek",
+        "computed": true
+      },
+      {
+        "date": "2027-04-27",
+        "name": "dan upora proti okupatorju",
+        "computed": false
+      },
+      {
+        "date": "2027-05-01",
+        "name": "praznik dela",
+        "computed": false
+      },
+      {
+        "date": "2027-05-02",
+        "name": "praznik dela",
+        "computed": false
+      },
+      {
+        "date": "2027-05-16",
+        "name": "binkoštna nedelja",
+        "computed": true
+      },
+      {
+        "date": "2027-06-25",
+        "name": "dan državnosti",
+        "computed": false
+      },
+      {
+        "date": "2027-08-15",
+        "name": "Marijino vnebovzetje",
+        "computed": false
+      },
+      {
+        "date": "2027-10-31",
+        "name": "dan reformacije",
+        "computed": false
+      },
+      {
+        "date": "2027-11-01",
+        "name": "dan spomina na mrtve",
+        "computed": false
+      },
+      {
+        "date": "2027-12-25",
+        "name": "božič",
+        "computed": false
+      },
+      {
+        "date": "2027-12-26",
+        "name": "dan samostojnosti in enotnosti",
+        "computed": false
+      }
+    ]
+  },
+  "stores": [],
+  "not_found": [
+    {
+      "store": "lidl",
+      "date": "2026-12-24",
+      "looked_at": "https://www.lidl.si/c/informacije-odpiralni-casi/s10022069",
+      "read_on": "2026-11-13"
+    },
+    {
+      "store": "lidl",
+      "date": "2026-12-31",
+      "looked_at": "https://www.lidl.si/c/informacije-odpiralni-casi/s10022069",
+      "read_on": "2026-11-13"
+    },
+    {
+      "store": "tus",
+      "date": "2026-12-24",
+      "looked_at": "https://www.tus.si/novice/",
+      "read_on": "2026-11-13"
+    },
+    {
+      "store": "tus",
+      "date": "2026-12-31",
+      "looked_at": "https://www.tus.si/novice/",
+      "read_on": "2026-11-13"
+    },
+    {
+      "store": "hofer",
+      "date": "2026-12-24",
+      "looked_at": "https://www.hofer.si/iskalnik-trgovin",
+      "read_on": "2026-11-13"
+    },
+    {
+      "store": "hofer",
+      "date": "2026-12-31",
+      "looked_at": "https://www.hofer.si/iskalnik-trgovin",
+      "read_on": "2026-11-13"
+    },
+    {
+      "store": "spar",
+      "date": "2026-12-24",
+      "looked_at": "https://www.spar.si/trgovine",
+      "read_on": "2026-11-13"
+    },
+    {
+      "store": "spar",
+      "date": "2026-12-31",
+      "looked_at": "https://www.spar.si/trgovine",
+      "read_on": "2026-11-13"
+    },
+    {
+      "store": "leclerc",
+      "date": "2026-12-24",
+      "looked_at": "https://www.e-leclerc.si/category/novice/vse-novice",
+      "read_on": "2026-11-13"
+    },
+    {
+      "store": "leclerc",
+      "date": "2026-12-31",
+      "looked_at": "https://www.e-leclerc.si/category/novice/vse-novice",
+      "read_on": "2026-11-13"
+    },
+    {
+      "store": "mercator",
+      "date": "2026-12-24",
+      "looked_at": "https://www.mercator.si/obvestila/",
+      "read_on": "2026-11-13"
+    },
+    {
+      "store": "mercator",
+      "date": "2026-12-31",
+      "looked_at": "https://www.mercator.si/obvestila/",
+      "read_on": "2026-11-13"
+    }
+  ]
+}

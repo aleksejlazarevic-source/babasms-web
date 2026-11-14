@@ -13,7 +13,8 @@ const test = require('node:test');
 const snapshot = require('./tus-a45-price-dates.json');
 const NOTE = snapshot.note;
 const OLD_NOTE = 'Vse cene veljajo s kartico Tuš klub, v oklepaju je prejšnja cena.';
-const ROOT = path.join(__dirname, '..', 't', 'tus');
+/* Fixture briefs, not t/tus: a publish may rewrite the live day files. */
+const ROOT = path.join(__dirname, 'fixtures', 'tus-a45');
 
 function readBrief(day) {
   return fs.readFileSync(path.join(ROOT, day, 'brief-sl.txt'), 'utf8').replace(/\r\n/g, '\n');
