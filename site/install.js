@@ -456,6 +456,10 @@
       if (all[k].hasAttribute && all[k].hasAttribute('hidden') && all[k].style) all[k].style.animation = 'none';
     }
     addClass(section, 'guide-loop');
+    /* The KinDeals line under the film scrolls. A keyboard needs a stop there.
+       Android never starts this loop. */
+    var under = document.querySelector && document.querySelector('.pitch-scroll');
+    if (under && under.setAttribute) under.setAttribute('tabindex', '0');
     var root = document.documentElement;
     function pin() {
       if (!root || !root.style) return;
@@ -482,27 +486,25 @@
       beforeInstallPrompt: false
     };
     var choice = installChoice(env);
-    if (choice.kind === 'desktop') {
-      return;
-    }
-
     if (choice.kind === 'installed') {
       whenReady(function () { hide(findDom().setup); hide(findGo().section); hide(findAndroid()); });
       return;
     }
 
-    if (choice.kind === 'ios') {
+    /* Android keeps the one install button. Every other visitor (desktop,
+       iPad, any iPhone) gets the iPhone iOS 27 steps with their pictures, so
+       the moving guide has a real box. A per-browser list or a hidden step-1
+       picture would skip the film. */
+    if (choice.kind !== 'android') {
       whenReady(function () {
         hide(findAndroid());
-        var dom = findDom(choice.iosSet);
-        if (!choice.showGuide) { hide(dom.setup); return; }
-        applyIos(dom, choice.guide);
-        if (choice.guide && choice.guide.browser === 'safari') startGuideLoop(dom);
+        hide(findGo().section);
+        startGuideLoop(findDom('27'));
       });
       return;
     }
 
-    // android and other non-iOS phones: one install button, always shown
+    // Android: one install button, always shown
     var deferred = window.__kdInstallPrompt || null, go = null, timer = null;
 
     /* Full Chrome on Android. A WebView, another browser, or Gmail's in-app tab is not. */
