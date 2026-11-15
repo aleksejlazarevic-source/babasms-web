@@ -11,24 +11,24 @@
       iphone: 'Tapni puščico iz kvadratka ob naslovu, na desni.',
       ipad: 'Tapni puščico iz kvadratka zgoraj desno.',
       aside: 'Odpre se seznam.',
-      rest: ['Tapni Dodaj na domači zaslon.', 'Ime pusti KinDeals. Tapni Dodaj.', 'Nato tapni ikono.']
+      rest: ['Tapni Dodaj na domači zaslon.', 'Ime naj ostane KinDeals. Tapni Dodaj.', 'Nato tapni ikono.']
     },
     firefox: {
       iphone: 'Odpri meni s tremi črtami.',
       ipad: 'Odpri meni s tremi črtami zgoraj desno.',
       aside: 'Tapni Dodaj na domači zaslon. Če te vrstice ni, tapni Deli in nato Dodaj na domači zaslon.',
-      rest: ['Ime pusti KinDeals. Tapni Dodaj.', 'Nato tapni ikono.']
+      rest: ['Ime naj ostane KinDeals. Tapni Dodaj.', 'Nato tapni ikono.']
     },
     edge: {
       iphone: 'Odpri meni s tremi pikami.',
       ipad: 'Odpri meni s tremi pikami zgoraj desno.',
       aside: 'Tapni Dodaj na domači zaslon.',
-      rest: ['Ime pusti KinDeals. Tapni Dodaj.', 'Nato tapni ikono.']
+      rest: ['Ime naj ostane KinDeals. Tapni Dodaj.', 'Nato tapni ikono.']
     }
   };
 
-  var IPAD_FIRST_ASIDE = 'Je zgoraj desno, ne spodaj.';
-  var CANNOT_ADD = 'Ta brskalnik na tej napravi ne zna dodati ikone. Odpri to stran v Safariju. Če je stran odprta v sporočilu, tapni ikono Safari.';
+  var IPAD_FIRST_ASIDE = 'Najdeš jo zgoraj desno, ne spodaj.';
+  var CANNOT_ADD = 'Ta brskalnik na tej napravi ne more dodati ikone. Odpri to stran v Safariju. Če je stran odprta v sporočilu, tapni ikono Safari.';
 
   function iosBrowser(ua) {
     if (/CriOS/.test(ua)) return 'chrome';
