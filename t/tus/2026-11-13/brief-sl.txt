@@ -1,7 +1,6 @@
 BABASMS1
 {IME}, to so Tušovi popusti za kuhanje od 11.11. do 24.11.:
 
-Babi, Tuševi popusti (letak A45).
 Vse cene veljajo s kartico Tuš klub, v oklepaju je prejšnja cena.
 
 1) VELJA 11.–24. 11. 2026
@@ -17,9 +16,9 @@ Piščanec Tuš, cca 1,5 kg 3,59/kg (4,59/kg)
 Mesni zajtrk Gavrilović, 150 g 1,69 (2,39)
 Pečen pršut Kras, narezek, 100 g 2,59 (3,29)
 Pašteta Kekec, 50 g 0,44 (0,89)
-Pečen laks kare Z'dežele, 1 kg 7,99 (15,99)
 
 RIBE
+Pečeni laks kare Z'dežele, 1 kg 7,99 (15,99)
 Tuna steak Eva v rastlinskem olju, 80 g 1,04 (2,09)
 
 MLEČNI IZDELKI
@@ -162,17 +161,7 @@ Slovenski krompir, 1 kg 0,49
 Živa solata Kristalka, 1 kos 0,89
 Ta pravo kislo zelje, 1 kg 1,99
 
-3) VELJA 13.–14. 11. 2026
-
-MESO
-Prekajeno pleče Ave, 1 kg 5,49 (11,99)
-Svinjski laks kare, 1 kg 3,99 (9,49)
-Pečenice, pripravljene v mesnici, 1 kg 5,89 (10,49)
-
-SADJE IN ZELENJAVA
-Limone, 1 kg 1,19 (2,49)
-
-4) VELJA 17.–24. 11. 2026 [ŠE NE VELJA – samo za pregled]
+4) VELJA 17.–24. 11. 2026
 
 PIJAČE
 Instant kava Nescafé, 200 g 7,99 (10,49)
