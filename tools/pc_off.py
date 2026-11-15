@@ -32,15 +32,22 @@ def missing(root: Path, day) -> bool:
     return not legacy.is_file() and not per_store.is_file()
 
 
-def send(text: str) -> None:
+def send(text: str) -> bool:
+    """False only when the Bot API request failed. That text never includes the URL."""
     token = os.environ.get('TELEGRAM_BOT_TOKEN') or ''
     chat = os.environ.get('TELEGRAM_CHAT_ID') or ''
     if not token or not chat:
         print('TELEGRAM secrets are not set')
-        return
-    data = urllib.parse.urlencode({'chat_id': chat, 'text': text}).encode()
-    url = f'https://api.telegram.org/bot{token}/sendMessage'
-    urllib.request.urlopen(urllib.request.Request(url, data), timeout=20).read()
+        return True
+    try:
+        data = urllib.parse.urlencode({'chat_id': chat, 'text': text}).encode()
+        url = f'https://api.telegram.org/bot{token}/sendMessage'
+        urllib.request.urlopen(urllib.request.Request(url, data), timeout=20).read()
+    except Exception:
+        # InvalidURL is an HTTPException. Its message includes the bot URL.
+        print('Telegram send failed')
+        return False
+    return True
 
 
 def main(root: Path, now: datetime | None = None) -> int:
@@ -54,9 +61,10 @@ def main(root: Path, now: datetime | None = None) -> int:
     if not missing(root, day):
         print(f'{day} is on the site')
         return 0
-    send(f'Babasms: the PC has not published Lidl for {day.isoformat()}.')
+    # False is a failed request. A stand-in that returns None still counts as sent.
+    failed = send(f'Babasms: the PC has not published Lidl for {day.isoformat()}.') is False
     print(f'missing {day}')
-    return 0
+    return 1 if failed else 0
 
 
 if __name__ == '__main__':
