@@ -34,10 +34,10 @@ Skutin žepek 0,69 (0,99)
 Mešano slano pecivo 0,99 (1,19)
 Sirova štručka 0,39 (0,59)
 Maslen rogljiček 0,29 (0,47)+
-Mlečni kifeljc 0,49 (0,59), ob nakupu vsaj 6 kosov
-Pizza žepek 0,49 (0,59), ob nakupu vsaj 6 kosov
-Pirina štručka 0,25 (0,29), ob nakupu vsaj 6 kosov
-Pšenična štručka 0,21 (0,25), ob nakupu vsaj 6 kosov
+Mlečni kifeljc 0,49 (0,59), ob nakupu vsaj 6 kosov, 6 kosov 2,94
+Pizza žepek 0,49 (0,59), ob nakupu vsaj 6 kosov, 6 kosov 2,94
+Pirina štručka 0,25 (0,29), ob nakupu vsaj 6 kosov, 6 kosov 1,50
+Pšenična štručka 0,21 (0,25), ob nakupu vsaj 6 kosov, 6 kosov 1,26
 
 SLADKO
 Party Mix mini bonboni 2,49 (3,19)
