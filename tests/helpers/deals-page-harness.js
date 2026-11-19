@@ -13,12 +13,12 @@ function makeNode(tag) {
   const node = {
     tagName: String(tag).toUpperCase(),
     className: '',
-    textContent: '',
     hidden: false,
     type: '',
     disabled: false,
     children: [],
     childNodes: [],
+    _text: '',
     appendChild(ch) {
       this.children.push(ch);
       this.childNodes.push(ch);
@@ -28,7 +28,25 @@ function makeNode(tag) {
       this._listeners[type] = fn;
     },
   };
+  /* Setting textContent clears children, as in a browser. showList relies on that. */
+  Object.defineProperty(node, 'textContent', {
+    get() {
+      return this._text;
+    },
+    set(value) {
+      this._text = value == null ? '' : String(value);
+      this.children.length = 0;
+      this.childNodes.length = 0;
+    },
+  });
   return node;
+}
+
+/** The click listener start() put on a control, such as Nazaj. */
+function press(node) {
+  const fn = node && node._listeners && node._listeners.click;
+  if (typeof fn !== 'function') throw new Error('no click listener');
+  fn();
 }
 
 /** Run site/deals.js with a minimal DOM so start() runs (same path as the live page). */
@@ -101,7 +119,13 @@ async function runDealsStart(options) {
   const api = context.window.KinDealsPage;
   if (!api) throw new Error('KinDealsPage missing after load');
 
-  return { api, list: elements.get('list') };
+  return {
+    api,
+    list: elements.get('list'),
+    back: elements.get('back'),
+    store: elements.get('store'),
+    text: elements.get('text'),
+  };
 }
 
 function storesOnScreen(listEl, known) {
@@ -123,4 +147,4 @@ function byOrder(list) {
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 }
 
-module.exports = { runDealsStart, storesOnScreen, byOrder };
+module.exports = { runDealsStart, storesOnScreen, byOrder, press };
