@@ -1,6 +1,6 @@
 /* The icon: Lidl's approved lines, one store on the screen, no name (Aleksej, 9 Nov 2026).
    The look is the shelf price tag (Aleksej approved Fable's page, 10 Nov 2026).
-   Lidl stays live. Spar is live. Tuš is off after a live-check mismatch (15 Nov 2026). Hofer and E.Leclerc say kmalu (t807u).
+   Lidl stays live. Spar is off after a live-check mismatch (19 Nov 2026). Tuš is off after a live-check mismatch (15 Nov 2026). Hofer and E.Leclerc say kmalu (t807u).
    A private preview parameter opens one kmalu store the way it would look live. The page reads it and never writes it into a link.
    The date reader is babasms/dates.py read_span. readSpan here is the same function.
    The page hides a line that has ended. A line that starts later, inside the leaflet window, is drawn under a start-day heading. The pipeline has its own cut.
@@ -32,9 +32,9 @@
     {id: 'lidl', name: 'Lidl', days: ['mon', 'thu'], live: true, order: 1},
     {id: 'tus', name: 'Tuš', days: ['wed', 'fri'], live: false, soon: true, order: 2},
     {id: 'hofer', name: 'Hofer', days: ['mon', 'thu'], live: false, soon: true, order: 3},
-    {id: 'spar', name: 'Spar', days: ['wed'], live: true, order: 4},
+    {id: 'spar', name: 'Spar', days: ['wed'], live: false, soon: true, order: 4},
     {id: 'leclerc', name: 'E.Leclerc', days: ['wed'], live: false, soon: true, order: 5},
-    {id: 'mercator', name: 'Mercator', days: ['wed'], live: false, soon: true, order: 6}
+    {id: 'mercator', name: 'Mercator', days: ['thu'], live: false, soon: true, order: 6}
   ];
   /* Coming back to the icon asks the network again after this long. One minute is a guess, 9 Nov 2026. */
   var STALE_MS = 60000;
