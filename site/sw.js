@@ -5,7 +5,7 @@
    A changed shell file changes that name, so
    the installed icon drops the old shell.
    Install saves offline.html and the look it uses. A navigation with no network and no saved copy gets that page. */
-var CACHE = 'kindeals-c27e3fe9b5e6';
+var CACHE = 'kindeals-6b8bf4e69027';
 var OFFLINE = 'offline.html';
 
 self.addEventListener('install', function (event) {
