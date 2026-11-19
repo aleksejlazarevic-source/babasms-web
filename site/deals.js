@@ -34,7 +34,7 @@
     {id: 'hofer', name: 'Hofer', days: ['mon', 'thu'], live: false, soon: true, order: 3},
     {id: 'spar', name: 'Spar', days: ['wed'], live: true, order: 4},
     {id: 'leclerc', name: 'E.Leclerc', days: ['wed'], live: false, soon: true, order: 5},
-    {id: 'mercator', name: 'Mercator', days: ['thu'], live: false, soon: true, order: 6}
+    {id: 'mercator', name: 'Mercator', days: ['wed'], live: false, soon: true, order: 6}
   ];
   /* Coming back to the icon asks the network again after this long. One minute is a guess, 9 Nov 2026. */
   var STALE_MS = 60000;
