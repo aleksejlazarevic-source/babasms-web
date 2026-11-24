@@ -27,14 +27,15 @@
   var WEEKDAY = ['nedelja', 'ponedeljek', 'torek', 'sreda', 'četrtek', 'petek', 'sobota'];
   /* Used only when the file probe cannot run (no network). A published store is one whose file answered. */
   var READABLE = {lidl: true};
-  /* Shown when stores.json cannot be read. Same ids, live and days as t2/stores.json. */
+  /* Shown when stores.json cannot be read. Same ids, live, days and auto as t2/stores.json.
+     auto stays false until a store is switched on. A hidden auto store says kmalu. */
   var KNOWN = [
-    {id: 'lidl', name: 'Lidl', days: ['mon', 'thu'], live: true, order: 1},
-    {id: 'tus', name: 'Tuš', days: ['wed', 'fri'], live: false, soon: true, order: 2},
-    {id: 'hofer', name: 'Hofer', days: ['mon', 'thu'], live: false, soon: true, order: 3},
-    {id: 'spar', name: 'Spar', days: ['wed'], live: false, soon: true, order: 4},
-    {id: 'leclerc', name: 'E.Leclerc', days: ['wed'], live: false, soon: true, order: 5},
-    {id: 'mercator', name: 'Mercator', days: ['thu'], live: false, soon: true, order: 6}
+    {id: 'lidl', name: 'Lidl', days: ['mon', 'thu'], live: true, order: 1, auto: false},
+    {id: 'tus', name: 'Tuš', days: ['wed', 'fri'], live: false, soon: true, order: 2, auto: false},
+    {id: 'hofer', name: 'Hofer', days: ['mon', 'thu'], live: false, soon: true, order: 3, auto: false},
+    {id: 'spar', name: 'Spar', days: ['wed'], live: false, soon: true, order: 4, auto: false},
+    {id: 'leclerc', name: 'E.Leclerc', days: ['wed'], live: false, soon: true, order: 5, auto: false},
+    {id: 'mercator', name: 'Mercator', days: ['thu'], live: false, soon: true, order: 6, auto: false}
   ];
   /* Coming back to the icon asks the network again after this long. One minute is a guess, 9 Nov 2026. */
   var STALE_MS = 60000;
@@ -519,11 +520,18 @@
       .slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
   }
 
-  /* She can open a store when he has set it live, or when this page's private
-     preview names that kmalu store, and this page can read its file. */
+  /* An auto store is open only when this load's state.json said show.
+     The page keeps no copy of that file. Offline, or a cached show, is not show. */
+  function shownAuto(store) {
+    return !!(store && store.auto === true && store.stateShow === true && store.probeError !== true);
+  }
+
+  /* She can open a store when he has set it live, or when a fresh state.json
+     says an auto store shows, or when this page's private preview names that
+     kmalu store, and this page can read its file. */
   function canOpen(store, files) {
     if (!store) return false;
-    if (liveStores([store]).length !== 1 && !previewTarget([store])) return false;
+    if (liveStores([store]).length !== 1 && !shownAuto(store) && !previewTarget([store])) return false;
     if (files) return files[store.id] === true;
     if (store && Object.prototype.hasOwnProperty.call(store, 'readable')) return store.readable === true;
     return READABLE[store.id] === true;
@@ -638,8 +646,31 @@
   /* A live store whose file answered, or one the network could not check.
      A 404 is not openable. probeError is set only after a failed fetch. */
   function fileReady(store) {
+    if (store && store.auto === true) {
+      if (!shownAuto(store)) return false;
+      return canOpen(store);
+    }
     if (store && store.probeError === true && liveStores([store]).length === 1) return true;
     return canOpen(store);
+  }
+
+  /* True when this fetched state.json may open an auto store. reachable false
+     is offline: a saved "show" is ignored. A missing end, or one before today, hides it. */
+  function applyState(store, doc, todayIso, reachable) {
+    if (store) store.stateShow = false;
+    if (!store || store.auto !== true || !reachable || !doc || typeof doc !== 'object') return false;
+    if (doc.show !== true || typeof doc.end !== 'string' || !DAY.test(doc.end)) return false;
+    if (doc.end < todayIso) return false;
+    store.stateShow = true;
+    return true;
+  }
+
+  function stateUrl(store) {
+    return PUBLIC + store.id + '/state.json';
+  }
+
+  function dealsOpen(store) {
+    return fileReady(store) && (!store.soon || shownAuto(store));
   }
 
   function untilOf(storeId) {
@@ -1017,8 +1048,12 @@
      A preview of one kmalu store uses the live tile, and only on that page. */
   function tileOf(store) {
     var preview = !!previewTarget([store]);
-    if ((fileReady(store) && !store.soon) || (preview && canOpen(store))) {
+    if (dealsOpen(store) || (preview && canOpen(store))) {
       return {tag: 'button', className: 'shop', note: ''};
+    }
+    /* A hidden auto store says kmalu, as Tuš and Spar do today. Never "še ni na voljo". */
+    if (store && store.auto === true && !preview) {
+      return {tag: 'div', className: 'shop shut', note: 'kmalu'};
     }
     return {
       tag: 'div',
@@ -1175,7 +1210,7 @@
     var open = [];
     var i;
     for (i = 0; i < stores.length; i++) {
-      if (fileReady(stores[i]) && !stores[i].soon) open.push(stores[i]);
+      if (dealsOpen(stores[i])) open.push(stores[i]);
     }
     return open;
   }
@@ -1195,7 +1230,7 @@
     if (LIST_ON && allowResume && !(named && named > drawnDay)) {
       saved = placeApi().read(drawnDay);
       if (saved) savedStore = storeById(saved.storeId);
-      if (saved && savedStore && fileReady(savedStore) && !savedStore.soon) {
+      if (saved && savedStore && dealsOpen(savedStore)) {
         resumeName = saved.section || '';
         resumeHold = true;
         placeOn = false;
@@ -1332,14 +1367,7 @@
     });
   }
 
-  function probeStore(store) {
-    /* A store hidden in t2/stores.json (live is not true) has no public brief.
-       Asking for one 404s on every load. A private preview of that store still asks. */
-    if (liveStores([store]).length !== 1 && !previewTarget([store])) {
-      store.readable = false;
-      store.probeError = false;
-      return Promise.resolve(false);
-    }
+  function probeBrief(store) {
     var day = isoOf(validSendDay(ljubljanaToday(new Date()), store));
     var urls = [fileUrl(store, day)];
     if (store.id === 'lidl') urls.push(PUBLIC + day + '/brief-sl.txt');
@@ -1361,10 +1389,58 @@
     });
   }
 
+  function probeStore(store) {
+    /* An auto store asks the network for state.json on every open. A saved
+       copy is not a show. A store hidden in t2/stores.json (live is not true,
+       and not auto) has no public brief. Asking for one 404s on every load.
+       A private preview of that store still asks. */
+    if (store.auto === true) {
+      var today = isoOf(ljubljanaToday(new Date()));
+      return fetch(fresh(stateUrl(store)), {cache: 'no-store'}).then(function (res) {
+        if (!res || !res.ok || typeof res.json !== 'function') {
+          applyState(store, null, today, true);
+          if (previewTarget([store])) return probeBrief(store);
+          store.readable = false;
+          store.probeError = false;
+          return false;
+        }
+        return res.json().then(function (doc) {
+          applyState(store, doc, today, true);
+          if (!store.stateShow && !previewTarget([store])) {
+            store.readable = false;
+            store.probeError = false;
+            return false;
+          }
+          return probeBrief(store);
+        }, function () {
+          /* A 200 that is not JSON must not reject the store list. */
+          applyState(store, null, today, false);
+          if (previewTarget([store])) return probeBrief(store);
+          store.readable = false;
+          store.probeError = true;
+          return false;
+        });
+      }, function () {
+        applyState(store, null, today, false);
+        if (previewTarget([store])) return probeBrief(store);
+        store.readable = false;
+        store.probeError = true;
+        return false;
+      });
+    }
+    if (liveStores([store]).length !== 1 && !previewTarget([store])) {
+      store.readable = false;
+      store.probeError = false;
+      return Promise.resolve(false);
+    }
+    return probeBrief(store);
+  }
+
   var api = {
     showText: showText, loadBatch: loadBatch, validSendDay: validSendDay, ljubljanaToday: ljubljanaToday,
     readSpan: readSpan, pastBriefCap: pastBriefCap,
     isoOf: isoOf, liveStores: liveStores, canOpen: canOpen, viewOf: viewOf, kindOf: kindOf,
+    applyState: applyState, dealsOpen: dealsOpen, probeStore: probeStore,
     isInternal: isInternal,
     KNOWN: KNOWN, LOOK_BACK: LOOK_BACK, previousSendDay: previousSendDay, fileUrl: fileUrl,
     tileOf: tileOf, storeToOpen: storeToOpen, closedLine: closedLine,

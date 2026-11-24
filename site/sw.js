@@ -5,7 +5,7 @@
    A changed shell file changes that name, so
    the installed icon drops the old shell.
    Install saves offline.html and the look it uses. A navigation with no network and no saved copy gets that page. */
-var CACHE = 'kindeals-502665038781';
+var CACHE = 'kindeals-fc932986eb0b';
 var OFFLINE = 'offline.html';
 
 self.addEventListener('install', function (event) {
@@ -58,6 +58,12 @@ function briefPath(url) {
   return /\/brief-[a-z0-9]+\.txt$/.test(new URL(url).pathname);
 }
 
+/* state.json is fetched every open. It is never stored or served from this cache,
+   so a phone that is offline cannot show a revoked store from a saved "show". */
+function stateFile(url) {
+  return /\/state\.json$/.test(new URL(url).pathname);
+}
+
 function dealsPath(url) {
   return /\/deals\.html$/.test(new URL(url).pathname);
 }
@@ -69,8 +75,18 @@ function withoutQuery(url) {
   return u.toString();
 }
 
+function stateFresh(key) {
+  var sep = key.indexOf('?') >= 0 ? '&' : '?';
+  return fetch(key + sep + 'fresh=' + Date.now(), {cache: 'no-store'}).then(function (res) {
+    return res;
+  }, function () {
+    return new Response('', {status: 503});
+  });
+}
+
 function networkFirst(req) {
   var key = stable(req.url);
+  if (stateFile(key)) return stateFresh(key);
   var sep = key.indexOf('?') >= 0 ? '&' : '?';
   return fetch(key + sep + 'fresh=' + Date.now(), {cache: 'no-store'}).then(function (res) {
     if (res && res.ok) return keep(key, res);
@@ -111,6 +127,7 @@ function missed(cache, req, key) {
 
 /* An empty 200 is not a leaflet. Only a body that contains BABASMS1 replaces the saved brief. */
 function keep(key, res) {
+  if (stateFile(key)) return res;
   if (!briefPath(key)) {
     return caches.open(CACHE).then(function (cache) {
       return cache.put(key, res.clone());
