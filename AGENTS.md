@@ -3,7 +3,7 @@
 ## Install (for the human)
 
 1. Save this file at the root of your project as `AGENTS.md`. Cursor reads `AGENTS.md` in every chat in that project. If the project already has one, paste this file below its content.
-2. In Cursor Settings, open Models and enable Fable 5.2, Opus 5.5, Grok 4.7 and Composer 2.5.
+2. In Cursor Settings, open Models and enable Grok 4.7 and Composer 2.5. Planning and devil's-advocate passes run outside Cursor via Antigravity CLI (Google AI Pro): `~/bin/slim-agy <model> <effort> <brief> [folder] [mins]` with `gemini-4-neon-high` or `claude-opus-5-5-high`, effort `high`.
 3. Pick the chat model before you send the first message of a chat (see "Models" below). Do not change the model in the middle of a chat.
 
 ## How it works in one minute (for the human)
@@ -63,18 +63,19 @@ The session model is the orchestrator. The user picks it in the model picker bef
 
 | Role | Model | Used for |
 |---|---|---|
-| Orchestrator, big | **Fable 5.2** | A very difficult task, or an overarching big plan: many waves, several days, a hard design choice, a plan that splits into child plans |
-| Orchestrator, small | **Opus 5.5** | A smaller plan or one chunk of a big plan: up to about three waves, about a day of work, no hard design choice |
+| Planner | `gemini-4-neon-high` | `~/bin/slim-agy gemini-4-neon-high high <brief> [folder] [mins]` · effort `high` · `Job: plan` (watched). Same session folds every devil's-advocate finding; fold job edits only named plan files |
+| Devil's advocate | `claude-opus-5-5-high` | `~/bin/slim-agy claude-opus-5-5-high high <brief> [folder] [mins]` · effort `high` · read-only background `Job: review`. Fresh session each pass, never the planner |
 | Worker, default | **Grok 4.7** | Writes code: features, bug fixes, tests, refactors |
 | Worker, simple | **Composer 2.5** | Mechanical work with no hard reasoning: a rename, a repeated edit across files, scaffolding, "run the tests and summarize" |
-| Reviewer and devil's advocate | Same model as the orchestrator | A fresh, read-only subagent. Never the worker that wrote the code |
+| Reviewer | **Grok 4.7** (rounds 1–3), `gemini-4-neon-high` (round 4+, after three parks) | Rounds 1–3: Cursor **Grok 4.7**. Round 4+: `~/bin/slim-agy gemini-4-neon-high high <brief> [folder] [mins]` · `Job: review`. Fresh read-only round each time. Never the worker that wrote the code |
+
+Planner, devil's advocate, and escalated review rounds launch through **Antigravity CLI** (Google AI Pro): `~/bin/slim-agy <model> <effort> <brief> [folder] [mins]`.
 
 Rules:
 
 - Pass the worker's model on every `Task` call through the `model` field. Use the exact slug your `Task` tool lists for that model. Never guess a slug.
 - If the tool does not list Grok 4.7 or Composer 2.5, stop that dispatch and tell the user which models are available. Do not substitute another model silently.
-- At the start of a planning chat, judge the size. If the job is big and this chat is not on Fable 5.2 (or small and on Fable 5.2), say so in one sentence and let the user decide. Then continue on the model you have.
-- A big plan may split into child plans. The Fable 5.2 session writes the parent plan and one child plan per chunk (`parent: <parent name>` in the child's header). Each child plan is executed in its own Opus 5.5 chat.
+- A big plan may split into child plans. The `gemini-4-neon-high` planner session (`Job: plan`) writes the parent plan and one child plan per chunk (`parent: <parent name>` in the child's header). Each child plan is executed in its own chat.
 - A piece that is too hard for a worker is done by the orchestrator itself. Say so in chat and in the ledger.
 
 ## 3. Planning
@@ -86,8 +87,8 @@ Rules:
    - A later wave may depend on an earlier wave, never the reverse.
    - Each item has an id (`W1.1`, `W1.2`, `W2.1`), the files it owns, a worker model, and a "done when" that a command can check (a named test passes, a file exists, a page renders).
    - One item is one branch and one pull request.
-4. **Devil's-advocate pass, before you show the plan.** Launch a fresh read-only subagent on the orchestrator's model, named `Devil's advocate — <plan name>`. Point it at the plan file; do not paste the plan into the brief. Its only job is to break the plan. For each wave and item it asks: what fails, what the user sees when it fails, which test is missing, what the plan assumes about code nobody verified, and what cannot be undone. It answers `SHIP` or `FIX-THEN-SHIP` with numbered findings and a severity (HIGH, MEDIUM, LOW).
-5. **Fold every finding into the plan** under a dated `## Review fold` section: the finding, its severity, where it was fixed in the plan. A finding you decide not to fix is written down as a deferral with its impact. Nothing is dropped silently. If a fold changes the design, run a new pass with a new subagent. Stop when a pass returns only LOW findings.
+4. **Devil's-advocate pass, before you show the plan.** Launch a fresh read-only session with `~/bin/slim-agy claude-opus-5-5-high high "<brief>" [folder] [mins]` — effort `high`, background `Job: review` — a new session for every pass — named `Devil's advocate — <plan name>`. Point it at the plan file; do not paste the plan into the brief. Its only job is to break the plan. For each wave and item it asks: what fails, what the user sees when it fails, which test is missing, what the plan assumes about code nobody verified, and what cannot be undone. It answers `SHIP` or `FIX-THEN-SHIP` with numbered findings and a severity (HIGH, MEDIUM, LOW).
+5. **Fold every finding into the plan** in the same `gemini-4-neon-high` planner session (`Job: plan`, watched), under a dated `## Review fold` section: the finding, its severity, where it was fixed in the plan. The fold job edits only named plan files. A finding you decide not to fix is written down as a deferral with its impact. Nothing is dropped silently. If a fold changes the design, run a new devil's-advocate pass with a fresh `claude-opus-5-5-high` session. Stop when a pass returns only LOW findings.
 6. **Present the plan** with the fold section visible. Set `status: approved` only when the user says so.
 7. **Stop there.** Execution starts in a new chat with `execute plan <name>`. The plan and the ledger carry everything the new chat needs.
 
@@ -130,12 +131,12 @@ Then drive the plan wave by wave:
 
 No item of a plan merges without an independent review.
 
-1. After the worker's tests are green, launch a fresh read-only subagent on the orchestrator's model, named `Review <item id> — <title>`, with a brief from Template D.
+1. After the worker's tests are green, launch a fresh read-only reviewer named `Review <item id> — <title>`, with a brief from Template D. Rounds 1–3 use **Grok 4.7**; from round 4 onward (after three parks without SHIP) every round uses `~/bin/slim-agy gemini-4-neon-high high "<brief>" [folder] [mins]` with `Job: review`, until SHIP.
 2. The reviewer reads the diff and the code, runs the tests, and answers `SHIP` or `FIX-THEN-SHIP` for one exact commit. HIGH and MEDIUM findings block. LOW findings are listed and ship.
 3. Write the verdict in the ledger STEP LOG in the same turn: `REVIEW SHIP <item> @<commit> r<round>` or `REVIEW FIX <item> @<commit> r<round>: <findings>`.
-4. On FIX-THEN-SHIP, a worker fixes the findings on the same branch. Then a new reviewer runs a new round. Never reuse the earlier reviewer.
+4. On FIX-THEN-SHIP, a **Grok 4.7** worker fixes the findings on the same branch. Then a new reviewer runs a new round. Never reuse the earlier reviewer.
 5. A push after a SHIP cancels that SHIP. Review the new commit.
-6. After three rounds without a SHIP, stop that item and ask the user.
+6. From round 4 onward, keep using `gemini-4-neon-high` (`Job: review` via `~/bin/slim-agy`) for each new review round until SHIP. Do not stop solely because a round count was reached; escalate to the user only when the item is blocked on a product decision the plan does not answer.
 
 ## 7. Ledger and dashboard: same-turn rule
 
@@ -192,7 +193,7 @@ title: <human title>
 status: draft
 created: <YYYY-MM-DD>
 approved:
-orchestrator: <Fable 5.2 | Opus 5.5>
+planner: gemini-4-neon-high
 workers: <how many worker dispatches the plan expects>
 estimate: <6h | 2d | 1w>
 parent:
